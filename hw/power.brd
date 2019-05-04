@@ -6,9 +6,11 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="1" unitdist="mm" unit="mm" style="dots" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
+<grid distance="0.2" unitdist="mm" unit="mm" style="dots" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="2" name="Route2" color="5" fill="1" visible="yes" active="yes"/>
+<layer number="15" name="Route15" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
@@ -941,7 +943,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 &lt;p&gt;OSH Park compatible
 &lt;p&gt;2 Layers: 6 mil clearence, width, annular, 10 mil drill
 &lt;p&gt;4 Layers: 5 mil clearence, width, 10 mil drill, 4 mil annular</description>
-<param name="layerSetup" value="(1*16)"/>
+<param name="layerSetup" value="(1*2+15*16)"/>
 <param name="mtCopper" value="0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm"/>
 <param name="mtIsolate" value="1.5mm 0.15mm 0.2mm 0.15mm 0.2mm 0.15mm 0.2mm 0.15mm 0.2mm 0.15mm 0.2mm 0.15mm 0.2mm 0.15mm 0.2mm"/>
 <param name="mdWireWire" value="6mil"/>
@@ -1508,6 +1510,19 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <contactref element="C36" pad="2"/>
 <contactref element="SW2" pad="P$4"/>
 <contactref element="SW2" pad="P$3"/>
+<polygon width="0.1524" layer="2">
+<vertex x="-3" y="12.6"/>
+<vertex x="63.8" y="12.6"/>
+<vertex x="63.8" y="30.8"/>
+<vertex x="-3" y="30.8"/>
+</polygon>
+<polygon width="0.1524" layer="15">
+<vertex x="-4" y="-4"/>
+<vertex x="46" y="-4"/>
+<vertex x="64.8" y="14.8"/>
+<vertex x="64.8" y="31.8"/>
+<vertex x="-4" y="31.8"/>
+</polygon>
 </signal>
 <signal name="+3V3">
 <contactref element="U7" pad="5"/>
@@ -1526,6 +1541,13 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <contactref element="C34" pad="1"/>
 <contactref element="LED2" pad="A"/>
 <contactref element="LED1" pad="A"/>
+<polygon width="0.1524" layer="2">
+<vertex x="-3" y="-3"/>
+<vertex x="49" y="-3"/>
+<vertex x="49" y="7.8"/>
+<vertex x="-3" y="7.8"/>
+</polygon>
+<via x="10" y="7" extent="1-16" drill="0.254"/>
 <wire x1="47.95" y1="11.7" x2="49.2" y2="11.1745" width="0" layer="19" extent="1-1"/>
 <wire x1="40.6255" y1="7.4" x2="47.95" y2="11.7" width="0" layer="19" extent="1-1"/>
 <wire x1="38.26" y1="6.6" x2="40.6255" y2="7.4" width="0" layer="19" extent="1-1"/>
@@ -1536,11 +1558,12 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="40.4" y1="1.4" x2="38.26" y2="6.6" width="0" layer="19" extent="1-1"/>
 <wire x1="20.85" y1="1.6" x2="30.3745" y2="1.4" width="0" layer="19" extent="1-1"/>
 <wire x1="16.65" y1="1.6" x2="20.85" y2="1.6" width="0" layer="19" extent="1-1"/>
-<wire x1="9.05" y1="7.0145" x2="16.65" y2="1.6" width="0" layer="19" extent="1-1"/>
+<wire x1="10" y1="7" x2="16.65" y2="1.6" width="0" layer="19" extent="1-1"/>
+<wire x1="9.05" y1="7.0145" x2="10" y2="7" width="0" layer="19" extent="1-1"/>
 <wire x1="7.4301" y1="7.23" x2="9.05" y2="7.0145" width="0" layer="19" extent="1-1"/>
 <wire x1="4.8" y1="2" x2="7.4301" y2="7.23" width="0" layer="19" extent="1-1"/>
-<wire x1="19.6" y1="11.1745" x2="20.85" y2="1.6" width="0" layer="19" extent="1-1"/>
-<wire x1="18.35" y1="11.7" x2="19.6" y2="11.1745" width="0" layer="19" extent="1-1"/>
+<wire x1="18.35" y1="11.7" x2="10" y2="7" width="0" layer="19" extent="1-1"/>
+<wire x1="19.6" y1="11.1745" x2="18.35" y2="11.7" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="VCC">
 <contactref element="U7" pad="1"/>
@@ -1583,9 +1606,17 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <vertex x="52" y="8.4"/>
 <vertex x="54.8" y="8.4"/>
 </polygon>
+<polygon width="0.1524" layer="2">
+<vertex x="-3" y="8.2"/>
+<vertex x="55.2" y="8.2"/>
+<vertex x="55.2" y="12.2"/>
+<vertex x="-3" y="12.2"/>
+</polygon>
+<via x="2.2" y="9" extent="1-16" drill="0.254"/>
 <wire x1="4.8299" y1="5.33" x2="4.8299" y2="7.23" width="0" layer="19" extent="1-1"/>
 <wire x1="4.6255" y1="4.05" x2="4.8299" y2="5.33" width="0" layer="19" extent="1-1"/>
 <wire x1="2.4" y1="7" x2="4.8299" y2="7.23" width="0" layer="19" extent="1-1"/>
+<wire x1="2.2" y1="9" x2="2.4" y2="7" width="0" layer="19" extent="1-1"/>
 <wire x1="7.9745" y1="9.6" x2="4.8299" y2="7.23" width="0" layer="19" extent="1-1"/>
 <wire x1="22.7745" y1="9.6" x2="9.9" y2="11.65" width="0" layer="19" extent="1-1"/>
 <wire x1="37.5745" y1="9.6" x2="24.7" y2="11.65" width="0" layer="19" extent="1-1"/>
