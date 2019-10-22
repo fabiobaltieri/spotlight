@@ -1266,7 +1266,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <attribute name="NAME" x="7.959" y="5.689" size="0.4064" layer="25" rot="R270"/>
 <attribute name="VALUE" x="5.6095" y="5.7525" size="0.4064" layer="27" rot="R270"/>
 </element>
-<element name="R1" library="MF_Passives" package="R0805" value="tbd" x="12.2" y="18.6" smashed="yes" rot="R270">
+<element name="R1" library="MF_Passives" package="R0805" value="270" x="12.2" y="18.6" smashed="yes" rot="R270">
 <attribute name="HOUSEPART" value="" x="12.2" y="18.6" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="MPN" value="" x="12.2" y="18.6" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="NAME" x="13.3" y="20.4" size="1.016" layer="25" font="vector" ratio="16" rot="R270"/>
@@ -1276,7 +1276,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <attribute name="VOLTAGE" value="" x="12.2" y="18.6" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="WATTAGE" value="" x="12.2" y="18.6" size="1.778" layer="27" rot="R270" display="off"/>
 </element>
-<element name="R3" library="MF_Passives" package="R0805" value="tbd" x="14.2" y="18.6" smashed="yes" rot="R270">
+<element name="R3" library="MF_Passives" package="R0805" value="270" x="14.2" y="18.6" smashed="yes" rot="R270">
 <attribute name="HOUSEPART" value="" x="14.2" y="18.6" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="MPN" value="" x="14.2" y="18.6" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="NAME" x="15.3" y="20.4" size="1.016" layer="25" font="vector" ratio="16" rot="R270"/>
@@ -1339,7 +1339,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <attribute name="URL" value="" x="7.4" y="3" size="1.778" layer="27" display="off"/>
 <attribute name="VOLTAGE" value="" x="7.4" y="3" size="1.778" layer="27" display="off"/>
 </element>
-<element name="R5" library="MF_Passives" package="R0805" value="tbd" x="29" y="18.6" smashed="yes" rot="R270">
+<element name="R5" library="MF_Passives" package="R0805" value="270" x="29" y="18.6" smashed="yes" rot="R270">
 <attribute name="HOUSEPART" value="" x="4.4" y="43.8" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="MPN" value="" x="4.4" y="43.8" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="NAME" x="30.1" y="20.4" size="1.016" layer="25" font="vector" ratio="16" rot="R270"/>
@@ -1349,7 +1349,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <attribute name="VOLTAGE" value="" x="4.4" y="43.8" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="WATTAGE" value="" x="4.4" y="43.8" size="1.778" layer="27" rot="R270" display="off"/>
 </element>
-<element name="R6" library="MF_Passives" package="R0805" value="tbd" x="27" y="18.6" smashed="yes" rot="R270">
+<element name="R6" library="MF_Passives" package="R0805" value="270" x="27" y="18.6" smashed="yes" rot="R270">
 <attribute name="HOUSEPART" value="" x="3" y="29.4" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="MPN" value="" x="3" y="29.4" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="NAME" x="28.1" y="20.4" size="1.016" layer="25" font="vector" ratio="16" rot="R270"/>
@@ -1412,7 +1412,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <attribute name="URL" value="" x="17.8" y="3" size="1.778" layer="27" display="off"/>
 <attribute name="VOLTAGE" value="" x="17.8" y="3" size="1.778" layer="27" display="off"/>
 </element>
-<element name="R8" library="MF_Passives" package="R0805" value="tbd" x="41.8" y="18.6" smashed="yes" rot="R270">
+<element name="R8" library="MF_Passives" package="R0805" value="270" x="41.8" y="18.6" smashed="yes" rot="R270">
 <attribute name="HOUSEPART" value="" x="21.4" y="29.4" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="MPN" value="" x="21.4" y="29.4" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="NAME" x="42.9" y="20.4" size="1.016" layer="25" font="vector" ratio="16" rot="R270"/>
@@ -1422,7 +1422,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <attribute name="VOLTAGE" value="" x="21.4" y="29.4" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="WATTAGE" value="" x="21.4" y="29.4" size="1.778" layer="27" rot="R270" display="off"/>
 </element>
-<element name="R9" library="MF_Passives" package="R0805" value="tbd" x="43.8" y="18.6" smashed="yes" rot="R270">
+<element name="R9" library="MF_Passives" package="R0805" value="270" x="43.8" y="18.6" smashed="yes" rot="R270">
 <attribute name="HOUSEPART" value="" x="19.8" y="33.6" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="MPN" value="" x="19.8" y="33.6" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="NAME" x="44.9" y="20.4" size="1.016" layer="25" font="vector" ratio="16" rot="R270"/>
@@ -1485,7 +1485,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <attribute name="URL" value="" x="31.6" y="3" size="1.778" layer="27" display="off"/>
 <attribute name="VOLTAGE" value="" x="31.6" y="3" size="1.778" layer="27" display="off"/>
 </element>
-<element name="R11" library="MF_Passives" package="R0805" value="tbd" x="56.6" y="18.6" smashed="yes" rot="R270">
+<element name="R11" library="MF_Passives" package="R0805" value="270" x="56.6" y="18.6" smashed="yes" rot="R270">
 <attribute name="HOUSEPART" value="" x="36.2" y="29.4" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="MPN" value="" x="36.2" y="29.4" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="NAME" x="57.7" y="20.4" size="1.016" layer="25" font="vector" ratio="16" rot="R270"/>
@@ -1495,7 +1495,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <attribute name="VOLTAGE" value="" x="36.2" y="29.4" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="WATTAGE" value="" x="36.2" y="29.4" size="1.778" layer="27" rot="R270" display="off"/>
 </element>
-<element name="R12" library="MF_Passives" package="R0805" value="tbd" x="58.6" y="18.6" smashed="yes" rot="R270">
+<element name="R12" library="MF_Passives" package="R0805" value="270" x="58.6" y="18.6" smashed="yes" rot="R270">
 <attribute name="HOUSEPART" value="" x="34.6" y="33.6" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="MPN" value="" x="34.6" y="33.6" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="NAME" x="59.7" y="20.4" size="1.016" layer="25" font="vector" ratio="16" rot="R270"/>

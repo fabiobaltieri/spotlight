@@ -5757,8 +5757,8 @@ DIN A3, landscape with extra doc field</description>
 <part name="TP4" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TP" device="TP18R" package3d_urn="urn:adsk.eagle:package:27981/1"/>
 <part name="P+3" library="supply1" deviceset="VCC" device=""/>
 <part name="GND5" library="supply1" deviceset="GND" device=""/>
-<part name="R1" library="MF_Passives" deviceset="RESISTOR" device="_0805" value="tbd"/>
-<part name="R3" library="MF_Passives" deviceset="RESISTOR" device="_0805" value="tbd"/>
+<part name="R1" library="MF_Passives" deviceset="RESISTOR" device="_0805" value="270"/>
+<part name="R3" library="MF_Passives" deviceset="RESISTOR" device="_0805" value="270"/>
 <part name="P+4" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
 <part name="GND6" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="C6" library="balto" deviceset="C" device="0603" value=".1u"/>
@@ -5775,8 +5775,8 @@ DIN A3, landscape with extra doc field</description>
 <part name="GND9" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="C9" library="MF_Passives" deviceset="CAPACITOR_NP" device="_1206" value="10u"/>
 <part name="C10" library="MF_Passives" deviceset="CAPACITOR_NP" device="_1206" value="10u"/>
-<part name="R5" library="MF_Passives" deviceset="RESISTOR" device="_0805" value="tbd"/>
-<part name="R6" library="MF_Passives" deviceset="RESISTOR" device="_0805" value="tbd"/>
+<part name="R5" library="MF_Passives" deviceset="RESISTOR" device="_0805" value="270"/>
+<part name="R6" library="MF_Passives" deviceset="RESISTOR" device="_0805" value="270"/>
 <part name="P+6" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
 <part name="GND10" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="C11" library="balto" deviceset="C" device="0603" value=".1u"/>
@@ -5793,8 +5793,8 @@ DIN A3, landscape with extra doc field</description>
 <part name="GND13" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="C14" library="MF_Passives" deviceset="CAPACITOR_NP" device="_1206" value="10u"/>
 <part name="C15" library="MF_Passives" deviceset="CAPACITOR_NP" device="_1206" value="10u"/>
-<part name="R8" library="MF_Passives" deviceset="RESISTOR" device="_0805" value="tbd"/>
-<part name="R9" library="MF_Passives" deviceset="RESISTOR" device="_0805" value="tbd"/>
+<part name="R8" library="MF_Passives" deviceset="RESISTOR" device="_0805" value="270"/>
+<part name="R9" library="MF_Passives" deviceset="RESISTOR" device="_0805" value="270"/>
 <part name="P+8" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
 <part name="GND14" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="C16" library="balto" deviceset="C" device="0603" value=".1u"/>
@@ -5811,8 +5811,8 @@ DIN A3, landscape with extra doc field</description>
 <part name="GND17" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="C19" library="MF_Passives" deviceset="CAPACITOR_NP" device="_1206" value="10u"/>
 <part name="C20" library="MF_Passives" deviceset="CAPACITOR_NP" device="_1206" value="10u"/>
-<part name="R11" library="MF_Passives" deviceset="RESISTOR" device="_0805" value="tbd"/>
-<part name="R12" library="MF_Passives" deviceset="RESISTOR" device="_0805" value="tbd"/>
+<part name="R11" library="MF_Passives" deviceset="RESISTOR" device="_0805" value="270"/>
+<part name="R12" library="MF_Passives" deviceset="RESISTOR" device="_0805" value="270"/>
 <part name="U5" library="balto" deviceset="MIC280" device=""/>
 <part name="U6" library="balto" deviceset="MIC280" device=""/>
 <part name="C21" library="balto" deviceset="C" device="0603"/>
@@ -5926,7 +5926,14 @@ DIN A3, landscape with extra doc field</description>
 <text x="213.36" y="243.84" size="1.778" layer="97">red</text>
 <text x="203.2" y="243.84" size="1.778" layer="97">green</text>
 <text x="83.82" y="63.5" size="1.778" layer="97">Vref = 200mV (analog mode)</text>
-<text x="45.72" y="160.02" size="1.778" layer="97">TODO: add TH vias!!!!!!</text>
+<text x="48.26" y="137.16" size="1.778" layer="97">TODO
+Add TH vias!!!!!!
+Battery measurement
+TP and connector labels
+New temperature sensor (TP100?)
+Power cable strain relief holes</text>
+<text x="238.76" y="76.2" size="1.778" layer="97">i2c addr = 0x48</text>
+<text x="284.48" y="76.2" size="1.778" layer="97">i2c addr = 0x49</text>
 </plain>
 <instances>
 <instance part="LICENSE1" gate="G$1" x="289.56" y="27.94" smashed="yes"/>
@@ -7551,6 +7558,10 @@ DIN A3, landscape with extra doc field</description>
 </schematic>
 </drawing>
 <compatibility>
+<note version="6.3" minversion="6.2.2" severity="warning">
+Since Version 6.2.2 text objects can contain more than one line,
+which will not be processed correctly with this version.
+</note>
 <note version="8.2" severity="warning">
 Since Version 8.2, EAGLE supports online libraries. The ids
 of those online libraries will not be understood (or retained)
