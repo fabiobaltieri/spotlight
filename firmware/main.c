@@ -3,6 +3,7 @@
 #include "app_timer.h"
 #include "boards.h"
 #include "bsp.h"
+#include "app_pwm.h"
 #include "nrf_delay.h"
 #include "nrf_pwr_mgmt.h"
 #include "nrf_sdh.h"
@@ -11,6 +12,9 @@
 #include "nrf_log.h"
 #include "nrf_log_ctrl.h"
 #include "nrf_log_default_backends.h"
+
+APP_PWM_INSTANCE(PWM1, 1);
+APP_PWM_INSTANCE(PWM2, 2);
 
 void bsp_evt_handler(bsp_event_t event)
 {
@@ -28,18 +32,44 @@ void bsp_evt_handler(bsp_event_t event)
 			break;
 
 		case BSP_EVENT_KEY_2:
-			bsp_board_led_invert(2);
-			NRF_LOG_INFO("Key 2");
+			NRF_LOG_INFO("Key 0 long");
 			break;
 
 		case BSP_EVENT_KEY_3:
-			bsp_board_led_invert(3);
-			NRF_LOG_INFO("Key 3");
+			NRF_LOG_INFO("Key 1 long");
 			break;
 
 		default:
 			break;
 	}
+}
+
+static void pwm_setup(void)
+{
+	ret_code_t err_code;
+
+	app_pwm_config_t pwm1_cfg = APP_PWM_DEFAULT_CONFIG_2CH(
+			20L, POWER_LED_1, POWER_LED_2);
+	app_pwm_config_t pwm2_cfg = APP_PWM_DEFAULT_CONFIG_2CH(
+			20L, POWER_LED_3, POWER_LED_4);
+
+	pwm1_cfg.pin_polarity[0] = APP_PWM_POLARITY_ACTIVE_LOW;
+	pwm1_cfg.pin_polarity[1] = APP_PWM_POLARITY_ACTIVE_LOW;
+	pwm2_cfg.pin_polarity[0] = APP_PWM_POLARITY_ACTIVE_LOW;
+	pwm2_cfg.pin_polarity[1] = APP_PWM_POLARITY_ACTIVE_LOW;
+
+	err_code = app_pwm_init(&PWM1, &pwm1_cfg, NULL);
+	APP_ERROR_CHECK(err_code);
+	err_code = app_pwm_init(&PWM2, &pwm2_cfg, NULL);
+	APP_ERROR_CHECK(err_code);
+
+	app_pwm_enable(&PWM1);
+	app_pwm_enable(&PWM2);
+
+	while (app_pwm_channel_duty_set(&PWM1, 0, 5) == NRF_ERROR_BUSY);
+	while (app_pwm_channel_duty_set(&PWM1, 1, 5) == NRF_ERROR_BUSY);
+	while (app_pwm_channel_duty_set(&PWM2, 0, 5) == NRF_ERROR_BUSY);
+	while (app_pwm_channel_duty_set(&PWM2, 1, 5) == NRF_ERROR_BUSY);
 }
 
 static void softdevice_setup(void)
@@ -93,6 +123,7 @@ int main(void)
 	log_init();
 	utils_setup();
 	softdevice_setup();
+	pwm_setup();
 
 	NRF_LOG_INFO("Started...");
 
