@@ -44,7 +44,9 @@ void bsp_evt_handler(bsp_event_t event)
 
 static void softdevice_setup(void)
 {
-	ret_code_t err_code = nrf_sdh_enable_request();
+	ret_code_t err_code;
+
+	err_code = nrf_sdh_enable_request();
 	APP_ERROR_CHECK(err_code);
 
 	ASSERT(nrf_sdh_is_enabled());
@@ -78,7 +80,9 @@ static void utils_setup(void)
 
 static void log_init(void)
 {
-	ret_code_t err_code = NRF_LOG_INIT(NULL);
+	ret_code_t err_code;
+
+	err_code = NRF_LOG_INIT(NULL);
 	APP_ERROR_CHECK(err_code);
 
 	NRF_LOG_DEFAULT_BACKENDS_INIT();
