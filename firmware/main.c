@@ -16,7 +16,7 @@
 APP_PWM_INSTANCE(PWM1, 1);
 APP_PWM_INSTANCE(PWM2, 2);
 
-void bsp_evt_handler(bsp_event_t event)
+static void bsp_evt_handler(bsp_event_t event)
 {
 	NRF_LOG_INFO("event %02x", event);
 	switch (event)
