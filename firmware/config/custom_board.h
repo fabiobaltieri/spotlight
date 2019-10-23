@@ -10,7 +10,10 @@
 #define BUTTON_1       13 // 5
 #define BUTTON_2       14 // 6
 
-#define BUTTONS_NUMBER 4
+#define BSP_BUTTON_0   BUTTON_1
+#define BSP_BUTTON_1   BUTTON_2
+
+#define BUTTONS_NUMBER 2
 #define BUTTON_PULL    NRF_GPIO_PIN_PULLUP
 #define BUTTONS_ACTIVE_STATE 0
 #define BUTTONS_LIST { BUTTON_1, BUTTON_2 }
