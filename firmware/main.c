@@ -5,6 +5,7 @@
 #include "bsp.h"
 #include "app_pwm.h"
 #include "nrf_delay.h"
+#include "nrf_drv_twi.h"
 #include "nrf_pwr_mgmt.h"
 #include "nrf_sdh.h"
 #include "nrf_sdh_ant.h"
@@ -16,12 +17,29 @@
 APP_PWM_INSTANCE(PWM1, 1);
 APP_PWM_INSTANCE(PWM2, 2);
 
+static const nrf_drv_twi_t m_twi = NRF_DRV_TWI_INSTANCE(0);
+
+static void twi_read(uint8_t addr)
+{
+	ret_code_t err_code;
+	uint8_t data;
+
+	err_code = nrf_drv_twi_rx(&m_twi, addr, &data, sizeof(data));
+	if (err_code == NRF_SUCCESS) {
+		NRF_LOG_INFO("TWI: addr: %02x %02d", addr, data);
+	} else {
+		NRF_LOG_INFO("TWI: addr: %02x nope", addr);
+	}
+}
+
 static void bsp_evt_handler(bsp_event_t event)
 {
 	NRF_LOG_INFO("event %02x", event);
 	switch (event)
 	{
 		case BSP_EVENT_KEY_0:
+			twi_read(0x4a);
+			twi_read(0x4b);
 			bsp_board_led_invert(0);
 			NRF_LOG_INFO("Key 0");
 			break;
@@ -42,6 +60,24 @@ static void bsp_evt_handler(bsp_event_t event)
 		default:
 			break;
 	}
+}
+
+static void twi_init(void)
+{
+	ret_code_t err_code;
+
+	const nrf_drv_twi_config_t twi_config = {
+		.scl                = TWI_SCL,
+		.sda                = TWI_SDA,
+		.frequency          = NRF_DRV_TWI_FREQ_100K,
+		.interrupt_priority = APP_IRQ_PRIORITY_HIGH,
+		.clear_bus_init     = false
+	};
+
+	err_code = nrf_drv_twi_init(&m_twi, &twi_config, NULL, NULL);
+	APP_ERROR_CHECK(err_code);
+
+	nrf_drv_twi_enable(&m_twi);
 }
 
 static void pwm_setup(void)
@@ -124,6 +160,7 @@ int main(void)
 	utils_setup();
 	softdevice_setup();
 	pwm_setup();
+	twi_init();
 
 	NRF_LOG_INFO("Started...");
 
