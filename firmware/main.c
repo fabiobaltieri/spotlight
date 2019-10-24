@@ -45,7 +45,6 @@ static void bsp_evt_handler(bsp_event_t event)
 			break;
 
 		case BSP_EVENT_KEY_1:
-			bsp_board_led_invert(1);
 			NRF_LOG_INFO("Key 1");
 			break;
 
@@ -78,6 +77,23 @@ static void twi_init(void)
 	APP_ERROR_CHECK(err_code);
 
 	nrf_drv_twi_enable(&m_twi);
+}
+
+APP_TIMER_DEF(test_tmr);
+static void test_timer_handler(void *p_context)
+{
+	bsp_board_led_invert(1);
+}
+
+static void timer_init()
+{
+	ret_code_t err_code;
+	err_code = app_timer_create(
+			&test_tmr, APP_TIMER_MODE_REPEATED, test_timer_handler);
+	APP_ERROR_CHECK(err_code);
+
+	err_code = app_timer_start(test_tmr, APP_TIMER_TICKS(1000), NULL);
+	APP_ERROR_CHECK(err_code);
 }
 
 static void pwm_setup(void)
@@ -161,6 +177,7 @@ int main(void)
 	softdevice_setup();
 	pwm_setup();
 	twi_init();
+	timer_init();
 
 	NRF_LOG_INFO("Started...");
 
