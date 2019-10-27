@@ -190,6 +190,7 @@ static void ant_evt_telemetry(ant_evt_t *ant_evt)
 					channel, ant_evt->message.ANT_MESSAGE_aucPayload);
 			break;
 		case EVENT_CHANNEL_COLLISION:
+			ANT_DBG("ANT %d: channel collision", channel);
 			break;
 		default:
 			ANT_DBG("ANT event %d %02x", ant_evt->channel, ant_evt->event);
