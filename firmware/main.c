@@ -97,6 +97,15 @@ static void timer_init()
 	APP_ERROR_CHECK(err_code);
 }
 
+static uint8_t levels[] = {1, 1, 1, 1};
+static void pwm_update(void)
+{
+	while (app_pwm_channel_duty_set(&PWM1, 0, 1) == NRF_ERROR_BUSY);
+	while (app_pwm_channel_duty_set(&PWM1, 1, 1) == NRF_ERROR_BUSY);
+	while (app_pwm_channel_duty_set(&PWM2, 0, 1) == NRF_ERROR_BUSY);
+	while (app_pwm_channel_duty_set(&PWM2, 1, 1) == NRF_ERROR_BUSY);
+}
+
 static void pwm_setup(void)
 {
 	ret_code_t err_code;
@@ -119,10 +128,7 @@ static void pwm_setup(void)
 	app_pwm_enable(&PWM1);
 	app_pwm_enable(&PWM2);
 
-	while (app_pwm_channel_duty_set(&PWM1, 0, 1) == NRF_ERROR_BUSY);
-	while (app_pwm_channel_duty_set(&PWM1, 1, 1) == NRF_ERROR_BUSY);
-	while (app_pwm_channel_duty_set(&PWM2, 0, 1) == NRF_ERROR_BUSY);
-	while (app_pwm_channel_duty_set(&PWM2, 1, 1) == NRF_ERROR_BUSY);
+	pwm_update();
 }
 
 static void softdevice_setup(void)
@@ -159,7 +165,6 @@ static void utils_setup(void)
 	err_code = nrf_pwr_mgmt_init();
 	APP_ERROR_CHECK(err_code);
 }
-
 
 static void log_init(void)
 {
