@@ -10,11 +10,33 @@
 #include "nrf_sdh.h"
 #include "nrf_sdh_ant.h"
 
+#include "ant_interface.h"
+#include "ant_parameters.h"
+#include "ant_channel_config.h"
+
 #include "nrf_log.h"
 #include "nrf_log_ctrl.h"
 #include "nrf_log_default_backends.h"
 
 #include "utils.h"
+
+// Telemetry Master channel
+#define TELEMETRY_CHANNEL 0
+#define TELEMETRY_ANT_NETWORK_NUM 0
+#define TELEMETRY_CHAN_ID_DEV_NUM 666
+#define TELEMETRY_CHAN_ID_DEV_TYPE 0xfb
+#define TELEMETRY_CHAN_ID_TRANS_TYPE 1
+#define TELEMETRY_CHAN_PERIOD 32768
+#define TELEMETRY_RF_FREQ 66
+
+// Remote Slave channel
+#define REMOTE_CHANNEL 1
+#define REMOTE_ANT_NETWORK_NUM 0
+#define REMOTE_CHAN_ID_DEV_NUM 0
+#define REMOTE_CHAN_ID_DEV_TYPE 0xfc
+#define REMOTE_CHAN_ID_TRANS_TYPE 1
+#define REMOTE_CHAN_PERIOD 16384
+#define REMOTE_RF_FREQ 66
 
 APP_PWM_INSTANCE(PWM1, 1);
 APP_PWM_INSTANCE(PWM2, 2);
@@ -131,6 +153,60 @@ static void pwm_setup(void)
 	pwm_update();
 }
 
+static void ant_evt_handler(ant_evt_t *ant_evt, void *context)
+{
+	NRF_LOG_INFO("ANT event %d %02x", ant_evt->channel, ant_evt->event);
+	bsp_board_led_invert(1);
+}
+
+#define ANT_OBSERVER_PRIO 1
+NRF_SDH_ANT_OBSERVER(m_ant_observer, ANT_OBSERVER_PRIO, ant_evt_handler, NULL);
+
+static void ant_channel_setup(void)
+{
+	ret_code_t err_code;
+
+	/* Telemetry */
+	ant_channel_config_t t_channel_config = {
+		.channel_number    = TELEMETRY_CHANNEL,
+		.channel_type      = CHANNEL_TYPE_MASTER,
+		.ext_assign        = 0x00,
+		.rf_freq           = TELEMETRY_RF_FREQ,
+		.transmission_type = TELEMETRY_CHAN_ID_TRANS_TYPE,
+		.device_type       = TELEMETRY_CHAN_ID_DEV_TYPE,
+		.device_number     = TELEMETRY_CHAN_ID_DEV_NUM,
+		.channel_period    = TELEMETRY_CHAN_PERIOD,
+		.network_number    = TELEMETRY_ANT_NETWORK_NUM,
+	};
+
+	err_code = ant_channel_init(&t_channel_config);
+	APP_ERROR_CHECK(err_code);
+
+	// TODO: tx preload
+
+	err_code = sd_ant_channel_open(TELEMETRY_CHANNEL);
+	APP_ERROR_CHECK(err_code);
+
+	/* Remote */
+	ant_channel_config_t r_channel_config = {
+		.channel_number    = REMOTE_CHANNEL,
+		.channel_type      = CHANNEL_TYPE_SLAVE,
+		.ext_assign        = 0x00,
+		.rf_freq           = REMOTE_RF_FREQ,
+		.transmission_type = REMOTE_CHAN_ID_TRANS_TYPE,
+		.device_type       = REMOTE_CHAN_ID_DEV_TYPE,
+		.device_number     = REMOTE_CHAN_ID_DEV_NUM,
+		.channel_period    = REMOTE_CHAN_PERIOD,
+		.network_number    = REMOTE_ANT_NETWORK_NUM,
+	};
+
+	err_code = ant_channel_init(&r_channel_config);
+	APP_ERROR_CHECK(err_code);
+
+	err_code = sd_ant_channel_open(REMOTE_CHANNEL);
+	APP_ERROR_CHECK(err_code);
+}
+
 static void softdevice_setup(void)
 {
 	ret_code_t err_code;
@@ -184,6 +260,8 @@ int main(void)
 	pwm_setup();
 	twi_init();
 	timer_init();
+
+	ant_channel_setup();
 
 	NRF_LOG_INFO("Started...");
 
