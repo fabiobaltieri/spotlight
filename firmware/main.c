@@ -181,11 +181,14 @@ static void ant_evt_telemetry(ant_evt_t *ant_evt)
 	uint8_t channel = ant_evt->channel;
 
 	switch (ant_evt->event) {
+		case EVENT_TX:
+			// TODO: actually load on demand.
+			ant_tx_load();
+			break;
 		case EVENT_RX:
 			ant_dump_message("RX",
 					channel, ant_evt->message.ANT_MESSAGE_aucPayload);
 			break;
-		case EVENT_TX:
 		case EVENT_CHANNEL_COLLISION:
 			break;
 		default:
