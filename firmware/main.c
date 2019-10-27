@@ -40,6 +40,9 @@
 #define REMOTE_CHAN_PERIOD 16384
 #define REMOTE_RF_FREQ 66
 
+// Running state
+static uint8_t levels[] = {1, 1, 1, 1};
+
 APP_PWM_INSTANCE(PWM1, 1);
 APP_PWM_INSTANCE(PWM2, 2);
 
@@ -121,7 +124,6 @@ static void timer_init()
 	APP_ERROR_CHECK(err_code);
 }
 
-static uint8_t levels[] = {1, 1, 1, 1};
 static void pwm_update(void)
 {
 	while (app_pwm_channel_duty_set(&PWM1, 0, 1) == NRF_ERROR_BUSY);
