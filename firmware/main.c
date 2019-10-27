@@ -124,12 +124,11 @@ static void timer_init()
 	APP_ERROR_CHECK(err_code);
 }
 
-static void pwm_update(void)
-{
-	while (app_pwm_channel_duty_set(&PWM1, 0, 1) == NRF_ERROR_BUSY);
-	while (app_pwm_channel_duty_set(&PWM1, 1, 1) == NRF_ERROR_BUSY);
-	while (app_pwm_channel_duty_set(&PWM2, 0, 1) == NRF_ERROR_BUSY);
-	while (app_pwm_channel_duty_set(&PWM2, 1, 1) == NRF_ERROR_BUSY);
+static void pwm_update(void) {
+	while (app_pwm_channel_duty_set(&PWM1, 0, levels[0]) == NRF_ERROR_BUSY);
+	while (app_pwm_channel_duty_set(&PWM1, 1, levels[1]) == NRF_ERROR_BUSY);
+	while (app_pwm_channel_duty_set(&PWM2, 0, levels[2]) == NRF_ERROR_BUSY);
+	while (app_pwm_channel_duty_set(&PWM2, 1, levels[3]) == NRF_ERROR_BUSY);
 }
 
 static void remote_process(uint8_t *payload)
