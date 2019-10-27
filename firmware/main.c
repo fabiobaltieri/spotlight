@@ -40,7 +40,6 @@ static void bsp_evt_handler(bsp_event_t event)
 		case BSP_EVENT_KEY_0:
 			twi_read(0x4a);
 			twi_read(0x4b);
-			bsp_board_led_invert(0);
 			NRF_LOG_INFO("Key 0");
 			break;
 
@@ -82,7 +81,7 @@ static void twi_init(void)
 APP_TIMER_DEF(test_tmr);
 static void test_timer_handler(void *p_context)
 {
-	bsp_board_led_invert(1);
+	bsp_board_led_invert(0);
 }
 
 static void timer_init()
@@ -118,10 +117,10 @@ static void pwm_setup(void)
 	app_pwm_enable(&PWM1);
 	app_pwm_enable(&PWM2);
 
-	while (app_pwm_channel_duty_set(&PWM1, 0, 5) == NRF_ERROR_BUSY);
-	while (app_pwm_channel_duty_set(&PWM1, 1, 5) == NRF_ERROR_BUSY);
-	while (app_pwm_channel_duty_set(&PWM2, 0, 5) == NRF_ERROR_BUSY);
-	while (app_pwm_channel_duty_set(&PWM2, 1, 5) == NRF_ERROR_BUSY);
+	while (app_pwm_channel_duty_set(&PWM1, 0, 1) == NRF_ERROR_BUSY);
+	while (app_pwm_channel_duty_set(&PWM1, 1, 1) == NRF_ERROR_BUSY);
+	while (app_pwm_channel_duty_set(&PWM2, 0, 1) == NRF_ERROR_BUSY);
+	while (app_pwm_channel_duty_set(&PWM2, 1, 1) == NRF_ERROR_BUSY);
 }
 
 static void softdevice_setup(void)
