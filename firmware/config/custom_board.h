@@ -10,6 +10,7 @@
 #define POWER_LED_2          29
 #define POWER_LED_3          30
 #define POWER_LED_4          31
+#define POWER_LED_POLARITY   APP_PWM_POLARITY_ACTIVE_HIGH
 
 #define BUTTON_1       5
 #define BUTTON_2       6
@@ -36,6 +37,7 @@
 #define POWER_LED_2          20
 #define POWER_LED_3          22
 #define POWER_LED_4          23
+#define POWER_LED_POLARITY   APP_PWM_POLARITY_ACTIVE_LOW
 
 #define BUTTON_1       13
 #define BUTTON_2       14

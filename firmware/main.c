@@ -105,10 +105,10 @@ static void pwm_setup(void)
 	app_pwm_config_t pwm2_cfg = APP_PWM_DEFAULT_CONFIG_2CH(
 			20L, POWER_LED_3, POWER_LED_4);
 
-	pwm1_cfg.pin_polarity[0] = APP_PWM_POLARITY_ACTIVE_LOW;
-	pwm1_cfg.pin_polarity[1] = APP_PWM_POLARITY_ACTIVE_LOW;
-	pwm2_cfg.pin_polarity[0] = APP_PWM_POLARITY_ACTIVE_LOW;
-	pwm2_cfg.pin_polarity[1] = APP_PWM_POLARITY_ACTIVE_LOW;
+	pwm1_cfg.pin_polarity[0] = POWER_LED_POLARITY;
+	pwm1_cfg.pin_polarity[1] = POWER_LED_POLARITY;
+	pwm2_cfg.pin_polarity[0] = POWER_LED_POLARITY;
+	pwm2_cfg.pin_polarity[1] = POWER_LED_POLARITY;
 
 	err_code = app_pwm_init(&PWM1, &pwm1_cfg, NULL);
 	APP_ERROR_CHECK(err_code);
