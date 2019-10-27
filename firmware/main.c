@@ -180,11 +180,12 @@ static void ant_tx_load(void)
 static void ant_evt_telemetry(ant_evt_t *ant_evt)
 {
 	switch (ant_evt->event) {
-		case EVENT_TX:
-			break;
 		case EVENT_RX:
 			ant_dump_message("RX",
 					TELEMETRY_CHANNEL, ant_evt->message.ANT_MESSAGE_aucPayload);
+			break;
+		case EVENT_TX:
+		case EVENT_CHANNEL_COLLISION:
 			break;
 		default:
 			ANT_DBG("ANT event %d %02x", ant_evt->channel, ant_evt->event);
@@ -203,7 +204,7 @@ static void ant_evt_remote(ant_evt_t *ant_evt)
 			remote_process(ant_evt->message.ANT_MESSAGE_aucPayload);
 			break;
 		case EVENT_RX_SEARCH_TIMEOUT:
-			ANT_DBG("ANT %d: search timeout", REMOTE_CHANNEL);
+		case EVENT_RX_FAIL_GO_TO_SEARCH:
 			break;
 		case EVENT_CHANNEL_CLOSED:
 			ANT_DBG("ANT %d: channel closed", REMOTE_CHANNEL);
