@@ -179,10 +179,12 @@ static void ant_tx_load(void)
 
 static void ant_evt_telemetry(ant_evt_t *ant_evt)
 {
+	uint8_t channel = ant_evt->channel;
+
 	switch (ant_evt->event) {
 		case EVENT_RX:
 			ant_dump_message("RX",
-					TELEMETRY_CHANNEL, ant_evt->message.ANT_MESSAGE_aucPayload);
+					channel, ant_evt->message.ANT_MESSAGE_aucPayload);
 			break;
 		case EVENT_TX:
 		case EVENT_CHANNEL_COLLISION:
@@ -196,6 +198,7 @@ static void ant_evt_telemetry(ant_evt_t *ant_evt)
 static void ant_evt_remote(ant_evt_t *ant_evt)
 {
 	ret_code_t err_code;
+	uint8_t channel = ant_evt->channel;
 
 	bsp_board_led_invert(1);
 
@@ -207,8 +210,8 @@ static void ant_evt_remote(ant_evt_t *ant_evt)
 		case EVENT_RX_FAIL_GO_TO_SEARCH:
 			break;
 		case EVENT_CHANNEL_CLOSED:
-			ANT_DBG("ANT %d: channel closed", REMOTE_CHANNEL);
-			err_code = sd_ant_channel_open(REMOTE_CHANNEL);
+			ANT_DBG("ANT %d: channel closed", channel);
+			err_code = sd_ant_channel_open(channel);
 			APP_ERROR_CHECK(err_code);
 			break;
 		default:
