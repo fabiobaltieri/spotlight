@@ -20,6 +20,8 @@
 
 #include "utils.h"
 
+#define ANT_DBG(a...) NRF_LOG_INFO(a)
+
 // Telemetry Master channel
 #define TELEMETRY_CHANNEL 0
 #define TELEMETRY_ANT_NETWORK_NUM 0
@@ -128,6 +130,11 @@ static void pwm_update(void)
 	while (app_pwm_channel_duty_set(&PWM2, 1, 1) == NRF_ERROR_BUSY);
 }
 
+static void remote_process(uint8_t *payload)
+{
+	ant_dump_message("RX", REMOTE_CHANNEL, payload);
+}
+
 static void pwm_setup(void)
 {
 	ret_code_t err_code;
@@ -153,10 +160,68 @@ static void pwm_setup(void)
 	pwm_update();
 }
 
+static void ant_tx_load(void)
+{
+	uint8_t payload[ANT_STANDARD_DATA_PAYLOAD_SIZE];
+
+	memset(payload, 0, ANT_STANDARD_DATA_PAYLOAD_SIZE);
+
+	ret_code_t err_code = sd_ant_broadcast_message_tx(
+			TELEMETRY_CHANNEL,
+			ANT_STANDARD_DATA_PAYLOAD_SIZE,
+			payload);
+	APP_ERROR_CHECK(err_code);
+
+	ant_dump_message("TX", REMOTE_CHANNEL, payload);
+}
+
+static void ant_evt_telemetry(ant_evt_t *ant_evt)
+{
+	switch (ant_evt->event) {
+		case EVENT_TX:
+			break;
+		case EVENT_RX:
+			ant_dump_message("RX",
+					TELEMETRY_CHANNEL, ant_evt->message.ANT_MESSAGE_aucPayload);
+			break;
+		default:
+			ANT_DBG("ANT event %d %02x", ant_evt->channel, ant_evt->event);
+			break;
+	}
+}
+
+static void ant_evt_remote(ant_evt_t *ant_evt)
+{
+	ret_code_t err_code;
+
+	bsp_board_led_invert(1);
+
+	switch (ant_evt->event) {
+		case EVENT_RX:
+			remote_process(ant_evt->message.ANT_MESSAGE_aucPayload);
+			break;
+		case EVENT_RX_SEARCH_TIMEOUT:
+			ANT_DBG("ANT %d: search timeout", REMOTE_CHANNEL);
+			break;
+		case EVENT_CHANNEL_CLOSED:
+			ANT_DBG("ANT %d: channel closed", REMOTE_CHANNEL);
+			err_code = sd_ant_channel_open(REMOTE_CHANNEL);
+			APP_ERROR_CHECK(err_code);
+			break;
+		default:
+			ANT_DBG("ANT event %d %02x", ant_evt->channel, ant_evt->event);
+			break;
+	}
+}
+
 static void ant_evt_handler(ant_evt_t *ant_evt, void *context)
 {
-	NRF_LOG_INFO("ANT event %d %02x", ant_evt->channel, ant_evt->event);
-	bsp_board_led_invert(1);
+	if (ant_evt->channel == TELEMETRY_CHANNEL)
+		ant_evt_telemetry(ant_evt);
+	else if (ant_evt->channel == REMOTE_CHANNEL)
+		ant_evt_remote(ant_evt);
+	else
+		ANT_DBG("ANT ?! event %d %02x", ant_evt->channel, ant_evt->event);
 }
 
 #define ANT_OBSERVER_PRIO 1
@@ -182,7 +247,7 @@ static void ant_channel_setup(void)
 	err_code = ant_channel_init(&t_channel_config);
 	APP_ERROR_CHECK(err_code);
 
-	// TODO: tx preload
+	ant_tx_load();
 
 	err_code = sd_ant_channel_open(TELEMETRY_CHANNEL);
 	APP_ERROR_CHECK(err_code);
