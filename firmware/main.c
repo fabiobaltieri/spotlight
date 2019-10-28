@@ -187,11 +187,12 @@ static void pwm_setup(void)
 
 static void ant_tx_load(void)
 {
+	ret_code_t err_code;
 	uint8_t payload[ANT_STANDARD_DATA_PAYLOAD_SIZE];
 
 	memset(payload, 0, ANT_STANDARD_DATA_PAYLOAD_SIZE);
 
-	ret_code_t err_code = sd_ant_broadcast_message_tx(
+	err_code = sd_ant_broadcast_message_tx(
 			TELEMETRY_CHANNEL,
 			ANT_STANDARD_DATA_PAYLOAD_SIZE,
 			payload);
