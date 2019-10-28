@@ -18,6 +18,7 @@
 #include "nrf_log_ctrl.h"
 #include "nrf_log_default_backends.h"
 
+#include "mic280.h"
 #include "utils.h"
 
 #define ANT_DBG(a...) NRF_LOG_INFO(a)
@@ -55,19 +56,6 @@ APP_PWM_INSTANCE(PWM1, 1);
 APP_PWM_INSTANCE(PWM2, 2);
 
 static const nrf_drv_twi_t twi = NRF_DRV_TWI_INSTANCE(0);
-
-static uint8_t mic280_read(uint8_t addr)
-{
-	ret_code_t err_code;
-	uint8_t data;
-
-	err_code = nrf_drv_twi_rx(&twi, addr, &data, sizeof(data));
-	if (err_code == NRF_SUCCESS) {
-		return data;
-	} else {
-		return INT8_MIN;
-	}
-}
 
 static void bsp_evt_handler(bsp_event_t event)
 {
@@ -116,10 +104,10 @@ static void twi_init(void)
 APP_TIMER_DEF(temp_tmr);
 static void temp_timer_handler(void *p_context)
 {
-	temps[0] = mic280_read(TEMP1_ADDR);
-	temps[1] = mic280_read(TEMP2_ADDR);
-	temps[2] = mic280_read(TEMP3_ADDR);
-	temps[3] = mic280_read(TEMP4_ADDR);
+	temps[0] = mic280_read(&twi, TEMP1_ADDR);
+	temps[1] = mic280_read(&twi, TEMP2_ADDR);
+	temps[2] = mic280_read(&twi, TEMP3_ADDR);
+	temps[3] = mic280_read(&twi, TEMP4_ADDR);
 }
 
 APP_TIMER_DEF(pwm_tmr);
