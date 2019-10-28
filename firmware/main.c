@@ -178,6 +178,7 @@ static void timer_init()
 {
 	ret_code_t err_code;
 
+	/* Temperature update cycle */
 	err_code = app_timer_create(
 			&temp_tmr, APP_TIMER_MODE_REPEATED, temp_timer_handler);
 	APP_ERROR_CHECK(err_code);
@@ -185,6 +186,7 @@ static void timer_init()
 	err_code = app_timer_start(temp_tmr, APP_TIMER_TICKS(1000), NULL);
 	APP_ERROR_CHECK(err_code);
 
+	/* PWM smoothing */
 	err_code = app_timer_create(
 			&pwm_tmr, APP_TIMER_MODE_SINGLE_SHOT, pwm_timer_handler);
 	APP_ERROR_CHECK(err_code);
