@@ -173,7 +173,7 @@ static void ant_tx_load(void)
 			payload);
 	APP_ERROR_CHECK(err_code);
 
-	ant_dump_message("TX", REMOTE_CHANNEL, payload);
+	ant_dump_message("TX", TELEMETRY_CHANNEL, payload);
 }
 
 static void ant_evt_telemetry(ant_evt_t *ant_evt)
