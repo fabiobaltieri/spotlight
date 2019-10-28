@@ -72,6 +72,11 @@ static void ant_tx_load(void)
 
 static void ant_evt_handler(ant_evt_t *ant_evt, void *context)
 {
+	if (ant_evt->channel != BROADCAST_CHANNEL_NUMBER)
+		return;
+	if (ant_evt->event != EVENT_TX)
+		return;
+
 	bsp_board_led_on(0);
 	nrf_delay_ms(10);
 	bsp_board_led_off(0);
