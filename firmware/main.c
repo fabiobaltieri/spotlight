@@ -122,32 +122,6 @@ static void temp_timer_handler(void *p_context)
 	temps[3] = mic280_read(TEMP4_ADDR);
 }
 
-static void pwm_adjust_step(uint8_t *from, uint8_t to)
-{
-	uint8_t step;
-	uint8_t delta;
-
-	if (*from == to)
-		return;
-
-	if (*from > to)
-		delta = *from - to;
-	else
-		delta = to - *from;
-
-	if (delta < 10)
-		step = 1;
-	else if (delta < 30)
-		step = 5;
-	else
-		step = 10;
-
-	if (*from > to)
-		*from -= step;
-	else
-		*from += step;
-}
-
 APP_TIMER_DEF(pwm_tmr);
 
 static void pwm_update(void)

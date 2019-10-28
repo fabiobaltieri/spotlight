@@ -16,3 +16,29 @@ void ant_dump_message(const char *id, uint8_t chan,uint8_t *payload)
 
 	NRF_LOG_INFO("%s (%d) [%s]", id, chan, buf)
 }
+
+void pwm_adjust_step(uint8_t *from, uint8_t to)
+{
+	uint8_t step;
+	uint8_t delta;
+
+	if (*from == to)
+		return;
+
+	if (*from > to)
+		delta = *from - to;
+	else
+		delta = to - *from;
+
+	if (delta < 10)
+		step = 1;
+	else if (delta < 30)
+		step = 5;
+	else
+		step = 10;
+
+	if (*from > to)
+		*from -= step;
+	else
+		*from += step;
+}
