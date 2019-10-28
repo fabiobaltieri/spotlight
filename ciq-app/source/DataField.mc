@@ -13,6 +13,9 @@ class DataField extends WatchUi.SimpleDataField {
 	}
 
 	function compute(info) {
+		if (ant_device.searching) {
+			return "Searching...";
+		}
 		return "--";
 	}
 }

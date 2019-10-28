@@ -9,6 +9,8 @@ class AntDevice extends Ant.GenericChannel {
 	const DEV_NUMBER = 0; /* 0 for search */
 	const CHANNEL = 66;
 
+	var searching = true;
+
 	hidden function debug(str) {
 		System.println("[Ant] " + str);
 	}
@@ -62,6 +64,7 @@ class AntDevice extends Ant.GenericChannel {
 			debug("sarch timeout");
 		} else if (id == Ant.MSG_ID_RF_EVENT && code == Ant.MSG_CODE_EVENT_RX_FAIL_GO_TO_SEARCH) {
 			debug("rx fail go to search");
+			searching = true;
 		} else if (id == Ant.MSG_ID_RF_EVENT && code == Ant.MSG_CODE_EVENT_CHANNEL_CLOSED) {
 			debug("channel closed");
 			open();
@@ -85,6 +88,7 @@ class AntDevice extends Ant.GenericChannel {
 		} else if (msgId == Ant.MSG_ID_BROADCAST_DATA) {
 			// Data
 			debug("data, dev: " + deviceNum + ": " + payloadHex(payload));
+			searching = false;
 			doMessage(payload);
 		} else {
 			// Other...
