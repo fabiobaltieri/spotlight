@@ -40,25 +40,32 @@
 #define REMOTE_CHAN_PERIOD 16384
 #define REMOTE_RF_FREQ 66
 
+// Temp sensor addresses (MIC280)
+#define TEMP1_ADDR 0x48
+#define TEMP2_ADDR 0x49
+#define TEMP3_ADDR 0x4a
+#define TEMP4_ADDR 0x4b
+
 // Running state
 static uint8_t levels[] = {1, 1, 1, 1};
 static uint8_t cur_levels[] = {0, 0, 0, 0};
+static int8_t temps[] = {INT8_MIN, INT8_MIN, INT8_MIN, INT8_MIN};
 
 APP_PWM_INSTANCE(PWM1, 1);
 APP_PWM_INSTANCE(PWM2, 2);
 
 static const nrf_drv_twi_t m_twi = NRF_DRV_TWI_INSTANCE(0);
 
-static void twi_read(uint8_t addr)
+static uint8_t mic280_read(uint8_t addr)
 {
 	ret_code_t err_code;
 	uint8_t data;
 
 	err_code = nrf_drv_twi_rx(&m_twi, addr, &data, sizeof(data));
 	if (err_code == NRF_SUCCESS) {
-		NRF_LOG_INFO("TWI: addr: %02x %02d", addr, data);
+		return data;
 	} else {
-		NRF_LOG_INFO("TWI: addr: %02x nope", addr);
+		return INT8_MIN;
 	}
 }
 
@@ -68,8 +75,6 @@ static void bsp_evt_handler(bsp_event_t event)
 	switch (event)
 	{
 		case BSP_EVENT_KEY_0:
-			twi_read(0x4a);
-			twi_read(0x4b);
 			NRF_LOG_INFO("Key 0");
 			break;
 
@@ -109,9 +114,12 @@ static void twi_init(void)
 }
 
 APP_TIMER_DEF(temp_tmr);
-static void test_timer_handler(void *p_context)
+static void temp_timer_handler(void *p_context)
 {
-	// TODO: temperature measurement
+	temps[0] = mic280_read(TEMP1_ADDR);
+	temps[1] = mic280_read(TEMP2_ADDR);
+	temps[2] = mic280_read(TEMP3_ADDR);
+	temps[3] = mic280_read(TEMP4_ADDR);
 }
 
 static void pwm_adjust_step(uint8_t *from, uint8_t to)
@@ -171,7 +179,7 @@ static void timer_init()
 	ret_code_t err_code;
 
 	err_code = app_timer_create(
-			&temp_tmr, APP_TIMER_MODE_REPEATED, test_timer_handler);
+			&temp_tmr, APP_TIMER_MODE_REPEATED, temp_timer_handler);
 	APP_ERROR_CHECK(err_code);
 
 	err_code = app_timer_start(temp_tmr, APP_TIMER_TICKS(1000), NULL);
