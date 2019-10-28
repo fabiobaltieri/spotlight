@@ -54,14 +54,14 @@ static int8_t temps[] = {INT8_MIN, INT8_MIN, INT8_MIN, INT8_MIN};
 APP_PWM_INSTANCE(PWM1, 1);
 APP_PWM_INSTANCE(PWM2, 2);
 
-static const nrf_drv_twi_t m_twi = NRF_DRV_TWI_INSTANCE(0);
+static const nrf_drv_twi_t twi = NRF_DRV_TWI_INSTANCE(0);
 
 static uint8_t mic280_read(uint8_t addr)
 {
 	ret_code_t err_code;
 	uint8_t data;
 
-	err_code = nrf_drv_twi_rx(&m_twi, addr, &data, sizeof(data));
+	err_code = nrf_drv_twi_rx(&twi, addr, &data, sizeof(data));
 	if (err_code == NRF_SUCCESS) {
 		return data;
 	} else {
@@ -107,10 +107,10 @@ static void twi_init(void)
 		.clear_bus_init     = false
 	};
 
-	err_code = nrf_drv_twi_init(&m_twi, &twi_config, NULL, NULL);
+	err_code = nrf_drv_twi_init(&twi, &twi_config, NULL, NULL);
 	APP_ERROR_CHECK(err_code);
 
-	nrf_drv_twi_enable(&m_twi);
+	nrf_drv_twi_enable(&twi);
 }
 
 APP_TIMER_DEF(temp_tmr);
