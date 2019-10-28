@@ -42,6 +42,7 @@
 
 // Running state
 static uint8_t levels[] = {1, 1, 1, 1};
+static uint8_t cur_levels[] = {0, 0, 0, 0};
 
 APP_PWM_INSTANCE(PWM1, 1);
 APP_PWM_INSTANCE(PWM2, 2);
@@ -107,28 +108,78 @@ static void twi_init(void)
 	nrf_drv_twi_enable(&m_twi);
 }
 
-APP_TIMER_DEF(test_tmr);
+APP_TIMER_DEF(temp_tmr);
 static void test_timer_handler(void *p_context)
 {
-	bsp_board_led_invert(0);
+	// TODO: temperature measurement
+}
+
+static void pwm_adjust_step(uint8_t *from, uint8_t to)
+{
+	uint8_t step;
+	uint8_t delta;
+
+	if (*from == to)
+		return;
+
+	if (*from > to)
+		delta = *from - to;
+	else
+		delta = to - *from;
+
+	if (delta < 10)
+		step = 1;
+	else if (delta < 30)
+		step = 5;
+	else
+		step = 10;
+
+	if (*from > to)
+		*from -= step;
+	else
+		*from += step;
+}
+
+APP_TIMER_DEF(pwm_tmr);
+
+static void pwm_update(void)
+{
+	ret_code_t err_code;
+	if (memcmp(levels, cur_levels, sizeof(levels))) {
+		err_code = app_timer_start(pwm_tmr, APP_TIMER_TICKS(20), NULL);
+		APP_ERROR_CHECK(err_code);
+	}
+}
+
+static void pwm_timer_handler(void *p_context)
+{
+	pwm_adjust_step(&cur_levels[0], levels[0]);
+	pwm_adjust_step(&cur_levels[1], levels[1]);
+	pwm_adjust_step(&cur_levels[2], levels[2]);
+	pwm_adjust_step(&cur_levels[3], levels[3]);
+
+	while (app_pwm_channel_duty_set(&PWM1, 0, cur_levels[0]) == NRF_ERROR_BUSY);
+	while (app_pwm_channel_duty_set(&PWM1, 1, cur_levels[1]) == NRF_ERROR_BUSY);
+	while (app_pwm_channel_duty_set(&PWM2, 0, cur_levels[2]) == NRF_ERROR_BUSY);
+	while (app_pwm_channel_duty_set(&PWM2, 1, cur_levels[3]) == NRF_ERROR_BUSY);
+
+	pwm_update();
 }
 
 static void timer_init()
 {
 	ret_code_t err_code;
+
 	err_code = app_timer_create(
-			&test_tmr, APP_TIMER_MODE_REPEATED, test_timer_handler);
+			&temp_tmr, APP_TIMER_MODE_REPEATED, test_timer_handler);
 	APP_ERROR_CHECK(err_code);
 
-	err_code = app_timer_start(test_tmr, APP_TIMER_TICKS(1000), NULL);
+	err_code = app_timer_start(temp_tmr, APP_TIMER_TICKS(1000), NULL);
 	APP_ERROR_CHECK(err_code);
-}
 
-static void pwm_update(void) {
-	while (app_pwm_channel_duty_set(&PWM1, 0, levels[0]) == NRF_ERROR_BUSY);
-	while (app_pwm_channel_duty_set(&PWM1, 1, levels[1]) == NRF_ERROR_BUSY);
-	while (app_pwm_channel_duty_set(&PWM2, 0, levels[2]) == NRF_ERROR_BUSY);
-	while (app_pwm_channel_duty_set(&PWM2, 1, levels[3]) == NRF_ERROR_BUSY);
+	err_code = app_timer_create(
+			&pwm_tmr, APP_TIMER_MODE_SINGLE_SHOT, pwm_timer_handler);
+	APP_ERROR_CHECK(err_code);
 }
 
 static void remote_process(uint8_t *payload)
@@ -330,10 +381,10 @@ int main(void)
 {
 	log_init();
 	utils_setup();
+	timer_init();
 	softdevice_setup();
 	pwm_setup();
 	twi_init();
-	timer_init();
 
 	ant_channel_setup();
 
