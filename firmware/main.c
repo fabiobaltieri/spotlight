@@ -153,10 +153,12 @@ APP_TIMER_DEF(pwm_tmr);
 static void pwm_update(void)
 {
 	ret_code_t err_code;
-	if (memcmp(levels, cur_levels, sizeof(levels))) {
-		err_code = app_timer_start(pwm_tmr, APP_TIMER_TICKS(20), NULL);
-		APP_ERROR_CHECK(err_code);
-	}
+
+	if (memcmp(levels, cur_levels, sizeof(levels)) == 0)
+		return;
+
+	err_code = app_timer_start(pwm_tmr, APP_TIMER_TICKS(20), NULL);
+	APP_ERROR_CHECK(err_code);
 }
 
 static void pwm_timer_handler(void *p_context)
