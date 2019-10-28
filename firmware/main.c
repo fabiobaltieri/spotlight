@@ -52,10 +52,12 @@ static uint8_t levels[] = {1, 1, 1, 1};
 static uint8_t cur_levels[] = {0, 0, 0, 0};
 static int8_t temps[] = {INT8_MIN, INT8_MIN, INT8_MIN, INT8_MIN};
 
+// Module state
 APP_PWM_INSTANCE(PWM1, 1);
 APP_PWM_INSTANCE(PWM2, 2);
-
 static const nrf_drv_twi_t twi = NRF_DRV_TWI_INSTANCE(0);
+APP_TIMER_DEF(temp_tmr);
+APP_TIMER_DEF(pwm_tmr);
 
 static void bsp_evt_handler(bsp_event_t event)
 {
@@ -101,7 +103,6 @@ static void twi_init(void)
 	nrf_drv_twi_enable(&twi);
 }
 
-APP_TIMER_DEF(temp_tmr);
 static void temp_timer_handler(void *p_context)
 {
 	temps[0] = mic280_read(&twi, TEMP1_ADDR);
@@ -109,8 +110,6 @@ static void temp_timer_handler(void *p_context)
 	temps[2] = mic280_read(&twi, TEMP3_ADDR);
 	temps[3] = mic280_read(&twi, TEMP4_ADDR);
 }
-
-APP_TIMER_DEF(pwm_tmr);
 
 static void pwm_update(void)
 {
