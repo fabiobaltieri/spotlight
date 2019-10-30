@@ -48,7 +48,7 @@
 #define TEMP4_ADDR 0x4b
 
 // Running state
-static uint8_t levels[] = {0, 0, 0, 0};
+static uint8_t tgt_levels[] = {0, 0, 0, 0};
 static uint8_t cur_levels[] = {1, 1, 1, 1};
 static int8_t temps[] = {INT8_MIN, INT8_MIN, INT8_MIN, INT8_MIN};
 
@@ -115,7 +115,7 @@ static void pwm_update(void)
 {
 	ret_code_t err_code;
 
-	if (memcmp(levels, cur_levels, sizeof(levels)) == 0)
+	if (memcmp(tgt_levels, cur_levels, sizeof(tgt_levels)) == 0)
 		return;
 
 	err_code = app_timer_start(pwm_tmr, APP_TIMER_TICKS(20), NULL);
@@ -124,10 +124,10 @@ static void pwm_update(void)
 
 static void pwm_timer_handler(void *p_context)
 {
-	pwm_adjust_step(&cur_levels[0], levels[0]);
-	pwm_adjust_step(&cur_levels[1], levels[1]);
-	pwm_adjust_step(&cur_levels[2], levels[2]);
-	pwm_adjust_step(&cur_levels[3], levels[3]);
+	pwm_adjust_step(&cur_levels[0], tgt_levels[0]);
+	pwm_adjust_step(&cur_levels[1], tgt_levels[1]);
+	pwm_adjust_step(&cur_levels[2], tgt_levels[2]);
+	pwm_adjust_step(&cur_levels[3], tgt_levels[3]);
 
 	while (app_pwm_channel_duty_set(&PWM1, 0, cur_levels[0]) == NRF_ERROR_BUSY);
 	while (app_pwm_channel_duty_set(&PWM1, 1, cur_levels[1]) == NRF_ERROR_BUSY);
