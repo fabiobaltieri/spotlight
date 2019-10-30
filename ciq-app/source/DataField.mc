@@ -6,6 +6,9 @@ using Toybox.System;
 class DataField extends WatchUi.SimpleDataField {
 	hidden var ant_device;
 
+	const modes = ["S", "M", "A", "R"];
+	const levels = ["-", "L", "M", "X", "*"];
+
 	function initialize(device) {
 		SimpleDataField.initialize();
 		label = "Spotlight";
@@ -25,6 +28,9 @@ class DataField extends WatchUi.SimpleDataField {
 		if (ant_device.searching) {
 			return "Searching...";
 		}
-		return "--";
+		return modes[ant_device.mode] +
+			levels[ant_device.level] + " " +
+			ant_device.battery + " " +
+			ant_device.temp;
 	}
 }

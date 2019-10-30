@@ -10,6 +10,10 @@ class AntDevice extends Ant.GenericChannel {
 	const CHANNEL = 66;
 
 	var searching = true;
+	var mode;
+	var level;
+	var battery;
+	var temp;
 
 	hidden function debug(str) {
 		System.println("[Ant] " + str);
@@ -73,8 +77,18 @@ class AntDevice extends Ant.GenericChannel {
 		}
 	}
 
+	hidden function s8(val) {
+		if (val & 0x80) {
+			return val | 0xffffff00;
+		}
+		return val;
+	}
+
 	hidden function doMessage(data) {
-		// TODO: message parsing and exporting
+		mode = data[0] & 0x0f;
+		level = (data[0] >> 4) & 0x0f;
+		battery = data[1];
+		temp = s8(data[2]);
 	}
 
 	function onMessage(msg) {
