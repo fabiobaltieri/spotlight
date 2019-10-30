@@ -137,7 +137,7 @@ static void pwm_timer_handler(void *p_context)
 	pwm_update();
 }
 
-static void timer_init()
+static void timer_init(void)
 {
 	ret_code_t err_code;
 
