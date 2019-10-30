@@ -119,6 +119,31 @@ static void temp_timer_handler(void *p_context)
 	temps[3] = mic280_read(&twi, TEMP4_ADDR);
 }
 
+static void ant_tx_load(void)
+{
+	ret_code_t err_code;
+	uint8_t payload[ANT_STANDARD_DATA_PAYLOAD_SIZE];
+
+	memset(payload, 0, ANT_STANDARD_DATA_PAYLOAD_SIZE);
+
+	payload[0] = state.mode | (state.level << 4); // Mode + Level
+	payload[1] = 100; // TODO: Battery
+	payload[2] = 25; // TODO: Temperature
+	payload[3] = 100; // TODO: Power de-rate
+	payload[4] = 0xff;
+	payload[5] = 0xff;
+	payload[6] = 0xff;
+	payload[7] = 0xff;
+
+	err_code = sd_ant_broadcast_message_tx(
+			TELEMETRY_CHANNEL,
+			ANT_STANDARD_DATA_PAYLOAD_SIZE,
+			payload);
+	APP_ERROR_CHECK(err_code);
+
+	ant_dump_message("TX", TELEMETRY_CHANNEL, payload);
+}
+
 static void pwm_update(void)
 {
 	ret_code_t err_code;
@@ -192,6 +217,7 @@ static void bsp_evt_handler(bsp_event_t event)
 	NRF_LOG_INFO("state mode: %d level: %d", state.mode, state.level);
 	memcpy(tgt_levels, &levels[state.level], sizeof(tgt_levels));
 	pwm_update();
+	ant_tx_load();
 }
 
 static void hello(void)
@@ -259,30 +285,12 @@ static void pwm_setup(void)
 	app_pwm_enable(&PWM2);
 }
 
-static void ant_tx_load(void)
-{
-	ret_code_t err_code;
-	uint8_t payload[ANT_STANDARD_DATA_PAYLOAD_SIZE];
-
-	memset(payload, 0, ANT_STANDARD_DATA_PAYLOAD_SIZE);
-
-	err_code = sd_ant_broadcast_message_tx(
-			TELEMETRY_CHANNEL,
-			ANT_STANDARD_DATA_PAYLOAD_SIZE,
-			payload);
-	APP_ERROR_CHECK(err_code);
-
-	ant_dump_message("TX", TELEMETRY_CHANNEL, payload);
-}
-
 static void ant_evt_telemetry(ant_evt_t *ant_evt)
 {
 	uint8_t channel = ant_evt->channel;
 
 	switch (ant_evt->event) {
 		case EVENT_TX:
-			// TODO: actually load on demand.
-			ant_tx_load();
 			break;
 		case EVENT_RX:
 			ant_dump_message("RX",
