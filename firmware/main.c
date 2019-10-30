@@ -59,31 +59,39 @@ static const nrf_drv_twi_t twi = NRF_DRV_TWI_INSTANCE(0);
 APP_TIMER_DEF(temp_tmr);
 APP_TIMER_DEF(pwm_tmr);
 
-static void bsp_evt_handler(bsp_event_t event)
-{
-	NRF_LOG_INFO("event %02x", event);
-	switch (event)
-	{
-		case BSP_EVENT_KEY_0:
-			NRF_LOG_INFO("Key 0");
-			break;
+// Levels
+static struct level {
+        uint8_t a, b, c, d;
+} levels[] = {
+        {  0,   0,   0,   0}, // 0 - Off
+        {  0,   2,   0,   0}, // 1 - Low
+        {  0,  20,  20,   0}, // 2 - Medium
+        {  0,  50,  50,   0}, // 3 - Maximum
+        {  0,   0, 100,   0}, // 4 - Beam
+};
+enum {
+	LEVEL_OFF = 0,
+	LEVEL_LOW = 1,
+	LEVEL_MEDIUM = 2,
+	LEVEL_MAXIMUM = 3,
+	LEVEL_BEAM = 4,
+	NUM_LEVELS = 5,
+};
+#define LEVEL_START LEVEL_LOW
+#define LEVEL_FALLBACK LEVEL_MEDIUM
 
-		case BSP_EVENT_KEY_1:
-			NRF_LOG_INFO("Key 1");
-			break;
+// Modes
+enum {
+	MODE_STANDBY = 0,
+	MODE_MANUAL = 1,
+	MODE_AUTO = 2,
+	MODE_REMOTE = 3,
+};
 
-		case BSP_EVENT_KEY_2:
-			NRF_LOG_INFO("Key 0 long");
-			break;
-
-		case BSP_EVENT_KEY_3:
-			NRF_LOG_INFO("Key 1 long");
-			break;
-
-		default:
-			break;
-	}
-}
+static struct {
+	uint8_t mode;
+	uint8_t level;
+} state;
 
 static void twi_init(void)
 {
@@ -134,6 +142,55 @@ static void pwm_timer_handler(void *p_context)
 	while (app_pwm_channel_duty_set(&PWM2, 0, cur_levels[2]) == NRF_ERROR_BUSY);
 	while (app_pwm_channel_duty_set(&PWM2, 1, cur_levels[3]) == NRF_ERROR_BUSY);
 
+	pwm_update();
+}
+
+static void switch_short(void)
+{
+	if (state.mode == MODE_STANDBY)
+		return;
+
+	if (state.mode == MODE_MANUAL && state.level == LEVEL_BEAM) {
+		state.mode = MODE_AUTO;
+		state.level = LEVEL_START;
+	} else if (state.mode == MODE_MANUAL) {
+		state.level++;
+	} else if (state.mode == MODE_AUTO) {
+		state.mode = MODE_MANUAL;
+		state.level = LEVEL_START;
+	} else if (state.mode == MODE_REMOTE) {
+		state.mode = MODE_MANUAL;
+		state.level = LEVEL_START;
+	} else {
+		NRF_LOG_INFO("I should not be here");
+	}
+}
+
+static void switch_long(void)
+{
+	if (state.mode == MODE_STANDBY) {
+		state.mode = MODE_MANUAL;
+		state.level = LEVEL_START;
+	} else {
+		state.mode = MODE_STANDBY;
+		state.level = LEVEL_OFF;
+	}
+}
+
+static void bsp_evt_handler(bsp_event_t event)
+{
+	switch (event) {
+		case BSP_EVENT_KEY_0:
+			switch_short();
+			break;
+		case BSP_EVENT_KEY_2:
+			switch_long();
+			break;
+		default:
+			break;
+	}
+	NRF_LOG_INFO("state mode: %d level: %d", state.mode, state.level);
+	memcpy(tgt_levels, &levels[state.level], sizeof(tgt_levels));
 	pwm_update();
 }
 
