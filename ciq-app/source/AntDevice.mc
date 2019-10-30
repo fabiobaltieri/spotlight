@@ -5,7 +5,7 @@ using Toybox.Ant;
 
 class AntDevice extends Ant.GenericChannel {
 	const DEVICE_TYPE = 0xfb;
-	const PERIOD = 32768;
+	const PERIOD = 16384;
 	const DEV_NUMBER = 0; /* 0 for search */
 	const CHANNEL = 66;
 
