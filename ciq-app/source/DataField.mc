@@ -24,13 +24,31 @@ class DataField extends WatchUi.SimpleDataField {
 	function onTimerReset() {
 	}
 
+	hidden function mode_string() {
+		var mode = modes[ant_device.mode];
+		var level = levels[ant_device.level];
+		var temp = ant_device.temp;
+		var battery = ant_device.battery;
+
+		if (temp == -128) {
+			temp = "-";
+		}
+
+		if (battery == 0xff) {
+			battery = "-";
+		} else if (battery == 0xfe) {
+			battery = "5V";
+		} else if (battery > 99) {
+			battery = 99;
+		}
+
+		return mode + level + " " + battery + " " + temp;
+	}
+
 	function compute(info) {
 		if (ant_device.searching) {
 			return "Searching...";
 		}
-		return modes[ant_device.mode] +
-			levels[ant_device.level] + " " +
-			ant_device.battery + " " +
-			ant_device.temp;
+		return mode_string();
 	}
 }
