@@ -354,11 +354,11 @@ static void log_init(void)
 int main(void)
 {
 	log_init();
-	utils_setup();
-	timer_init();
 	softdevice_setup();
-	pwm_setup();
+	utils_setup();
 	twi_init();
+	timer_init();
+	pwm_setup();
 
 	ant_channel_setup();
 
