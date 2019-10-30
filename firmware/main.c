@@ -218,9 +218,11 @@ static void bsp_evt_handler(bsp_event_t event)
 {
 	switch (event) {
 		case BSP_EVENT_KEY_0:
+		case BSP_EVENT_KEY_1:
 			switch_short();
 			break;
 		case BSP_EVENT_KEY_2:
+		case BSP_EVENT_KEY_3:
 			switch_long();
 			break;
 		default:
