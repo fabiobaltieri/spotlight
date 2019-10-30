@@ -42,10 +42,7 @@
 #define REMOTE_RF_FREQ 66
 
 // Temp sensor addresses (MIC280)
-#define TEMP1_ADDR 0x48
-#define TEMP2_ADDR 0x49
-#define TEMP3_ADDR 0x4a
-#define TEMP4_ADDR 0x4b
+static uint8_t temps_addr[] = {0x48, 0x49, 0x4a, 0x4b};
 
 // Running state
 static uint8_t tgt_levels[] = {0, 0, 0, 0};
@@ -111,12 +108,16 @@ static void twi_init(void)
 	nrf_drv_twi_enable(&twi);
 }
 
-static void temp_timer_handler(void *p_context)
+static int8_t get_max_temp(void)
 {
-	temps[0] = mic280_read(&twi, TEMP1_ADDR);
-	temps[1] = mic280_read(&twi, TEMP2_ADDR);
-	temps[2] = mic280_read(&twi, TEMP3_ADDR);
-	temps[3] = mic280_read(&twi, TEMP4_ADDR);
+	int8_t out = INT8_MIN;
+	uint8_t i;
+
+	for (i = 0; i < sizeof(temps); i++)
+		if (temps[i] > out)
+			out = temps[i];
+
+	return out;
 }
 
 static void ant_tx_load(void)
@@ -128,7 +129,7 @@ static void ant_tx_load(void)
 
 	payload[0] = state.mode | (state.level << 4); // Mode + Level
 	payload[1] = 100; // TODO: Battery
-	payload[2] = 25; // TODO: Temperature
+	payload[2] = get_max_temp(); // Temperature
 	payload[3] = 100; // TODO: Power de-rate
 	payload[4] = 0xff;
 	payload[5] = 0xff;
@@ -142,6 +143,17 @@ static void ant_tx_load(void)
 	APP_ERROR_CHECK(err_code);
 
 	ant_dump_message("TX", TELEMETRY_CHANNEL, payload);
+}
+
+static void temp_timer_handler(void *p_context)
+{
+	uint8_t i;
+
+	for (i = 0; i < sizeof(temps); i++)
+		temps[i] = mic280_read(&twi, temps_addr[i]);
+
+	// TODO: power derate
+	ant_tx_load();
 }
 
 static void pwm_update(void)
