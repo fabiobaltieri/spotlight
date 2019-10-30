@@ -139,6 +139,8 @@ static void pwm_timer_handler(void *p_context)
 
 static void hello(void)
 {
+	bsp_board_led_on(1);
+
 	while (app_pwm_channel_duty_set(&PWM1, 0, 1) == NRF_ERROR_BUSY);
 	nrf_delay_ms(100);
 	while (app_pwm_channel_duty_set(&PWM1, 0, 0) == NRF_ERROR_BUSY);
