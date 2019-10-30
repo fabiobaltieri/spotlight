@@ -12,6 +12,15 @@ class DataField extends WatchUi.SimpleDataField {
 		ant_device = device;
 	}
 
+	function onTimerStart() {
+	}
+
+	function onTimerStop() {
+	}
+
+	function onTimerReset() {
+	}
+
 	function compute(info) {
 		if (ant_device.searching) {
 			return "Searching...";
