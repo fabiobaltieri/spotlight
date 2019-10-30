@@ -48,8 +48,8 @@
 #define TEMP4_ADDR 0x4b
 
 // Running state
-static uint8_t levels[] = {1, 1, 1, 1};
-static uint8_t cur_levels[] = {0, 0, 0, 0};
+static uint8_t levels[] = {0, 0, 0, 0};
+static uint8_t cur_levels[] = {1, 1, 1, 1};
 static int8_t temps[] = {INT8_MIN, INT8_MIN, INT8_MIN, INT8_MIN};
 
 // Module state
@@ -137,6 +137,23 @@ static void pwm_timer_handler(void *p_context)
 	pwm_update();
 }
 
+static void hello(void)
+{
+	while (app_pwm_channel_duty_set(&PWM1, 0, 1) == NRF_ERROR_BUSY);
+	nrf_delay_ms(100);
+	while (app_pwm_channel_duty_set(&PWM1, 0, 0) == NRF_ERROR_BUSY);
+	while (app_pwm_channel_duty_set(&PWM1, 1, 1) == NRF_ERROR_BUSY);
+	nrf_delay_ms(100);
+	while (app_pwm_channel_duty_set(&PWM1, 1, 0) == NRF_ERROR_BUSY);
+	while (app_pwm_channel_duty_set(&PWM2, 0, 1) == NRF_ERROR_BUSY);
+	nrf_delay_ms(100);
+	while (app_pwm_channel_duty_set(&PWM2, 0, 0) == NRF_ERROR_BUSY);
+	while (app_pwm_channel_duty_set(&PWM2, 1, 1) == NRF_ERROR_BUSY);
+	nrf_delay_ms(100);
+
+	pwm_update();
+}
+
 static void timer_init(void)
 {
 	ret_code_t err_code;
@@ -181,8 +198,6 @@ static void pwm_setup(void)
 
 	app_pwm_enable(&PWM1);
 	app_pwm_enable(&PWM2);
-
-	pwm_update();
 }
 
 static void ant_tx_load(void)
@@ -359,6 +374,8 @@ int main(void)
 	twi_init();
 	timer_init();
 	pwm_setup();
+
+	hello();
 
 	ant_channel_setup();
 
