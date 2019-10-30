@@ -7,7 +7,7 @@ class DataField extends WatchUi.SimpleDataField {
 	hidden var ant_device;
 
 	const modes = ["S", "M", "A", "R"];
-	const levels = ["-", "L", "M", "X", "*"];
+	const levels = ["-", "L", "M", "H", "!"];
 
 	function initialize(device) {
 		SimpleDataField.initialize();

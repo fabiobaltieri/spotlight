@@ -70,7 +70,7 @@ enum {
 	LEVEL_OFF = 0,
 	LEVEL_LOW = 1,
 	LEVEL_MEDIUM = 2,
-	LEVEL_MAXIMUM = 3,
+	LEVEL_HIGH = 3,
 	LEVEL_BEAM = 4,
 	NUM_LEVELS = 5,
 };
