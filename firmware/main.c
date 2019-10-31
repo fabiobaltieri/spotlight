@@ -180,6 +180,13 @@ static void pwm_timer_handler(void *p_context)
 	pwm_update();
 }
 
+static void apply_state(void)
+{
+	NRF_LOG_INFO("state mode: %d level: %d", state.mode, state.level);
+	memcpy(tgt_levels, &levels[state.level], sizeof(tgt_levels));
+	pwm_update();
+	ant_tx_load();
+}
 static void switch_short(void)
 {
 	if (state.mode == MODE_STANDBY)
@@ -199,6 +206,7 @@ static void switch_short(void)
 	} else {
 		NRF_LOG_INFO("I should not be here");
 	}
+	apply_state();
 }
 
 static void switch_long(void)
@@ -210,6 +218,7 @@ static void switch_long(void)
 		state.mode = MODE_STANDBY;
 		state.level = LEVEL_OFF;
 	}
+	apply_state();
 }
 
 static void bsp_evt_handler(bsp_event_t event)
@@ -226,10 +235,6 @@ static void bsp_evt_handler(bsp_event_t event)
 		default:
 			break;
 	}
-	NRF_LOG_INFO("state mode: %d level: %d", state.mode, state.level);
-	memcpy(tgt_levels, &levels[state.level], sizeof(tgt_levels));
-	pwm_update();
-	ant_tx_load();
 }
 
 static void hello(void)
