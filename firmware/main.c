@@ -120,6 +120,18 @@ static int8_t get_max_temp(void)
 	return out;
 }
 
+static uint8_t payload_unchanged(uint8_t *new)
+{
+	static uint8_t old[ANT_STANDARD_DATA_PAYLOAD_SIZE];
+
+	if (memcmp(old, new, ANT_STANDARD_DATA_PAYLOAD_SIZE) == 0)
+		return 1;
+
+	memcpy(old, new, ANT_STANDARD_DATA_PAYLOAD_SIZE);
+
+	return 0;
+}
+
 static void ant_tx_load(void)
 {
 	ret_code_t err_code;
@@ -133,6 +145,9 @@ static void ant_tx_load(void)
 	payload[5] = 0xff;
 	payload[6] = 0xff;
 	payload[7] = 0xff;
+
+	if (payload_unchanged(payload))
+		return;
 
 	err_code = sd_ant_broadcast_message_tx(
 			TELEMETRY_CHANNEL,
