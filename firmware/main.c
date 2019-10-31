@@ -269,7 +269,12 @@ static void timer_init(void)
 	APP_ERROR_CHECK(err_code);
 }
 
-static void remote_process(uint8_t *payload)
+static void telemetry_rx_process(uint8_t *payload)
+{
+	ant_dump_message("RX", TELEMETRY_CHANNEL, payload);
+}
+
+static void remote_rx_process(uint8_t *payload)
 {
 	ant_dump_message("RX", REMOTE_CHANNEL, payload);
 }
@@ -305,8 +310,7 @@ static void ant_evt_telemetry(ant_evt_t *ant_evt)
 		case EVENT_TX:
 			break;
 		case EVENT_RX:
-			ant_dump_message("RX",
-					channel, ant_evt->message.ANT_MESSAGE_aucPayload);
+			telemetry_rx_process(ant_evt->message.ANT_MESSAGE_aucPayload);
 			break;
 		case EVENT_CHANNEL_COLLISION:
 			ANT_DBG("ANT %d: channel collision", channel);
@@ -326,7 +330,7 @@ static void ant_evt_remote(ant_evt_t *ant_evt)
 
 	switch (ant_evt->event) {
 		case EVENT_RX:
-			remote_process(ant_evt->message.ANT_MESSAGE_aucPayload);
+			remote_rx_process(ant_evt->message.ANT_MESSAGE_aucPayload);
 			break;
 		case EVENT_RX_SEARCH_TIMEOUT:
 		case EVENT_RX_FAIL_GO_TO_SEARCH:
