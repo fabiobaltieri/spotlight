@@ -125,8 +125,6 @@ static void ant_tx_load(void)
 	ret_code_t err_code;
 	uint8_t payload[ANT_STANDARD_DATA_PAYLOAD_SIZE];
 
-	memset(payload, 0, ANT_STANDARD_DATA_PAYLOAD_SIZE);
-
 	payload[0] = state.mode | (state.level << 4); // Mode + Level
 	payload[1] = 100; // TODO: Battery
 	payload[2] = get_max_temp(); // Temperature
