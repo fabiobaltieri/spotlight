@@ -64,7 +64,7 @@ static struct level {
 } levels[] = {
         {  0,   0,   0,   0}, // 0 - Off
         {  0,   2,   0,   0}, // 1 - Low
-        {  0,  20,  20,   0}, // 2 - Medium
+        {  0,  20,  10,   0}, // 2 - Medium
         {  0,  50,  50,   0}, // 3 - Maximum
         {  0,   0, 100,   0}, // 4 - Beam
 };
