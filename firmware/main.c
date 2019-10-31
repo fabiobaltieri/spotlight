@@ -21,7 +21,7 @@
 #include "mic280.h"
 #include "utils.h"
 
-#define ANT_DBG(a...) NRF_LOG_INFO(a)
+#define DEBUG_ANT(a...) NRF_LOG_INFO(a)
 
 // Telemetry Master channel
 #define TELEMETRY_CHANNEL 0
@@ -333,10 +333,11 @@ static void ant_evt_telemetry(ant_evt_t *ant_evt)
 			telemetry_rx_process(ant_evt->message.ANT_MESSAGE_aucPayload);
 			break;
 		case EVENT_CHANNEL_COLLISION:
-			ANT_DBG("ANT %d: channel collision", channel);
+			DEBUG_ANT("ANT %d: channel collision", channel);
 			break;
 		default:
-			ANT_DBG("ANT event %d %02x", ant_evt->channel, ant_evt->event);
+			DEBUG_ANT("ANT event %d %02x",
+					ant_evt->channel, ant_evt->event);
 			break;
 	}
 }
@@ -356,12 +357,13 @@ static void ant_evt_remote(ant_evt_t *ant_evt)
 		case EVENT_RX_FAIL_GO_TO_SEARCH:
 			break;
 		case EVENT_CHANNEL_CLOSED:
-			ANT_DBG("ANT %d: channel closed", channel);
+			DEBUG_ANT("ANT %d: channel closed", channel);
 			err_code = sd_ant_channel_open(channel);
 			APP_ERROR_CHECK(err_code);
 			break;
 		default:
-			ANT_DBG("ANT event %d %02x", ant_evt->channel, ant_evt->event);
+			DEBUG_ANT("ANT event %d %02x",
+					ant_evt->channel, ant_evt->event);
 			break;
 	}
 }
@@ -373,7 +375,8 @@ static void ant_evt_handler(ant_evt_t *ant_evt, void *context)
 	else if (ant_evt->channel == REMOTE_CHANNEL)
 		ant_evt_remote(ant_evt);
 	else
-		ANT_DBG("ANT ?! event %d %02x", ant_evt->channel, ant_evt->event);
+		DEBUG_ANT("ANT ?! event %d %02x",
+				ant_evt->channel, ant_evt->event);
 }
 
 #define ANT_OBSERVER_PRIO 1
