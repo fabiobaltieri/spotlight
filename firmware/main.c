@@ -34,6 +34,7 @@
 #define TELEMETRY_RF_FREQ 66
 
 // Remote Slave channel
+#define REMOTE_ENABLE 0
 #define REMOTE_CHANNEL 1
 #define REMOTE_ANT_NETWORK_NUM 0
 #define REMOTE_CHAN_ID_DEV_NUM 0
@@ -412,6 +413,7 @@ static void ant_channel_setup(void)
 	err_code = sd_ant_channel_open(TELEMETRY_CHANNEL);
 	APP_ERROR_CHECK(err_code);
 
+#if REMOTE_ENABLE
 	/* Remote */
 	ant_channel_config_t r_channel_config = {
 		.channel_number    = REMOTE_CHANNEL,
@@ -430,6 +432,7 @@ static void ant_channel_setup(void)
 
 	err_code = sd_ant_channel_open(REMOTE_CHANNEL);
 	APP_ERROR_CHECK(err_code);
+#endif
 }
 
 static void softdevice_setup(void)
