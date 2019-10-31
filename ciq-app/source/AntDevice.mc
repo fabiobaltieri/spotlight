@@ -77,6 +77,26 @@ class AntDevice extends Ant.GenericChannel {
 		}
 	}
 
+	hidden function u8cap(val) {
+		var out = val.toNumber();
+		if (out > 0xff) {
+			return 0xff;
+		}
+		return out;
+	}
+
+	function send_back(active, speed, cadence) {
+		var data = [0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff];
+
+		data[0] = active;
+		data[1] = u8cap(speed);
+		data[2] = u8cap(cadence);
+
+		var message = new Ant.Message();
+		message.setPayload(data);
+		GenericChannel.sendBroadcast(message);
+	}
+
 	hidden function s8(val) {
 		if (val & 0x80) {
 			return val | 0xffffff00;

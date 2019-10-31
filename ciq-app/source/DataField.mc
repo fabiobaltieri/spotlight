@@ -5,9 +5,11 @@ using Toybox.System;
 
 class DataField extends WatchUi.SimpleDataField {
 	hidden var ant_device;
+	hidden var active = false;
 
 	const modes = ["S", "M", "A", "R"];
 	const levels = ["-", "L", "M", "H", "!"];
+	const MODE_AUTO = 2;
 
 	function initialize(device) {
 		SimpleDataField.initialize();
@@ -16,12 +18,29 @@ class DataField extends WatchUi.SimpleDataField {
 	}
 
 	function onTimerStart() {
+		active = true;
 	}
 
 	function onTimerStop() {
+		active = false;
 	}
 
 	function onTimerReset() {
+		active = false;
+	}
+
+	hidden function send_back(info) {
+		var speed = 0;
+		var cadence = 0;
+
+		if (info.currentSpeed) {
+			speed = info.currentSpeed * 3600 / 1000;
+		}
+		if (info.currentCadence) {
+			cadence = info.currentCadence;
+		}
+
+		ant_device.send_back(active, speed, cadence);
 	}
 
 	hidden function mode_string() {
@@ -48,6 +67,9 @@ class DataField extends WatchUi.SimpleDataField {
 	function compute(info) {
 		if (ant_device.searching) {
 			return "Searching...";
+		}
+		if (ant_device.mode == MODE_AUTO) {
+			send_back(info);
 		}
 		return mode_string();
 	}
