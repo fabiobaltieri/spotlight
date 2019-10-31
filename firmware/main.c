@@ -22,6 +22,7 @@
 #include "utils.h"
 
 #define DEBUG_ANT(a...) NRF_LOG_INFO(a)
+#define DEBUG_LEVELS(a...) NRF_LOG_INFO(a)
 
 // Telemetry Master channel
 #define TELEMETRY_CHANNEL 0
@@ -191,6 +192,10 @@ static void pwm_timer_handler(void *p_context)
 	while (app_pwm_channel_duty_set(&PWM1, 1, cur_levels[1]) == NRF_ERROR_BUSY);
 	while (app_pwm_channel_duty_set(&PWM2, 0, cur_levels[2]) == NRF_ERROR_BUSY);
 	while (app_pwm_channel_duty_set(&PWM2, 1, cur_levels[3]) == NRF_ERROR_BUSY);
+
+	DEBUG_LEVELS("levels: %3d %3d %3d %3d",
+			cur_levels[0], cur_levels[1],
+			cur_levels[2], cur_levels[3]);
 
 	pwm_update();
 }
