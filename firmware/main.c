@@ -343,6 +343,17 @@ static void telemetry_rx_process(uint8_t *payload)
 static void remote_rx_process(uint8_t *payload)
 {
 	ant_dump_message("RX", REMOTE_CHANNEL, payload);
+
+	state.mode = MODE_REMOTE;
+	state.level = LEVEL_MEDIUM;
+
+	tgt_levels[0] = payload[0];
+	tgt_levels[1] = payload[1];
+	tgt_levels[2] = payload[2];
+	tgt_levels[3] = payload[3];
+
+	pwm_update();
+	ant_tx_load();
 }
 
 static void pwm_setup(void)
