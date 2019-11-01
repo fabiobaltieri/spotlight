@@ -163,7 +163,7 @@ static void ant_tx_load(void)
 	ant_dump_message("TX", TELEMETRY_CHANNEL, payload);
 }
 
-static void temp_timer_handler(void *p_context)
+static void temp_timer_handler(void *context)
 {
 	uint8_t i;
 
@@ -185,7 +185,7 @@ static void pwm_update(void)
 	APP_ERROR_CHECK(err_code);
 }
 
-static void pwm_timer_handler(void *p_context)
+static void pwm_timer_handler(void *context)
 {
 	pwm_adjust_step(&cur_levels[0], tgt_levels[0]);
 	pwm_adjust_step(&cur_levels[1], tgt_levels[1]);
