@@ -1,10 +1,11 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include "app_timer.h"
+#include "app_pwm.h"
 #include "boards.h"
 #include "bsp.h"
-#include "app_pwm.h"
 #include "nrf_delay.h"
+#include "nrf_drv_saadc.h"
 #include "nrf_drv_twi.h"
 #include "nrf_pwr_mgmt.h"
 #include "nrf_sdh.h"
@@ -51,11 +52,13 @@ static uint8_t temps_addr[] = {0x48, 0x49, 0x4a, 0x4b};
 static uint8_t tgt_levels[] = {0, 0, 0, 0};
 static uint8_t cur_levels[] = {1, 1, 1, 1};
 static int8_t temps[] = {INT8_MIN, INT8_MIN, INT8_MIN, INT8_MIN};
+static int16_t batt = 0;
 
 // Module state
 APP_PWM_INSTANCE(PWM1, 1);
 APP_PWM_INSTANCE(PWM2, 2);
 static const nrf_drv_twi_t twi = NRF_DRV_TWI_INSTANCE(0);
+static nrf_saadc_value_t adc_buf;
 APP_TIMER_DEF(temp_tmr);
 APP_TIMER_DEF(pwm_tmr);
 
@@ -163,14 +166,42 @@ static void ant_tx_load(void)
 	ant_dump_message("TX", TELEMETRY_CHANNEL, payload);
 }
 
-static void temp_timer_handler(void *context)
+void saadc_callback(nrf_drv_saadc_evt_t const *evt)
+{
+	nrf_saadc_value_t adc_result;
+
+	if (evt->type == NRF_DRV_SAADC_EVT_DONE) {
+		adc_result = evt->data.done.p_buffer[0];
+		batt = adc_result;
+
+		NRF_LOG_INFO("result %d", adc_result);
+	}
+}
+
+void saadc_convert(void)
+{
+	ret_code_t err_code;
+
+	err_code = nrf_drv_saadc_buffer_convert(&adc_buf, 1);
+	APP_ERROR_CHECK(err_code);
+
+	err_code = nrf_drv_saadc_sample();
+	APP_ERROR_CHECK(err_code);
+}
+
+static void timer_handler(void *context)
 {
 	uint8_t i;
 
+	// Update the battery voltage (for the next sample)
+	saadc_convert();
+
+	// Update temperatures
 	for (i = 0; i < sizeof(temps); i++)
 		temps[i] = mic280_read(&twi, temps_addr[i]);
 
-	// TODO: power derate
+	// TODO: overtemperature protection
+
 	ant_tx_load();
 }
 
@@ -309,9 +340,9 @@ static void timer_init(void)
 {
 	ret_code_t err_code;
 
-	/* Temperature update cycle */
+	/* Temperature and voltage update cycle */
 	err_code = app_timer_create(
-			&temp_tmr, APP_TIMER_MODE_REPEATED, temp_timer_handler);
+			&temp_tmr, APP_TIMER_MODE_REPEATED, timer_handler);
 	APP_ERROR_CHECK(err_code);
 
 	err_code = app_timer_start(temp_tmr, APP_TIMER_TICKS(1000), NULL);
@@ -502,6 +533,22 @@ static void softdevice_setup(void)
 	APP_ERROR_CHECK(err_code);
 }
 
+void saadc_init(void)
+{
+	ret_code_t err_code;
+
+	nrf_saadc_channel_config_t channel_config =
+		NRF_DRV_SAADC_DEFAULT_CHANNEL_CONFIG_SE(BATTERY_SENSE_INPUT);
+
+	err_code = nrf_drv_saadc_init(NULL, saadc_callback);
+	APP_ERROR_CHECK(err_code);
+
+	err_code = nrf_drv_saadc_channel_init(0, &channel_config);
+	APP_ERROR_CHECK(err_code);
+
+	saadc_convert();
+}
+
 static void utils_setup(void)
 {
 	ret_code_t err_code;
@@ -535,6 +582,7 @@ int main(void)
 	log_init();
 	softdevice_setup();
 	utils_setup();
+	saadc_init();
 	twi_init();
 	timer_init();
 	pwm_setup();

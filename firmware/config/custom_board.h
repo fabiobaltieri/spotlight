@@ -26,6 +26,8 @@
 #define TWI_SCL        27
 #define TWI_SDA        26
 
+#define BATTERY_SENSE_INPUT NRF_SAADC_INPUT_AIN3
+
 /* PCA10040 pins */
 #else
 
@@ -53,5 +55,7 @@
 
 #define TWI_SCL        24
 #define TWI_SDA        25
+
+#define BATTERY_SENSE_INPUT NRF_SAADC_INPUT_AIN0
 
 #endif
