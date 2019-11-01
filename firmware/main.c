@@ -289,6 +289,7 @@ static void bsp_evt_handler(bsp_event_t event)
 
 static void hello(void)
 {
+	bsp_board_led_on(0);
 	bsp_board_led_on(1);
 
 	while (app_pwm_channel_duty_set(&PWM1, 0, 1) == NRF_ERROR_BUSY);
@@ -394,7 +395,7 @@ static void ant_evt_remote(ant_evt_t *ant_evt)
 #endif
 	uint8_t channel = ant_evt->channel;
 
-	bsp_board_led_invert(1);
+	bsp_board_led_invert(0);
 
 	switch (ant_evt->event) {
 		case EVENT_RX:
@@ -405,6 +406,7 @@ static void ant_evt_remote(ant_evt_t *ant_evt)
 			break;
 		case EVENT_CHANNEL_CLOSED:
 			DEBUG_ANT("ANT %d: channel closed", channel);
+			bsp_board_led_off(0);
 #if REMOTE_REOPEN
 			err_code = sd_ant_channel_open(channel);
 			APP_ERROR_CHECK(err_code);
