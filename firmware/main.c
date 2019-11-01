@@ -87,6 +87,7 @@ enum {
 	MODE_AUTO = 2,
 	MODE_REMOTE = 3,
 };
+#define AUTO_CADENCE_TRESHOLD 142
 
 static struct {
 	uint8_t mode;
@@ -209,6 +210,32 @@ static void apply_state(void)
 	pwm_update();
 	ant_tx_load();
 }
+
+static void switch_auto(uint8_t active, uint8_t speed, uint8_t cadence)
+{
+	uint8_t new_level;
+
+	if (state.mode != MODE_AUTO) {
+		NRF_LOG_INFO("RX discard, not in auto");
+		return;
+	}
+	NRF_LOG_INFO("active: %d speed: %d cadence: %d",
+			active, speed, cadence);
+
+	if (!active)
+		new_level = LEVEL_LOW;
+	else if (cadence > AUTO_CADENCE_TRESHOLD)
+		new_level = LEVEL_HIGH;
+	else
+		new_level = LEVEL_MEDIUM;
+
+	if (new_level == state.level)
+		return;
+
+	state.level = new_level;
+	apply_state();
+}
+
 static void switch_short(void)
 {
 	if (state.mode == MODE_STANDBY)
@@ -298,7 +325,17 @@ static void timer_init(void)
 
 static void telemetry_rx_process(uint8_t *payload)
 {
+	uint8_t active;
+	uint8_t speed;
+	uint8_t cadence;
+
 	ant_dump_message("RX", TELEMETRY_CHANNEL, payload);
+
+	active = payload[0];
+	speed = payload[1];
+	cadence = payload[2];
+
+	switch_auto(active, speed, cadence);
 }
 
 static void remote_rx_process(uint8_t *payload)
