@@ -62,11 +62,12 @@ APP_TIMER_DEF(pwm_tmr);
 static struct level {
         uint8_t a, b, c, d;
 } levels[] = {
+	/* S    O  O90    S */
         {  0,   0,   0,   0}, // 0 - Off
-        {  0,   2,   0,   0}, // 1 - Low
-        {  0,  20,  10,   0}, // 2 - Medium
-        {  0,  50,  50,   0}, // 3 - Maximum
-        {  0,   0, 100,   0}, // 4 - Beam
+        {  0,   2,   0,   0}, // 1 - Low (150mW)
+        {  4,  10,  10,   4}, // 2 - Medium (1.5W)
+        { 25,  25,  25,  25}, // 3 - Maximum (5W)
+        { 60,   0,   0,  60}, // 4 - Beam (7W)
 };
 enum {
 	LEVEL_OFF = 0,
