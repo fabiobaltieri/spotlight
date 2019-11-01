@@ -1,4 +1,6 @@
-#if 1
+/* real board pins */
+#if !APP_DEBUGGING_ON_PCA10040
+
 #define LED_1          7
 #define LED_2          8
 
@@ -25,7 +27,10 @@
 
 #define TWI_SCL        27
 #define TWI_SDA        26
-#else /* PCA10040 pins */
+
+/* PCA10040 pins */
+#else
+
 #define LED_1          17
 #define LED_2          18
 
@@ -52,4 +57,5 @@
 
 #define TWI_SCL        24
 #define TWI_SDA        25
+
 #endif
