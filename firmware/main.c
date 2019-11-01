@@ -34,7 +34,8 @@
 #define TELEMETRY_RF_FREQ 66
 
 // Remote Slave channel
-#define REMOTE_ENABLE 0
+#define REMOTE_ENABLE 1
+#define REMOTE_REOPEN 0
 #define REMOTE_CHANNEL 1
 #define REMOTE_ANT_NETWORK_NUM 0
 #define REMOTE_CHAN_ID_DEV_NUM 0
@@ -388,7 +389,9 @@ static void ant_evt_telemetry(ant_evt_t *ant_evt)
 
 static void ant_evt_remote(ant_evt_t *ant_evt)
 {
+#if REMOTE_REOPEN
 	ret_code_t err_code;
+#endif
 	uint8_t channel = ant_evt->channel;
 
 	bsp_board_led_invert(1);
@@ -402,8 +405,10 @@ static void ant_evt_remote(ant_evt_t *ant_evt)
 			break;
 		case EVENT_CHANNEL_CLOSED:
 			DEBUG_ANT("ANT %d: channel closed", channel);
+#if REMOTE_REOPEN
 			err_code = sd_ant_channel_open(channel);
 			APP_ERROR_CHECK(err_code);
+#endif
 			break;
 		default:
 			DEBUG_ANT("ANT event %d %02x",
