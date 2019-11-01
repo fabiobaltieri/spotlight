@@ -275,11 +275,9 @@ static void bsp_evt_handler(bsp_event_t event)
 {
 	switch (event) {
 		case BSP_EVENT_KEY_0:
-		case BSP_EVENT_KEY_1:
 			switch_short();
 			break;
-		case BSP_EVENT_KEY_2:
-		case BSP_EVENT_KEY_3:
+		case BSP_EVENT_KEY_1:
 			switch_long();
 			break;
 		default:
@@ -515,11 +513,7 @@ static void utils_setup(void)
 	APP_ERROR_CHECK(err_code);
 
 	err_code = bsp_event_to_button_action_assign(
-			0, BSP_BUTTON_ACTION_LONG_PUSH, BSP_EVENT_KEY_2);
-	APP_ERROR_CHECK(err_code);
-
-	err_code = bsp_event_to_button_action_assign(
-			1, BSP_BUTTON_ACTION_LONG_PUSH, BSP_EVENT_KEY_3);
+			0, BSP_BUTTON_ACTION_LONG_PUSH, BSP_EVENT_KEY_1);
 	APP_ERROR_CHECK(err_code);
 
 	err_code = nrf_pwr_mgmt_init();

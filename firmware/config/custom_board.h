@@ -14,16 +14,14 @@
 #define POWER_LED_4          31
 #define POWER_LED_POLARITY   APP_PWM_POLARITY_ACTIVE_HIGH
 
-#define BUTTON_1       5
-#define BUTTON_2       6
+#define BUTTON_1       6
 
 #define BSP_BUTTON_0   BUTTON_1
-#define BSP_BUTTON_1   BUTTON_2
 
-#define BUTTONS_NUMBER 2
+#define BUTTONS_NUMBER 1
 #define BUTTON_PULL    NRF_GPIO_PIN_PULLUP
 #define BUTTONS_ACTIVE_STATE 0
-#define BUTTONS_LIST { BUTTON_1, BUTTON_2 }
+#define BUTTONS_LIST { BUTTON_1 }
 
 #define TWI_SCL        27
 #define TWI_SDA        26
@@ -45,15 +43,13 @@
 #define POWER_LED_POLARITY   APP_PWM_POLARITY_ACTIVE_LOW
 
 #define BUTTON_1       13
-#define BUTTON_2       14
 
 #define BSP_BUTTON_0   BUTTON_1
-#define BSP_BUTTON_1   BUTTON_2
 
-#define BUTTONS_NUMBER 2
+#define BUTTONS_NUMBER 1
 #define BUTTON_PULL    NRF_GPIO_PIN_PULLUP
 #define BUTTONS_ACTIVE_STATE 0
-#define BUTTONS_LIST { BUTTON_1, BUTTON_2 }
+#define BUTTONS_LIST { BUTTON_1 }
 
 #define TWI_SCL        24
 #define TWI_SDA        25
