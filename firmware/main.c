@@ -318,9 +318,6 @@ static void bsp_evt_handler(bsp_event_t event)
 
 static void hello(void)
 {
-	bsp_board_led_on(0);
-	bsp_board_led_on(1);
-
 	while (app_pwm_channel_duty_set(&PWM1, 0, 1) == NRF_ERROR_BUSY);
 	nrf_delay_ms(100);
 	while (app_pwm_channel_duty_set(&PWM1, 0, 0) == NRF_ERROR_BUSY);
@@ -559,6 +556,8 @@ static void utils_setup(void)
 	err_code = bsp_init(BSP_INIT_LEDS | BSP_INIT_BUTTONS, bsp_evt_handler);
 	APP_ERROR_CHECK(err_code);
 
+	bsp_board_led_on(0);
+
 	err_code = bsp_event_to_button_action_assign(
 			0, BSP_BUTTON_ACTION_LONG_PUSH, BSP_EVENT_KEY_1);
 	APP_ERROR_CHECK(err_code);
@@ -580,12 +579,14 @@ static void log_init(void)
 int main(void)
 {
 	log_init();
-	softdevice_setup();
 	utils_setup();
+	softdevice_setup();
 	saadc_init();
 	twi_init();
 	timer_init();
 	pwm_setup();
+
+	bsp_board_led_on(1);
 
 	hello();
 
