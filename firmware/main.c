@@ -52,7 +52,9 @@ static uint8_t temps_addr[] = {0x48, 0x49, 0x4a, 0x4b};
 static uint8_t tgt_levels[] = {0, 0, 0, 0};
 static uint8_t cur_levels[] = {1, 1, 1, 1};
 static int8_t temps[] = {INT8_MIN, INT8_MIN, INT8_MIN, INT8_MIN};
-static int16_t batt = 0;
+static int16_t batt_mv = 0;
+#define BATT_NUM (39420 / 2 / 2) // 3.6 * 10.95 * 1000
+#define BATT_DEN (1024 / 2 / 2) // 10bit
 
 // Module state
 APP_PWM_INSTANCE(PWM1, 1);
@@ -146,8 +148,8 @@ static void ant_tx_load(void)
 	uint8_t payload[ANT_STANDARD_DATA_PAYLOAD_SIZE];
 
 	payload[0] = state.mode | (state.level << 4); // Mode + Level
-	payload[1] = 100; // TODO: Battery
-	payload[2] = get_max_temp(); // Temperature
+	payload[1] = (batt_mv / 100); // Battery (V * 10, TODO: percentage)
+	payload[2] = get_max_temp(); // Temperature (C)
 	payload[3] = 100; // TODO: Power de-rate
 	payload[4] = 0xff;
 	payload[5] = 0xff;
@@ -168,13 +170,11 @@ static void ant_tx_load(void)
 
 void saadc_callback(nrf_drv_saadc_evt_t const *evt)
 {
-	nrf_saadc_value_t adc_result;
+	uint32_t adc_result;
 
 	if (evt->type == NRF_DRV_SAADC_EVT_DONE) {
 		adc_result = evt->data.done.p_buffer[0];
-		batt = adc_result;
-
-		NRF_LOG_INFO("result %d", adc_result);
+		batt_mv = (adc_result * BATT_NUM) / BATT_DEN;
 	}
 }
 
