@@ -4,7 +4,9 @@ KEY = $(HOME)/ciq/key/developer_key.der
 NAME = spotlight
 
 JUNGLE = monkey.jungle
+ifeq ($(DEVICE),)
 DEVICE = fr230
+endif
 
 MONKEYC = $(SDK_PATH)/monkeyc
 MONKEYDO = $(SDK_PATH)/monkeydo
