@@ -63,6 +63,7 @@ static const nrf_drv_twi_t twi = NRF_DRV_TWI_INSTANCE(0);
 static nrf_saadc_value_t adc_buf;
 APP_TIMER_DEF(temp_tmr);
 APP_TIMER_DEF(pwm_tmr);
+APP_TIMER_DEF(delay_tmr);
 
 // Levels
 static struct level {
@@ -84,7 +85,6 @@ enum {
 	NUM_LEVELS = 5,
 };
 #define LEVEL_START LEVEL_LOW
-#define LEVEL_FALLBACK LEVEL_MEDIUM
 
 // Modes
 enum {
@@ -268,19 +268,44 @@ static void switch_auto(uint8_t active, uint8_t speed, uint8_t cadence)
 	apply_state();
 }
 
+static uint8_t switch_delay;
+
+static void delay_timer_handler(void *context)
+{
+	switch_delay = 1;
+	NRF_LOG_INFO("delay");
+}
+
+static void delay_timer_kick(void)
+{
+	ret_code_t err_code;
+
+	switch_delay = 0;
+
+	err_code = app_timer_stop(delay_tmr);
+	APP_ERROR_CHECK(err_code);
+
+	err_code = app_timer_start(delay_tmr, APP_TIMER_TICKS(3000), NULL);
+	APP_ERROR_CHECK(err_code);
+}
+
 static void switch_short(void)
 {
 	if (state.mode == MODE_STANDBY)
 		return;
 
-	if (state.mode == MODE_MANUAL && state.level == LEVEL_BEAM) {
+	if (switch_delay && state.mode == MODE_MANUAL && state.level == LEVEL_HIGH) {
+		state.level = LEVEL_MEDIUM;
+	} else if (switch_delay && state.mode == MODE_MANUAL && state.level == LEVEL_BEAM) {
+		state.level = LEVEL_MEDIUM;
+	} else if (state.mode == MODE_MANUAL && state.level == LEVEL_BEAM) {
 		state.mode = MODE_AUTO;
 		state.level = LEVEL_START;
 	} else if (state.mode == MODE_MANUAL) {
 		state.level++;
 	} else if (state.mode == MODE_AUTO) {
 		state.mode = MODE_MANUAL;
-		state.level = LEVEL_START;
+		state.level = LEVEL_MEDIUM;
 	} else if (state.mode == MODE_REMOTE) {
 		state.mode = MODE_MANUAL;
 		state.level = LEVEL_START;
@@ -288,6 +313,8 @@ static void switch_short(void)
 		NRF_LOG_INFO("I should not be here");
 	}
 	apply_state();
+
+	delay_timer_kick();
 }
 
 static void switch_long(void)
@@ -348,6 +375,11 @@ static void timer_init(void)
 	/* PWM smoothing */
 	err_code = app_timer_create(
 			&pwm_tmr, APP_TIMER_MODE_SINGLE_SHOT, pwm_timer_handler);
+	APP_ERROR_CHECK(err_code);
+
+	/* Switch delay */
+	err_code = app_timer_create(
+			&delay_tmr, APP_TIMER_MODE_SINGLE_SHOT, delay_timer_handler);
 	APP_ERROR_CHECK(err_code);
 }
 
