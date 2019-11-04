@@ -7,6 +7,7 @@
         <iq:languages/>
         <iq:permissions>
             <iq:uses-permission id="Ant"/>
+            <iq:uses-permission id="FitContributor"/>
         </iq:permissions>
     </iq:application>
 </iq:manifest>

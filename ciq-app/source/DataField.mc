@@ -11,10 +11,33 @@ class DataField extends WatchUi.SimpleDataField {
 	const levels = ["-", "L", "M", "H", "!"];
 	const MODE_AUTO = 2;
 
+	const LEVEL_FIELD_ID = 0;
+	const BATT_FIELD_ID = 1;
+	const TEMP_FIELD_ID = 2;
+	hidden var level_field;
+	hidden var batt_field;
+	hidden var temp_field;
+
 	function initialize(device) {
 		SimpleDataField.initialize();
 		label = "Spotlight";
 		ant_device = device;
+
+		level_field = createField(
+				"level",
+				LEVEL_FIELD_ID,
+				FitContributor.DATA_TYPE_SINT8,
+				{:mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>""});
+		batt_field = createField(
+				"battery",
+				BATT_FIELD_ID,
+				FitContributor.DATA_TYPE_UINT8,
+				{:mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"%"});
+		temp_field = createField(
+				"temperature",
+				TEMP_FIELD_ID,
+				FitContributor.DATA_TYPE_SINT8,
+				{:mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"C"});
 	}
 
 	function onTimerStart() {
@@ -64,7 +87,22 @@ class DataField extends WatchUi.SimpleDataField {
 		return mode + level + " " + battery + " " + temp;
 	}
 
+	hidden function log_fields() {
+		if (ant_device.searching) {
+			level_field.setData(-1);
+			batt_field.setData(0);
+			temp_field.setData(0);
+			return;
+		}
+		level_field.setData(ant_device.level);
+		batt_field.setData(ant_device.battery);
+		if (ant_device.temp != -128) {
+			temp_field.setData(ant_device.temp);
+		}
+	}
+
 	function compute(info) {
+		log_fields();
 		if (ant_device.searching) {
 			return "Searching...";
 		}
