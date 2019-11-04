@@ -1,8 +1,0 @@
-#!/bin/sh
-
-SDK_PATH=$HOME/ciq/bin
-DEVICE=${2:-fr230}
-OUTPUT=spotlight.prg
-KEY=$HOME/ciq/key/developer_key.der
-
-$SDK_PATH/monkeyc -d $DEVICE -f monkey.jungle -o $OUTPUT -y $KEY && $SDK_PATH/monkeydo $OUTPUT $DEVICE
