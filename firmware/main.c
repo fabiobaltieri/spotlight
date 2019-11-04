@@ -51,7 +51,7 @@ static uint8_t temps_addr[] = {0x48, 0x49, 0x4a, 0x4b};
 // Running state
 static uint8_t tgt_levels[] = {0, 0, 0, 0};
 static uint8_t cur_levels[] = {1, 1, 1, 1};
-static int8_t temps[] = {INT8_MIN, INT8_MIN, INT8_MIN, INT8_MIN};
+static int8_t temps[] = {INT8_MIN, INT8_MIN, INT8_MIN, INT8_MIN, INT8_MIN};
 static int16_t batt_mv = 0;
 #define BATT_NUM (39420 / 2 / 2) // 3.6 * 10.95 * 1000
 #define BATT_DEN (1024 / 2 / 2) // 10bit
@@ -192,13 +192,16 @@ void saadc_convert(void)
 static void timer_handler(void *context)
 {
 	uint8_t i;
+	int32_t temp;
 
 	// Update the battery voltage (for the next sample)
 	saadc_convert();
 
 	// Update temperatures
-	for (i = 0; i < sizeof(temps); i++)
+	for (i = 0; i < sizeof(temps_addr); i++)
 		temps[i] = mic280_read(&twi, temps_addr[i]);
+	sd_temp_get(&temp);
+	temps[i] = temp / 4;
 
 	// TODO: overtemperature protection
 
