@@ -16,7 +16,7 @@ class AntDevice extends Ant.GenericChannel {
 	var temp;
 
 	hidden function debug(str) {
-		// System.println("[Ant] " + str);
+		//System.println("[Ant] " + str);
 	}
 
 	function initialize() {
