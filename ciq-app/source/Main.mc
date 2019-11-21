@@ -11,7 +11,6 @@ class Main extends Application.AppBase {
 
 	function onStart(state) {
 		antDevice = new AntDevice();
-		antDevice.open();
 		return false;
 	}
 

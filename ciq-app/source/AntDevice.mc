@@ -9,7 +9,11 @@ class AntDevice extends Ant.GenericChannel {
 	const DEV_NUMBER = 0; /* 0 for search */
 	const CHANNEL = 66;
 
-	var searching = true;
+	const REOPEN_DELAY = 50;
+	var open_delay = 1;
+	var opened = false;
+	var searching = false;
+
 	var mode;
 	var level;
 	var battery;
@@ -32,7 +36,7 @@ class AntDevice extends Ant.GenericChannel {
 				:transmissionType => 0,
 				:messagePeriod => PERIOD,
 				:radioFrequency => CHANNEL,
-				:searchTimeoutLowPriority => 10,
+				:searchTimeoutLowPriority => 4, // 10 seconds
 				:searchThreshold => 0,
 				});
 		GenericChannel.setDeviceConfig(device_cfg);
@@ -40,6 +44,20 @@ class AntDevice extends Ant.GenericChannel {
 
 	function open() {
 		GenericChannel.open();
+		opened = true;
+		searching = true;
+	}
+
+	function maybe_open() {
+		if (opened) {
+			return;
+		}
+		if (open_delay > 0) {
+			open_delay--;
+			return;
+		}
+		open_delay = REOPEN_DELAY;
+		open();
 	}
 
 	function close() {
@@ -71,7 +89,7 @@ class AntDevice extends Ant.GenericChannel {
 			searching = true;
 		} else if (id == Ant.MSG_ID_RF_EVENT && code == Ant.MSG_CODE_EVENT_CHANNEL_CLOSED) {
 			debug("channel closed");
-			open();
+			opened = false;
 		} else {
 			debug("channel response, id: " + id.format("%02x") + " code: " + code.format("%02x"));
 		}
@@ -122,8 +140,8 @@ class AntDevice extends Ant.GenericChannel {
 		} else if (msgId == Ant.MSG_ID_BROADCAST_DATA) {
 			// Data
 			debug("data, dev: " + deviceNum + ": " + payloadHex(payload));
-			searching = false;
 			doMessage(payload);
+			searching = false;
 		} else {
 			// Other...
 			debug("other: " + payloadHex(payload) + " devnum: " + deviceNum + " id: " + msgId);

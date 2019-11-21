@@ -88,7 +88,7 @@ class DataField extends WatchUi.SimpleDataField {
 	}
 
 	hidden function log_fields() {
-		if (ant_device.searching) {
+		if (!ant_device.opened || ant_device.searching) {
 			level_field.setData(-1);
 			batt_field.setData(0);
 			temp_field.setData(0);
@@ -103,12 +103,18 @@ class DataField extends WatchUi.SimpleDataField {
 
 	function compute(info) {
 		log_fields();
-		if (ant_device.searching) {
+
+		if (!ant_device.opened) {
+			ant_device.maybe_open();
+			return "Idle";
+		} else if (ant_device.searching) {
 			return "Searching...";
 		}
+
 		if (ant_device.mode == MODE_AUTO) {
 			send_back(info);
 		}
+
 		return mode_string();
 	}
 }
