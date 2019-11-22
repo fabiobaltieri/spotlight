@@ -288,7 +288,7 @@ static void delay_timer_kick(void)
 	err_code = app_timer_stop(delay_tmr);
 	APP_ERROR_CHECK(err_code);
 
-	err_code = app_timer_start(delay_tmr, APP_TIMER_TICKS(3000), NULL);
+	err_code = app_timer_start(delay_tmr, APP_TIMER_TICKS(2000), NULL);
 	APP_ERROR_CHECK(err_code);
 }
 
