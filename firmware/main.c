@@ -446,6 +446,9 @@ static void ant_evt_telemetry(ant_evt_t *ant_evt)
 
 	switch (ant_evt->event) {
 		case EVENT_TX:
+			bsp_board_led_on(1);
+			nrf_delay_ms(10);
+			bsp_board_led_off(1);
 			break;
 		case EVENT_RX:
 			telemetry_rx_process(ant_evt->message.ANT_MESSAGE_aucPayload);
