@@ -150,7 +150,7 @@ static void ant_tx_load(void)
 	payload[0] = state.mode | (state.level << 4); // Mode + Level
 	payload[1] = (batt_mv / 100); // Battery (V * 10, TODO: percentage)
 	payload[2] = get_max_temp(); // Temperature (C)
-	payload[3] = 100; // TODO: Power de-rate
+	payload[3] = 0xff;
 	payload[4] = 0xff;
 	payload[5] = 0xff;
 	payload[6] = 0xff;
