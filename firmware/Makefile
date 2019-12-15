@@ -191,7 +191,7 @@ flash: default
 
 flash_softdevice:
 	@echo Flashing: ANT_s212_nrf52_5.0.0.hex
-	nrfjprog -f nrf52 --program $(SDK_ROOT)/components/softdevice/s212/ANT_s212_nrf52_5.0.0.hex --sectorerase
+	nrfjprog -f nrf52 --program $(SDK_ROOT)/components/softdevice/s212/ANT_s212_nrf52810_nrf52832_6.1.1.hex --sectorerase
 	nrfjprog -f nrf52 --reset
 
 erase:
