@@ -1221,7 +1221,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <attribute name="NAME" x="12.305" y="3.905" size="1.27" layer="25" rot="R270"/>
 <attribute name="VALUE" x="7.225" y="3.905" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="U7" library="SparkFun-PowerIC" package="SOT23-5" value="MIC5233" x="4.4" y="9.8" smashed="yes" rot="R270">
+<element name="U7" library="SparkFun-PowerIC" package="SOT23-5" value="MIC5301" x="4.4" y="9.8" smashed="yes" rot="R270">
 <attribute name="NAME" x="6.559" y="10.689" size="0.4064" layer="25" rot="R270"/>
 <attribute name="VALUE" x="4.2095" y="10.7525" size="0.4064" layer="27" rot="R270"/>
 </element>
