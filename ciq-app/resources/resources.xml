@@ -28,7 +28,7 @@
 			chartTitle="@Strings.temp_title"
 			dataLabel="@Strings.temp_label"
 			unitLabel="@Strings.temp_unit"
-			fillColor="#ff8000"
+			fillColor="#ff9900"
 			/>
 	</fitContributions>
 </resources>
