@@ -6,6 +6,8 @@ using Toybox.System;
 class DataField extends WatchUi.SimpleDataField {
 	hidden var ant_device;
 	hidden var active = false;
+	hidden var speed = 0;
+	hidden var cadence = 0;
 
 	const modes = ["S", "M", "A", "R"];
 	const levels = ["-", "L", "M", "H", "!"];
@@ -40,30 +42,32 @@ class DataField extends WatchUi.SimpleDataField {
 				{:mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"C"});
 	}
 
+	hidden function send_back() {
+		ant_device.send_back(active, speed, cadence);
+	}
+
 	function onTimerStart() {
 		active = true;
+		send_back();
 	}
 
 	function onTimerStop() {
 		active = false;
+		send_back();
 	}
 
 	function onTimerReset() {
 		active = false;
+		send_back();
 	}
 
-	hidden function send_back(info) {
-		var speed = 0;
-		var cadence = 0;
-
+	hidden function update_send_back(info) {
 		if (info.currentSpeed) {
 			speed = info.currentSpeed * 3600 / 1000;
 		}
 		if (info.currentCadence) {
 			cadence = info.currentCadence;
 		}
-
-		ant_device.send_back(active, speed, cadence);
 	}
 
 	hidden function mode_string() {
@@ -112,7 +116,8 @@ class DataField extends WatchUi.SimpleDataField {
 		}
 
 		if (ant_device.mode == MODE_AUTO) {
-			send_back(info);
+			update_send_back(info);
+			send_back();
 		}
 
 		return mode_string();
