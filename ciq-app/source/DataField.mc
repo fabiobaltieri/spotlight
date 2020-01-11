@@ -82,8 +82,6 @@ class DataField extends WatchUi.SimpleDataField {
 
 		if (battery == 0xff) {
 			battery = "-";
-		} else if (battery == 0xfe) {
-			battery = "5V";
 		} else if (battery > 99) {
 			battery = 99;
 		}
