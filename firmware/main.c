@@ -35,7 +35,6 @@
 #define TELEMETRY_RF_FREQ 66
 
 // Remote Slave channel
-#define REMOTE_ENABLE 1
 #define REMOTE_REOPEN 0
 #define REMOTE_CHANNEL 1
 #define REMOTE_ANT_NETWORK_NUM 0
@@ -124,7 +123,7 @@ static int8_t get_max_temp(void)
 	int8_t out = INT8_MIN;
 	uint8_t i;
 
-	if (TARGET == TARGET_PCA10040)
+	if (!TARGET_HAS_EXT_TEMP)
 		return die_temp;
 
 	for (i = 0; i < sizeof(temps); i++)
@@ -202,8 +201,9 @@ static void timer_handler(void *context)
 	saadc_convert();
 
 	// Update temperatures
-	for (i = 0; i < sizeof(temps_addr); i++)
-		temps[i] = mic280_read(&twi, temps_addr[i]);
+	if (TARGET_HAS_EXT_TEMP)
+		for (i = 0; i < sizeof(temps_addr); i++)
+			temps[i] = mic280_read(&twi, temps_addr[i]);
 
 	sd_temp_get(&temp);
 	die_temp = temp / 4;
@@ -216,6 +216,9 @@ static void timer_handler(void *context)
 static void pwm_update(void)
 {
 	ret_code_t err_code;
+
+	if (!TARGET_HAS_PWM)
+		return;
 
 	if (memcmp(tgt_levels, cur_levels, sizeof(tgt_levels)) == 0)
 		return;
@@ -426,6 +429,9 @@ static void pwm_setup(void)
 {
 	ret_code_t err_code;
 
+	if (!TARGET_HAS_PWM)
+		return;
+
 	app_pwm_config_t pwm1_cfg = APP_PWM_DEFAULT_CONFIG_2CH(
 			20L, POWER_LED_1, POWER_LED_2);
 	app_pwm_config_t pwm2_cfg = APP_PWM_DEFAULT_CONFIG_2CH(
@@ -538,7 +544,9 @@ static void ant_channel_setup(void)
 	err_code = sd_ant_channel_open(TELEMETRY_CHANNEL);
 	APP_ERROR_CHECK(err_code);
 
-#if REMOTE_ENABLE
+	if (!TARGET_HAS_REMOTE)
+		return;
+
 	/* Remote */
 	ant_channel_config_t r_channel_config = {
 		.channel_number    = REMOTE_CHANNEL,
@@ -557,7 +565,6 @@ static void ant_channel_setup(void)
 
 	err_code = sd_ant_channel_open(REMOTE_CHANNEL);
 	APP_ERROR_CHECK(err_code);
-#endif
 }
 
 static void softdevice_setup(void)

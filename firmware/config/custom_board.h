@@ -1,6 +1,10 @@
 /* Per target definitions */
 #if TARGET == TARGET_PCA10040
 
+#define TARGET_HAS_REMOTE 1
+#define TARGET_HAS_EXT_TEMP 0
+#define TARGET_HAS_PWM 1
+
 #define LED_1 17
 #define LED_2 18
 #define BUTTON_1 13
@@ -14,6 +18,10 @@
 #define BATTERY_SENSE_INPUT NRF_SAADC_INPUT_VDD
 
 #elif TARGET == TARGET_SPOTLIGHT
+
+#define TARGET_HAS_REMOTE 1
+#define TARGET_HAS_EXT_TEMP 1
+#define TARGET_HAS_PWM 1
 
 #define LED_1 7
 #define LED_2 8
