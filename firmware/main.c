@@ -124,7 +124,7 @@ static int8_t get_max_temp(void)
 	int8_t out = INT8_MIN;
 	uint8_t i;
 
-	if (APP_DEBUGGING_ON_PCA10040)
+	if (TARGET == TARGET_PCA10040)
 		return die_temp;
 
 	for (i = 0; i < sizeof(temps); i++)
