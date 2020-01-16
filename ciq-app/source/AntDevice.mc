@@ -9,7 +9,7 @@ class AntDevice extends Ant.GenericChannel {
 	const DEV_NUMBER = 0; /* 0 for search */
 	const CHANNEL = 66;
 
-	const REOPEN_DELAY = 50;
+	const REOPEN_DELAY = 20;
 	var open_delay = 1;
 	var opened = false;
 	var searching = false;
