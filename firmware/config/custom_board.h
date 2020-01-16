@@ -37,7 +37,21 @@
 
 #elif TARGET == TARGET_RETROFIT
 
-#error "fix me"
+#define TARGET_HAS_REMOTE 0
+#define TARGET_HAS_EXT_TEMP 0
+#define TARGET_HAS_PWM 0
+
+#define LED_1 22
+#define LED_2 20
+#define BUTTON_1 23
+#define POWER_LED_1 24
+#define POWER_LED_2 25
+#define POWER_LED_3 26
+#define POWER_LED_4 27
+#define POWER_LED_POLARITY APP_PWM_POLARITY_ACTIVE_LOW
+#define TWI_SCL 18
+#define TWI_SDA 19
+#define BATTERY_SENSE_INPUT NRF_SAADC_INPUT_AIN4
 
 #else
 #error "TARGET undefined"
