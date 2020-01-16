@@ -8,6 +8,7 @@ class DataField extends WatchUi.SimpleDataField {
 	hidden var active = false;
 	hidden var speed = 0;
 	hidden var cadence = 0;
+	hidden var id_displayed = false;
 
 	const modes = ["S", "M", "A", "R"];
 	const levels = ["-", "L", "M", "H", "!"];
@@ -107,10 +108,14 @@ class DataField extends WatchUi.SimpleDataField {
 		log_fields();
 
 		if (!ant_device.opened) {
+			id_displayed = false;
 			ant_device.maybe_open();
 			return "Idle";
 		} else if (ant_device.searching) {
 			return "Searching...";
+		} else if (!id_displayed) {
+			id_displayed = true;
+			return "id: " + ant_device.deviceNum;
 		}
 
 		if (ant_device.mode == MODE_AUTO) {

@@ -14,6 +14,7 @@ class AntDevice extends Ant.GenericChannel {
 	var opened = false;
 	var searching = false;
 
+	var deviceNum;
 	var mode;
 	var level;
 	var battery;
@@ -131,8 +132,9 @@ class AntDevice extends Ant.GenericChannel {
 
 	function onMessage(msg) {
 		var payload = msg.getPayload();
-		var deviceNum = msg.deviceNumber;
 		var msgId = msg.messageId;
+
+		deviceNum = msg.deviceNumber;
 
 		if (msgId == Ant.MSG_ID_CHANNEL_RESPONSE_EVENT) {
 			// Channel Response
