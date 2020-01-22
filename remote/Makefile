@@ -1,4 +1,4 @@
-PROJECT_NAME     := spotlight_s212
+PROJECT_NAME     := spotlight_remote_s212
 TARGETS          := nrf52832_xxaa
 OUTPUT_DIRECTORY := _build
 

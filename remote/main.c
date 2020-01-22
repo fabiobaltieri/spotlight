@@ -116,8 +116,7 @@ static void ant_channel_setup(void)
 
 static void bsp_evt_handler(bsp_event_t event)
 {
-	switch (event)
-	{
+	switch (event) {
 		case BSP_EVENT_KEY_0:
 			config_idx = (config_idx + 1) % NUM_CONFIGS;
 			break;
