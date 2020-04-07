@@ -30,7 +30,7 @@
 #define TELEMETRY_ANT_NETWORK_NUM 0
 #define TELEMETRY_CHAN_ID_DEV_NUM 666
 #define TELEMETRY_CHAN_ID_DEV_TYPE 0xfb
-#define TELEMETRY_CHAN_ID_TRANS_TYPE 1
+#define TELEMETRY_CHAN_ID_TRANS_TYPE 5
 #define TELEMETRY_CHAN_PERIOD 16384
 #define TELEMETRY_RF_FREQ 66
 
@@ -150,10 +150,11 @@ static void ant_tx_load(void)
 	ret_code_t err_code;
 	uint8_t payload[ANT_STANDARD_DATA_PAYLOAD_SIZE];
 
-	payload[0] = state.mode | (state.level << 4); // Mode + Level
-	payload[1] = (batt_mv / 100); // Battery (V * 10, TODO: percentage)
-	payload[2] = get_max_temp(); // Temperature (C)
-	payload[3] = 0xff;
+	payload[0] = 0x00; // Page 0
+
+	payload[1] = state.mode | (state.level << 4); // Mode + Level
+	payload[2] = (batt_mv / 100); // Battery (V * 10, TODO: percentage)
+	payload[3] = get_max_temp(); // Temperature (C)
 	payload[4] = 0xff;
 	payload[5] = 0xff;
 	payload[6] = 0xff;

@@ -13,6 +13,7 @@ class AntDevice extends Ant.GenericChannel {
 	var open_delay = 1;
 	var opened = false;
 	var searching = false;
+	var data_valid = false;
 
 	var deviceNum;
 	var mode;
@@ -91,6 +92,7 @@ class AntDevice extends Ant.GenericChannel {
 		} else if (id == Ant.MSG_ID_RF_EVENT && code == Ant.MSG_CODE_EVENT_CHANNEL_CLOSED) {
 			debug("channel closed");
 			opened = false;
+			data_valid = false;
 		} else {
 			debug("channel response, id: " + id.format("%02x") + " code: " + code.format("%02x"));
 		}
@@ -124,10 +126,16 @@ class AntDevice extends Ant.GenericChannel {
 	}
 
 	hidden function doMessage(data) {
-		mode = data[0] & 0x0f;
-		level = (data[0] >> 4) & 0x0f;
-		battery = data[1];
-		temp = s8(data[2]);
+		if (data[0] != 0) {
+			return;
+		}
+
+		mode = data[1] & 0x0f;
+		level = (data[1] >> 4) & 0x0f;
+		battery = data[2];
+		temp = s8(data[3]);
+
+		data_valid = true;
 	}
 
 	function onMessage(msg) {
