@@ -45,6 +45,7 @@ class AntDevice extends Ant.GenericChannel {
 	}
 
 	function open() {
+		debug("open");
 		GenericChannel.open();
 		opened = true;
 		searching = true;
