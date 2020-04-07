@@ -85,7 +85,7 @@ class AntDevice extends Ant.GenericChannel {
 		if (id == Ant.MSG_ID_RF_EVENT && code == Ant.MSG_CODE_EVENT_RX_FAIL) {
 			debug("rx fail");
 		} else if (id == Ant.MSG_ID_RF_EVENT && code == Ant.MSG_CODE_EVENT_RX_SEARCH_TIMEOUT) {
-			debug("sarch timeout");
+			debug("search timeout");
 		} else if (id == Ant.MSG_ID_RF_EVENT && code == Ant.MSG_CODE_EVENT_RX_FAIL_GO_TO_SEARCH) {
 			debug("rx fail go to search");
 			searching = true;
