@@ -110,9 +110,11 @@ class AntDevice extends Ant.GenericChannel {
 	function send_back(active, speed, cadence) {
 		var data = [0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff];
 
-		data[0] = active;
-		data[1] = u8cap(speed);
-		data[2] = u8cap(cadence);
+		data[0] = 0x10; // Page 16
+
+		data[1] = active;
+		data[2] = u8cap(speed);
+		data[3] = u8cap(cadence);
 
 		var message = new Ant.Message();
 		message.setPayload(data);
@@ -128,6 +130,7 @@ class AntDevice extends Ant.GenericChannel {
 
 	hidden function doMessage(data) {
 		if (data[0] != 0) {
+			// Page 0
 			return;
 		}
 
