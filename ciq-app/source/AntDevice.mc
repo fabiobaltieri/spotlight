@@ -147,8 +147,8 @@ class AntDevice extends Ant.GenericChannel {
 			doChResponse(payload[0], payload[1]);
 		} else if (msgId == Ant.MSG_ID_BROADCAST_DATA) {
 			// Data
-			debug("data, dev: " + deviceNum + ": " + payloadHex(payload));
 			deviceNum = msg.deviceNumber;
+			debug("data, dev: " + deviceNum + ": " + payloadHex(payload));
 			doMessage(payload);
 			searching = false;
 		} else {
