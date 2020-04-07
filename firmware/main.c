@@ -44,6 +44,9 @@
 #define REMOTE_CHAN_PERIOD 16384
 #define REMOTE_RF_FREQ 66
 
+#define PAGE_0 0x00
+#define PAGE_16 0x10
+
 // Temp sensor addresses (MIC280)
 static uint8_t temps_addr[] = {0x4a, 0x4b};
 
@@ -150,7 +153,7 @@ static void ant_tx_load(void)
 	ret_code_t err_code;
 	uint8_t payload[ANT_STANDARD_DATA_PAYLOAD_SIZE];
 
-	payload[0] = 0x00; // Page 0
+	payload[0] = PAGE_0; // Page 0
 
 	payload[1] = state.mode | (state.level << 4); // Mode + Level
 	payload[2] = (batt_mv / 100); // Battery (V * 10, TODO: percentage)
@@ -403,9 +406,13 @@ static void telemetry_rx_process(uint8_t *payload)
 
 	ant_dump_message("RX", TELEMETRY_CHANNEL, payload);
 
-	active = payload[0];
-	speed = payload[1];
-	cadence = payload[2];
+	if (payload[0] != PAGE_16) {
+		return;
+	}
+
+	active = payload[1];
+	speed = payload[2];
+	cadence = payload[3];
 
 	switch_auto(active, speed, cadence);
 }
