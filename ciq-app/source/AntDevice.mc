@@ -142,14 +142,13 @@ class AntDevice extends Ant.GenericChannel {
 		var payload = msg.getPayload();
 		var msgId = msg.messageId;
 
-		deviceNum = msg.deviceNumber;
-
 		if (msgId == Ant.MSG_ID_CHANNEL_RESPONSE_EVENT) {
 			// Channel Response
 			doChResponse(payload[0], payload[1]);
 		} else if (msgId == Ant.MSG_ID_BROADCAST_DATA) {
 			// Data
 			debug("data, dev: " + deviceNum + ": " + payloadHex(payload));
+			deviceNum = msg.deviceNumber;
 			doMessage(payload);
 			searching = false;
 		} else {
