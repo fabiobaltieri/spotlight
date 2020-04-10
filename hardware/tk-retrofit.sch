@@ -4163,10 +4163,10 @@ DIN A4, landscape with extra doc field</description>
 <part name="C23" library="balto" deviceset="C" device="0603" value=".8p"/>
 <part name="Y1" library="SparkFun-Clocks" deviceset="CRYSTAL" device="SMD-3.2X2.5" value="32MHz"/>
 <part name="Y2" library="SparkFun-Clocks" deviceset="CRYSTAL-32.768KHZ" device="SMD-3.2X1.5" value="32.768kHz"/>
-<part name="C24" library="balto" deviceset="C" device="0603" value="33p"/>
-<part name="C25" library="balto" deviceset="C" device="0603" value="33p"/>
-<part name="C26" library="balto" deviceset="C" device="0603" value="16p"/>
-<part name="C27" library="balto" deviceset="C" device="0603" value="16p"/>
+<part name="C24" library="balto" deviceset="C" device="0603" value="12p"/>
+<part name="C25" library="balto" deviceset="C" device="0603" value="12p"/>
+<part name="C26" library="balto" deviceset="C" device="0603" value="12p"/>
+<part name="C27" library="balto" deviceset="C" device="0603" value="12p"/>
 <part name="C28" library="balto" deviceset="C" device="0603" value="dnp"/>
 <part name="GND23" library="supply1" deviceset="GND" device=""/>
 <part name="GND24" library="supply1" deviceset="GND" device=""/>

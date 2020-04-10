@@ -1112,19 +1112,19 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <attribute name="NAME" x="23.562" y="7.124" size="1.27" layer="25" rot="R270"/>
 <attribute name="VALUE" x="20.768" y="7.124" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="C24" library="balto" package="0603" value="33p" x="19.6" y="9.8" smashed="yes">
+<element name="C24" library="balto" package="0603" value="12p" x="19.6" y="9.8" smashed="yes">
 <attribute name="NAME" x="18.076" y="10.562" size="1.27" layer="25"/>
 <attribute name="VALUE" x="18.076" y="7.768" size="1.27" layer="27"/>
 </element>
-<element name="C25" library="balto" package="0603" value="33p" x="17.2" y="12.2" smashed="yes" rot="R90">
+<element name="C25" library="balto" package="0603" value="12p" x="17.2" y="12.2" smashed="yes" rot="R90">
 <attribute name="NAME" x="16.438" y="10.676" size="1.27" layer="25" rot="R90"/>
 <attribute name="VALUE" x="19.232" y="10.676" size="1.27" layer="27" rot="R90"/>
 </element>
-<element name="C26" library="balto" package="0603" value="16p" x="9.6" y="12" smashed="yes" rot="R90">
+<element name="C26" library="balto" package="0603" value="12p" x="9.6" y="12" smashed="yes" rot="R90">
 <attribute name="NAME" x="8.838" y="10.476" size="1.27" layer="25" rot="R90"/>
 <attribute name="VALUE" x="11.632" y="10.476" size="1.27" layer="27" rot="R90"/>
 </element>
-<element name="C27" library="balto" package="0603" value="16p" x="7.8" y="6" smashed="yes" rot="R180">
+<element name="C27" library="balto" package="0603" value="12p" x="7.8" y="6" smashed="yes" rot="R180">
 <attribute name="NAME" x="9.324" y="5.238" size="1.27" layer="25" rot="R180"/>
 <attribute name="VALUE" x="9.324" y="8.032" size="1.27" layer="27" rot="R180"/>
 </element>
