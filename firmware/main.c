@@ -28,7 +28,6 @@
 // Telemetry Master channel
 #define TELEMETRY_CHANNEL 0
 #define TELEMETRY_ANT_NETWORK_NUM 0
-#define TELEMETRY_CHAN_ID_DEV_NUM 666
 #define TELEMETRY_CHAN_ID_DEV_TYPE 0xfb
 #define TELEMETRY_CHAN_ID_TRANS_TYPE 5
 #define TELEMETRY_CHAN_PERIOD 16384
@@ -46,6 +45,9 @@
 
 #define PAGE_0 0x00
 #define PAGE_16 0x10
+
+// Device number
+static uint16_t device_number;
 
 // Temp sensor addresses (MIC280)
 static uint8_t temps_addr[] = {0x4a, 0x4b};
@@ -539,7 +541,7 @@ static void ant_channel_setup(void)
 		.rf_freq           = TELEMETRY_RF_FREQ,
 		.transmission_type = TELEMETRY_CHAN_ID_TRANS_TYPE,
 		.device_type       = TELEMETRY_CHAN_ID_DEV_TYPE,
-		.device_number     = TELEMETRY_CHAN_ID_DEV_NUM,
+		.device_number     = device_number,
 		.channel_period    = TELEMETRY_CHAN_PERIOD,
 		.network_number    = TELEMETRY_ANT_NETWORK_NUM,
 	};
@@ -648,9 +650,11 @@ int main(void)
 
 	hello();
 
+	device_number = NRF_FICR->DEVICEADDR[0] & 0xffff;
+
 	ant_channel_setup();
 
-	NRF_LOG_INFO("Started...");
+	NRF_LOG_INFO("Started... devnum: %d", device_number);
 
 	for (;;) {
 		NRF_LOG_FLUSH();
