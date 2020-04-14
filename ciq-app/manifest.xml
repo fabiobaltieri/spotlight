@@ -1,13 +1,13 @@
 <iq:manifest xmlns:iq="http://www.garmin.com/xml/connectiq" version="1">
-    <iq:application entry="Main" id="1D87FA5F119942B2A8B4B7E07F9914CF" launcherIcon="@Drawables.LauncherIcon" minSdkVersion="1.2.0" name="@Strings.AppName" type="datafield">
-        <iq:products>
-            <iq:product id="fr230"/>
-            <iq:product id="fr235"/>
-        </iq:products>
-        <iq:languages/>
-        <iq:permissions>
-            <iq:uses-permission id="Ant"/>
-            <iq:uses-permission id="FitContributor"/>
-        </iq:permissions>
-    </iq:application>
+	<iq:application entry="Main" id="1D87FA5F119942B2A8B4B7E07F9914CF" launcherIcon="@Drawables.LauncherIcon" minSdkVersion="1.2.0" name="@Strings.AppName" type="datafield">
+		<iq:products>
+			<iq:product id="fr230"/>
+			<iq:product id="fr235"/>
+		</iq:products>
+		<iq:languages/>
+		<iq:permissions>
+			<iq:uses-permission id="Ant"/>
+			<iq:uses-permission id="FitContributor"/>
+		</iq:permissions>
+	</iq:application>
 </iq:manifest>
