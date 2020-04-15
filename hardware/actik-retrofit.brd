@@ -1317,7 +1317,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <attribute name="PROD_ID" value="IC-13460" x="52.09" y="-8.24" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="17.8" y="3.7" size="0.6096" layer="27" font="vector" ratio="20" align="top-center"/>
 </element>
-<element name="Y1" library="balto" package="XTAL-2X1.6" value="" x="23.2" y="11.8" smashed="yes" rot="R90">
+<element name="Y1" library="balto" package="XTAL-2X1.6" value="32MHz" x="23.2" y="11.8" smashed="yes" rot="R90">
 <attribute name="NAME" x="22.2" y="9.8" size="1.016" layer="25" rot="R90"/>
 <attribute name="VALUE" x="24.2" y="9.8" size="1.016" layer="27" rot="R90" align="top-left"/>
 </element>

@@ -4905,7 +4905,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="+3V12" library="supply1" deviceset="+3V3" device=""/>
 <part name="U5" library="balto" deviceset="2450AT18D0100" device="-L" value="2450AT18D0100-L"/>
 <part name="GND22" library="supply1" deviceset="GND" device=""/>
-<part name="Y1" library="balto" deviceset="XTAL-GND" device="-2X1.6"/>
+<part name="Y1" library="balto" deviceset="XTAL-GND" device="-2X1.6" value="32MHz"/>
 <part name="GND35" library="supply1" deviceset="GND" device=""/>
 <part name="U1" library="balto" deviceset="TMP102" device=""/>
 <part name="U6" library="balto" deviceset="MAX17048" device=""/>
