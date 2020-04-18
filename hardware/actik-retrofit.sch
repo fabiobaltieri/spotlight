@@ -5134,6 +5134,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 </instance>
 <instance part="L1" gate="G$1" x="106.68" y="33.02" smashed="yes">
 <attribute name="NAME" x="101.6" y="38.1" size="1.016" layer="95" font="vector" align="top-left"/>
+<attribute name="VALUE" x="101.6" y="35.56" size="1.016" layer="96" font="vector"/>
 </instance>
 <instance part="C3" gate="G$1" x="99.06" y="27.94" smashed="yes">
 <attribute name="NAME" x="100.584" y="28.321" size="1.778" layer="95"/>
