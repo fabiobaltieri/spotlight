@@ -1,15 +1,16 @@
-SDK_PATH = $(HOME)/ciq/bin
-KEY = $(HOME)/ciq/key/developer_key.der
+SDK_PATH = $(HOME)/ciq
+KEY = $(SDK_PATH)/key/developer_key.der
 
 NAME = spotlight
+APP_ID = d19a5b17-078e-49c9-a6b3-9f1e47f60a80
 
 JUNGLE = monkey.jungle
 ifeq ($(DEVICE),)
 DEVICE = fr230
 endif
 
-MONKEYC = $(SDK_PATH)/monkeyc
-MONKEYDO = $(SDK_PATH)/monkeydo
+MONKEYC = $(SDK_PATH)/bin/monkeyc
+MONKEYDO = $(SDK_PATH)/bin/monkeydo
 
 .PHONY: all clean sim graph
 
@@ -31,4 +32,7 @@ sim: $(NAME).prg
 	$(MONKEYDO) $(NAME).prg $(DEVICE)
 
 graph:
-	java -jar $(SDK_PATH)/fit-graph.jar
+	java -jar $(SDK_PATH)/bin/fit-graph.jar
+
+era:
+	$(SDK_PATH)/bin/era -k $(KEY) -a $(APP_ID)
