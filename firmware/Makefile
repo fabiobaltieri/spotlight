@@ -205,3 +205,7 @@ flash_softdevice:
 
 erase:
 	nrfjprog -f nrf52 --eraseall
+
+boot: default
+	nrfutil pkg generate --application $(OUTPUT_DIRECTORY)/nrf52832_xxaa.hex --hw-version 52 --sd-req 0xBA --application-version 0 --key-file ota-key.pem $(OUTPUT_DIRECTORY)/nrf52832_xxaa.zip
+	nrfutil dfu ble --package $(OUTPUT_DIRECTORY)/nrf52832_xxaa.zip -ic NRF52 -f
