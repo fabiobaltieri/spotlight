@@ -1,4 +1,4 @@
-PROJECT_NAME     := spotlight_s212
+PROJECT_NAME     := spotlight_s332
 TARGETS          := nrf52832_xxaa
 OUTPUT_DIRECTORY := _build
 
@@ -90,8 +90,8 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/libraries/timer \
   $(SDK_ROOT)/components/libraries/util \
   $(SDK_ROOT)/components/softdevice/common \
-  $(SDK_ROOT)/components/softdevice/s212/headers \
-  $(SDK_ROOT)/components/softdevice/s212/headers/nrf52 \
+  $(SDK_ROOT)/components/softdevice/s332/headers \
+  $(SDK_ROOT)/components/softdevice/s332/headers/nrf52 \
   $(SDK_ROOT)/components/toolchain/cmsis/include \
   $(SDK_ROOT)/external/fprintf \
   $(SDK_ROOT)/external/segger_rtt \
@@ -121,7 +121,7 @@ CFLAGS += -DFLOAT_ABI_HARD
 CFLAGS += -DNRF52
 CFLAGS += -DNRF52832_XXAA
 CFLAGS += -DNRF52_PAN_74
-CFLAGS += -DS212
+CFLAGS += -DS332
 CFLAGS += -DSOFTDEVICE_PRESENT
 CFLAGS += -DSWI_DISABLE0
 CFLAGS += -mcpu=cortex-m4
@@ -148,7 +148,7 @@ ASMFLAGS += -DFLOAT_ABI_HARD
 ASMFLAGS += -DNRF52
 ASMFLAGS += -DNRF52832_XXAA
 ASMFLAGS += -DNRF52_PAN_74
-ASMFLAGS += -DS212
+ASMFLAGS += -DS332
 ASMFLAGS += -DSOFTDEVICE_PRESENT
 ASMFLAGS += -DSWI_DISABLE0
 
@@ -199,8 +199,8 @@ flash: default
 	nrfjprog -f nrf52 --reset
 
 flash_softdevice:
-	@echo Flashing: ANT_s212_nrf52_5.0.0.hex
-	nrfjprog -f nrf52 --program $(SDK_ROOT)/components/softdevice/s212/ANT_s212_nrf52810_nrf52832_6.1.1.hex --sectorerase
+	@echo Flashing: ANT_s332_nrf52832_6.1.1.hex
+	nrfjprog -f nrf52 --program $(SDK_ROOT)/components/softdevice/s332/ANT_s332_nrf52832_6.1.1.hex --sectorerase
 	nrfjprog -f nrf52 --reset
 
 erase:
