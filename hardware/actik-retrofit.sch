@@ -4900,7 +4900,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="GND20" library="supply1" deviceset="GND" device=""/>
 <part name="C13" library="balto" deviceset="C" device="0603" value=".1u"/>
 <part name="C14" library="balto" deviceset="C" device="0603" value=".1u"/>
-<part name="C15" library="balto" deviceset="C" device="0603" value=".1u"/>
+<part name="C15" library="balto" deviceset="C" device="0603" value="10u"/>
 <part name="GND21" library="supply1" deviceset="GND" device=""/>
 <part name="+3V12" library="supply1" deviceset="+3V3" device=""/>
 <part name="U5" library="balto" deviceset="2450AT18D0100" device="-L" value="2450AT18D0100-L"/>
@@ -4979,6 +4979,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <text x="78.74" y="53.34" size="1.778" layer="97" align="center">X</text>
 <text x="78.74" y="50.8" size="1.778" layer="97" align="center">X</text>
 <text x="78.74" y="48.26" size="1.778" layer="97" align="center">X</text>
+<text x="111.76" y="78.74" size="1.778" layer="97">^^ near pin 48</text>
 </plain>
 <instances>
 <instance part="LICENSE1" gate="G$1" x="165.1" y="25.4" smashed="yes"/>

@@ -1168,7 +1168,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <attribute name="NAME" x="14.724" y="2.038" size="1.27" layer="25" rot="R180"/>
 <attribute name="VALUE" x="14.724" y="4.832" size="1.27" layer="27" rot="R180"/>
 </element>
-<element name="C15" library="balto" package="0603" value=".1u" x="20.2" y="11.8" smashed="yes" rot="R90">
+<element name="C15" library="balto" package="0603" value="10u" x="20.2" y="11.8" smashed="yes" rot="R90">
 <attribute name="NAME" x="19.438" y="0.276" size="1.27" layer="25" rot="R90"/>
 <attribute name="VALUE" x="22.232" y="0.276" size="1.27" layer="27" rot="R90"/>
 </element>
