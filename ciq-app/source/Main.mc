@@ -11,7 +11,6 @@ class Main extends Application.AppBase {
 
 	function onStart(state) {
 		antDevice = new AntDevice();
-		return false;
 	}
 
 	function getInitialView() {
@@ -20,6 +19,5 @@ class Main extends Application.AppBase {
 
 	function onStop(state) {
 		antDevice.close();
-		return false;
 	}
 }
