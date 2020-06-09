@@ -8,6 +8,7 @@ class AntDevice extends Ant.GenericChannel {
 	const PERIOD = 16384;
 	const DEV_NUMBER = 0; /* 0 for search */
 	const CHANNEL = 66;
+	var device_cfg;
 
 	const REOPEN_DELAY = 20;
 	var open_delay = 1;
@@ -26,7 +27,6 @@ class AntDevice extends Ant.GenericChannel {
 	}
 
 	function initialize() {
-		var device_cfg;
 		var chan_ass = new Ant.ChannelAssignment(
 				Ant.CHANNEL_TYPE_RX_NOT_TX,
 				Ant.NETWORK_PUBLIC);
@@ -41,11 +41,11 @@ class AntDevice extends Ant.GenericChannel {
 				:searchTimeoutLowPriority => 4, // 10 seconds
 				:searchThreshold => 0,
 				});
-		GenericChannel.setDeviceConfig(device_cfg);
 	}
 
 	function open() {
 		debug("open");
+		GenericChannel.setDeviceConfig(device_cfg);
 		GenericChannel.open();
 		opened = true;
 		searching = true;
