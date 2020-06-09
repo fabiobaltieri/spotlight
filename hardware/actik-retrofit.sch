@@ -4854,8 +4854,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="+3V9" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="FRAME1" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="DINA4_L" device=""/>
 <part name="C1" library="balto" deviceset="C" device="0603" value=".1u"/>
-<part name="R1" library="balto" deviceset="R" device="0603" value="1k"/>
-<part name="R2" library="balto" deviceset="R" device="0603" value="10k"/>
+<part name="R1" library="balto" deviceset="R" device="0603" value="2k2"/>
+<part name="R2" library="balto" deviceset="R" device="0603" value="22k"/>
 <part name="GND2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="P+2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
 <part name="TP1" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TP" device="TP10R" package3d_urn="urn:adsk.eagle:package:27959/1" value="TPTP10R"/>
@@ -4914,9 +4914,9 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="GND37" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND38" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="TP5" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TP" device="TP10R" package3d_urn="urn:adsk.eagle:package:27959/1" value="TPTP10R"/>
-<part name="R3" library="balto" deviceset="R" device="0603" value="10k"/>
-<part name="R6" library="balto" deviceset="R" device="0603" value="10k"/>
-<part name="R7" library="balto" deviceset="R" device="0603" value="10k"/>
+<part name="R3" library="balto" deviceset="R" device="0603" value="12k"/>
+<part name="R6" library="balto" deviceset="R" device="0603" value="12k"/>
+<part name="R7" library="balto" deviceset="R" device="0603" value="12k"/>
 <part name="C16" library="balto" deviceset="C" device="0603" value=".1u"/>
 <part name="GND1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="P+4" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
