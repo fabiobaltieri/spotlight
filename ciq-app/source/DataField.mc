@@ -71,11 +71,11 @@ class DataField extends WatchUi.SimpleDataField {
 		}
 	}
 
-	hidden function mode_string() {
-		var mode = modes[ant_device.mode];
-		var level = levels[ant_device.level];
-		var temp = ant_device.temp;
-		var battery = ant_device.battery;
+	hidden function mode_string(device, full) {
+		var mode = modes[device.mode];
+		var level = levels[device.level];
+		var temp = device.temp;
+		var battery = device.battery;
 
 		if (temp == -128) {
 			temp = "-";
@@ -87,7 +87,11 @@ class DataField extends WatchUi.SimpleDataField {
 			battery = 99;
 		}
 
-		return mode + level + " " + battery + " " + temp;
+		if (full) {
+			return mode + level + " " + battery + " " + temp;
+		} else {
+			return mode + level + " " + battery;
+		}
 	}
 
 	hidden function log_fields() {
@@ -123,6 +127,6 @@ class DataField extends WatchUi.SimpleDataField {
 			send_back();
 		}
 
-		return mode_string();
+		return mode_string(ant_device, true);
 	}
 }
