@@ -1,18 +1,17 @@
 #include <stdint.h>
+#include "ant_channel_config.h"
+#include "ant_interface.h"
+#include "ant_parameters.h"
 #include "boards.h"
-#include "bsp.h"
 #include "nrf_delay.h"
+#include "nrf_log.h"
 #include "nrf_sdh.h"
 #include "nrf_sdh_ant.h"
 
-#include "ant_interface.h"
-#include "ant_parameters.h"
-#include "ant_channel_config.h"
-
-#include "nrf_log.h"
-
 #include "state.h"
 #include "utils.h"
+
+#include "telemetry.h"
 
 #define DEBUG_ANT(a...) NRF_LOG_INFO(a)
 
