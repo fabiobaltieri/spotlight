@@ -18,16 +18,21 @@ static void dfu_observer(nrf_dfu_evt_type_t evt_type)
 		case NRF_DFU_EVT_DFU_INITIALIZED:
 			bsp_board_init(BSP_INIT_LEDS);
 			bsp_board_led_on(BSP_BOARD_LED_0);
+			bsp_board_led_on(BSP_BOARD_LED_1);
 			break;
 		case NRF_DFU_EVT_TRANSPORT_ACTIVATED:
 			bsp_board_led_invert(BSP_BOARD_LED_0);
+			bsp_board_led_invert(BSP_BOARD_LED_1);
 			nrf_delay_ms(100);
 			bsp_board_led_invert(BSP_BOARD_LED_0);
+			bsp_board_led_invert(BSP_BOARD_LED_1);
 			break;
 		case NRF_DFU_EVT_OBJECT_RECEIVED:
 			bsp_board_led_invert(BSP_BOARD_LED_0);
+			bsp_board_led_invert(BSP_BOARD_LED_1);
 			nrf_delay_ms(33);
 			bsp_board_led_invert(BSP_BOARD_LED_0);
+			bsp_board_led_invert(BSP_BOARD_LED_1);
 			break;
 		default:
 			break;
