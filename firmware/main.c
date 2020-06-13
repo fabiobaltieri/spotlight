@@ -72,14 +72,23 @@ APP_TIMER_DEF(delay_tmr);
 
 // Levels
 static struct level {
-        uint8_t a, b, c, d;
+	uint8_t a, b, c, d;
 } levels[] = {
+#if TARGET == TARGET_ACTIK
+	/* S    O  Red   nc */
+	{  0,   0,   0,   0}, // 0 - Off
+	{  1,   0,   0,   0}, // 1 - Low
+	{ 25,  25,   0,   0}, // 2 - Medium
+	{100, 100,   0,   0}, // 3 - High
+	{  0,   0, 100,   0}, // 4 - Red
+#else
 	/* S    O  O90    S */
-        {  0,   0,   0,   0}, // 0 - Off
-        {  0,   2,   0,   0}, // 1 - Low (150mW)
-        {  4,  10,  10,   4}, // 2 - Medium (1.5W)
-        { 12,  38,  38,  12}, // 3 - High (5W)
-        { 60,   0,   0,  60}, // 4 - Beam (7W)
+	{  0,   0,   0,   0}, // 0 - Off
+	{  0,   2,   0,   0}, // 1 - Low (150mW)
+	{  4,  10,  10,   4}, // 2 - Medium (1.5W)
+	{ 12,  38,  38,  12}, // 3 - High (5W)
+	{ 60,   0,   0,  60}, // 4 - Beam (7W)
+#endif
 };
 enum {
 	LEVEL_OFF = 0,
