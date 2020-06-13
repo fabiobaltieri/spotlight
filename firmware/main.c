@@ -11,10 +11,6 @@
 #include "nrf_sdh.h"
 #include "nrf_sdh_ant.h"
 
-#include "ant_interface.h"
-#include "ant_parameters.h"
-#include "ant_channel_config.h"
-
 #include "nrf_log.h"
 #include "nrf_log_ctrl.h"
 #include "nrf_log_default_backends.h"
@@ -67,22 +63,6 @@ static struct level {
 	{ 12,  38,  38,  12}, // 3 - High (5W)
 	{ 60,   0,   0,  60}, // 4 - Beam (7W)
 #endif
-};
-
-enum {
-	MODE_STANDBY = 0,
-	MODE_MANUAL = 1,
-	MODE_AUTO = 2,
-	MODE_REMOTE = 3,
-};
-
-enum {
-	LEVEL_OFF = 0,
-	LEVEL_LOW = 1,
-	LEVEL_MEDIUM = 2,
-	LEVEL_HIGH = 3,
-	LEVEL_BEAM = 4,
-	NUM_LEVELS = 5,
 };
 
 #define AUTO_CADENCE_TRESHOLD 142
