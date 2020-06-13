@@ -19,19 +19,13 @@
 #include "nrf_log_ctrl.h"
 #include "nrf_log_default_backends.h"
 
+#include "state.h"
+#include "telemetry.h"
 #include "mic280.h"
 #include "utils.h"
 
 #define DEBUG_ANT(a...) NRF_LOG_INFO(a)
 #define DEBUG_LEVELS(a...) NRF_LOG_INFO(a)
-
-// Telemetry Master channel
-#define TELEMETRY_CHANNEL 0
-#define TELEMETRY_ANT_NETWORK_NUM 0
-#define TELEMETRY_CHAN_ID_DEV_TYPE 0xfb
-#define TELEMETRY_CHAN_ID_TRANS_TYPE 5
-#define TELEMETRY_CHAN_PERIOD 16384
-#define TELEMETRY_RF_FREQ 66
 
 // Remote Slave channel
 #define REMOTE_REOPEN 0
@@ -43,12 +37,6 @@
 #define REMOTE_CHAN_PERIOD 16384
 #define REMOTE_RF_FREQ 66
 
-#define PAGE_0 0x00
-#define PAGE_16 0x10
-
-// Device number
-static uint16_t device_number;
-
 // Temp sensor addresses (MIC280)
 static uint8_t temps_addr[] = {0x4a, 0x4b};
 
@@ -57,7 +45,6 @@ static uint8_t tgt_levels[] = {0, 0, 0, 0};
 static uint8_t cur_levels[] = {1, 1, 1, 1};
 static int8_t temps[] = {INT8_MIN, INT8_MIN};
 static int8_t die_temp;
-static int16_t batt_mv = 0;
 #define BATT_NUM (39420 / 2 / 2) // 3.6 * 10.95 * 1000
 #define BATT_DEN (1024 / 2 / 2) // 10bit
 
@@ -109,10 +96,7 @@ enum {
 };
 #define AUTO_CADENCE_TRESHOLD 142
 
-static struct {
-	uint8_t mode;
-	uint8_t level;
-} state;
+struct state state;
 
 static void twi_init(void)
 {
@@ -147,52 +131,13 @@ static int8_t get_max_temp(void)
 	return out;
 }
 
-static uint8_t payload_unchanged(uint8_t *new)
-{
-	static uint8_t old[ANT_STANDARD_DATA_PAYLOAD_SIZE];
-
-	if (memcmp(old, new, ANT_STANDARD_DATA_PAYLOAD_SIZE) == 0)
-		return 1;
-
-	memcpy(old, new, ANT_STANDARD_DATA_PAYLOAD_SIZE);
-
-	return 0;
-}
-
-static void ant_tx_load(void)
-{
-	ret_code_t err_code;
-	uint8_t payload[ANT_STANDARD_DATA_PAYLOAD_SIZE];
-
-	payload[0] = PAGE_0; // Page 0
-
-	payload[1] = state.mode | (state.level << 4); // Mode + Level
-	payload[2] = (batt_mv / 100); // Battery (V * 10, TODO: percentage)
-	payload[3] = get_max_temp(); // Temperature (C)
-	payload[4] = 0xff;
-	payload[5] = 0xff;
-	payload[6] = 0xff;
-	payload[7] = 0xff;
-
-	if (payload_unchanged(payload))
-		return;
-
-	err_code = sd_ant_broadcast_message_tx(
-			TELEMETRY_CHANNEL,
-			ANT_STANDARD_DATA_PAYLOAD_SIZE,
-			payload);
-	APP_ERROR_CHECK(err_code);
-
-	ant_dump_message("TX", TELEMETRY_CHANNEL, payload);
-}
-
 void saadc_callback(nrf_drv_saadc_evt_t const *evt)
 {
 	uint32_t adc_result;
 
 	if (evt->type == NRF_DRV_SAADC_EVT_DONE) {
 		adc_result = evt->data.done.p_buffer[0];
-		batt_mv = (adc_result * BATT_NUM) / BATT_DEN;
+		state.batt_mv = (adc_result * BATT_NUM) / BATT_DEN;
 	}
 }
 
@@ -223,9 +168,11 @@ static void timer_handler(void *context)
 	sd_temp_get(&temp);
 	die_temp = temp / 4;
 
+	state.temp = get_max_temp();
+
 	// TODO: overtemperature protection
 
-	ant_tx_load();
+	telemetry_update();
 }
 
 static void pwm_update(void)
@@ -266,10 +213,10 @@ static void apply_state(void)
 	NRF_LOG_INFO("state mode: %d level: %d", state.mode, state.level);
 	memcpy(tgt_levels, &levels[state.level], sizeof(tgt_levels));
 	pwm_update();
-	ant_tx_load();
+	telemetry_update();
 }
 
-static void switch_auto(uint8_t active, uint8_t speed, uint8_t cadence)
+void switch_auto(uint8_t active, uint8_t speed, uint8_t cadence)
 {
 	uint8_t new_level;
 
@@ -409,25 +356,6 @@ static void timer_init(void)
 	APP_ERROR_CHECK(err_code);
 }
 
-static void telemetry_rx_process(uint8_t *payload)
-{
-	uint8_t active;
-	uint8_t speed;
-	uint8_t cadence;
-
-	ant_dump_message("RX", TELEMETRY_CHANNEL, payload);
-
-	if (payload[0] != PAGE_16) {
-		return;
-	}
-
-	active = payload[1];
-	speed = payload[2];
-	cadence = payload[3];
-
-	switch_auto(active, speed, cadence);
-}
-
 static void remote_rx_process(uint8_t *payload)
 {
 	ant_dump_message("RX", REMOTE_CHANNEL, payload);
@@ -441,7 +369,7 @@ static void remote_rx_process(uint8_t *payload)
 	tgt_levels[3] = payload[3];
 
 	pwm_update();
-	ant_tx_load();
+	telemetry_update();
 }
 
 static void pwm_setup(void)
@@ -470,35 +398,16 @@ static void pwm_setup(void)
 	app_pwm_enable(&PWM2);
 }
 
-static void ant_evt_telemetry(ant_evt_t *ant_evt)
-{
-	uint8_t channel = ant_evt->channel;
 
-	switch (ant_evt->event) {
-		case EVENT_TX:
-			bsp_board_led_on(1);
-			nrf_delay_ms(10);
-			bsp_board_led_off(1);
-			break;
-		case EVENT_RX:
-			telemetry_rx_process(ant_evt->message.ANT_MESSAGE_aucPayload);
-			break;
-		case EVENT_CHANNEL_COLLISION:
-			DEBUG_ANT("ANT %d: channel collision", channel);
-			break;
-		default:
-			DEBUG_ANT("ANT event %d %02x",
-					ant_evt->channel, ant_evt->event);
-			break;
-	}
-}
-
-static void ant_evt_remote(ant_evt_t *ant_evt)
+static void ant_evt_remote(ant_evt_t *ant_evt, void *context)
 {
 #if REMOTE_REOPEN
 	ret_code_t err_code;
 #endif
 	uint8_t channel = ant_evt->channel;
+
+	if (ant_evt->channel != REMOTE_CHANNEL)
+		return;
 
 	bsp_board_led_invert(0);
 
@@ -524,44 +433,11 @@ static void ant_evt_remote(ant_evt_t *ant_evt)
 	}
 }
 
-static void ant_evt_handler(ant_evt_t *ant_evt, void *context)
-{
-	if (ant_evt->channel == TELEMETRY_CHANNEL)
-		ant_evt_telemetry(ant_evt);
-	else if (ant_evt->channel == REMOTE_CHANNEL)
-		ant_evt_remote(ant_evt);
-	else
-		DEBUG_ANT("ANT ?! event %d %02x",
-				ant_evt->channel, ant_evt->event);
-}
+NRF_SDH_ANT_OBSERVER(m_ant_observer, 1, ant_evt_remote, NULL);
 
-#define ANT_OBSERVER_PRIO 1
-NRF_SDH_ANT_OBSERVER(m_ant_observer, ANT_OBSERVER_PRIO, ant_evt_handler, NULL);
-
-static void ant_channel_setup(void)
+static void ant_channel_setup(uint16_t device_number)
 {
 	ret_code_t err_code;
-
-	/* Telemetry */
-	ant_channel_config_t t_channel_config = {
-		.channel_number    = TELEMETRY_CHANNEL,
-		.channel_type      = CHANNEL_TYPE_MASTER,
-		.ext_assign        = 0x00,
-		.rf_freq           = TELEMETRY_RF_FREQ,
-		.transmission_type = TELEMETRY_CHAN_ID_TRANS_TYPE,
-		.device_type       = TELEMETRY_CHAN_ID_DEV_TYPE,
-		.device_number     = device_number,
-		.channel_period    = TELEMETRY_CHAN_PERIOD,
-		.network_number    = TELEMETRY_ANT_NETWORK_NUM,
-	};
-
-	err_code = ant_channel_init(&t_channel_config);
-	APP_ERROR_CHECK(err_code);
-
-	ant_tx_load();
-
-	err_code = sd_ant_channel_open(TELEMETRY_CHANNEL);
-	APP_ERROR_CHECK(err_code);
 
 	if (!TARGET_HAS_REMOTE)
 		return;
@@ -647,6 +523,8 @@ static void log_init(void)
 
 int main(void)
 {
+	static uint16_t device_number;
+
 	log_init();
 	utils_setup();
 	softdevice_setup();
@@ -661,7 +539,8 @@ int main(void)
 
 	device_number = NRF_FICR->DEVICEADDR[0] & 0xffff;
 
-	ant_channel_setup();
+	telemetry_setup(device_number);
+	ant_channel_setup(device_number);
 
 	NRF_LOG_INFO("Started... devnum: %d", device_number);
 
