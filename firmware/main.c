@@ -443,9 +443,9 @@ static void pwm_setup(void)
 		return;
 
 	app_pwm_config_t pwm1_cfg = APP_PWM_DEFAULT_CONFIG_2CH(
-			20L, POWER_LED_1, POWER_LED_2);
+			PWM_PERIOD_US, POWER_LED_1, POWER_LED_2);
 	app_pwm_config_t pwm2_cfg = APP_PWM_DEFAULT_CONFIG_2CH(
-			20L, POWER_LED_3, POWER_LED_4);
+			PWM_PERIOD_US, POWER_LED_3, POWER_LED_4);
 
 	pwm1_cfg.pin_polarity[0] = POWER_LED_POLARITY;
 	pwm1_cfg.pin_polarity[1] = POWER_LED_POLARITY;
