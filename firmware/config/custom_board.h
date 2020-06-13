@@ -48,10 +48,28 @@
 #define POWER_LED_2 25 // nc
 #define POWER_LED_3 26 // nc
 #define POWER_LED_4 27 // nc
-#define POWER_LED_POLARITY APP_PWM_POLARITY_ACTIVE_LOW
+#define POWER_LED_POLARITY APP_PWM_POLARITY_ACTIVE_HIGH
 #define TWI_SCL 18 // nc
 #define TWI_SDA 19 // nc
 #define BATTERY_SENSE_INPUT NRF_SAADC_INPUT_AIN4
+
+#elif TARGET == TARGET_ACTIK
+
+#define TARGET_HAS_REMOTE 0
+#define TARGET_HAS_EXT_TEMP 0
+#define TARGET_HAS_PWM 1
+
+#define LED_1 30 // nc
+#define LED_2 31
+#define BUTTON_1 29
+#define POWER_LED_1 22
+#define POWER_LED_2 5
+#define POWER_LED_3 6
+#define POWER_LED_4 11 // nc
+#define POWER_LED_POLARITY APP_PWM_POLARITY_ACTIVE_HIGH
+#define TWI_SCL 8
+#define TWI_SDA 7
+#define BATTERY_SENSE_INPUT NRF_SAADC_INPUT_AIN2
 
 #else
 #error "TARGET undefined"
