@@ -19,23 +19,14 @@
 #include "nrf_log_ctrl.h"
 #include "nrf_log_default_backends.h"
 
+#include "mic280.h"
+#include "remote.h"
 #include "state.h"
 #include "telemetry.h"
-#include "mic280.h"
 #include "utils.h"
 
 #define DEBUG_ANT(a...) NRF_LOG_INFO(a)
 #define DEBUG_LEVELS(a...) NRF_LOG_INFO(a)
-
-// Remote Slave channel
-#define REMOTE_REOPEN 0
-#define REMOTE_CHANNEL 1
-#define REMOTE_ANT_NETWORK_NUM 0
-#define REMOTE_CHAN_ID_DEV_NUM 0
-#define REMOTE_CHAN_ID_DEV_TYPE 0xfc
-#define REMOTE_CHAN_ID_TRANS_TYPE 0
-#define REMOTE_CHAN_PERIOD 16384
-#define REMOTE_RF_FREQ 66
 
 // Temp sensor addresses (MIC280)
 static uint8_t temps_addr[] = {0x4a, 0x4b};
@@ -77,6 +68,14 @@ static struct level {
 	{ 60,   0,   0,  60}, // 4 - Beam (7W)
 #endif
 };
+
+enum {
+	MODE_STANDBY = 0,
+	MODE_MANUAL = 1,
+	MODE_AUTO = 2,
+	MODE_REMOTE = 3,
+};
+
 enum {
 	LEVEL_OFF = 0,
 	LEVEL_LOW = 1,
@@ -85,15 +84,7 @@ enum {
 	LEVEL_BEAM = 4,
 	NUM_LEVELS = 5,
 };
-#define LEVEL_START LEVEL_LOW
 
-// Modes
-enum {
-	MODE_STANDBY = 0,
-	MODE_MANUAL = 1,
-	MODE_AUTO = 2,
-	MODE_REMOTE = 3,
-};
 #define AUTO_CADENCE_TRESHOLD 142
 
 struct state state;
@@ -208,12 +199,23 @@ static void pwm_timer_handler(void *context)
 	pwm_update();
 }
 
-static void apply_state(void)
+static void apply_state(uint8_t *manual)
 {
 	NRF_LOG_INFO("state mode: %d level: %d", state.mode, state.level);
-	memcpy(tgt_levels, &levels[state.level], sizeof(tgt_levels));
+	if (manual) {
+		memcpy(tgt_levels, manual, sizeof(tgt_levels));
+	} else {
+		memcpy(tgt_levels, &levels[state.level], sizeof(tgt_levels));
+	}
 	pwm_update();
 	telemetry_update();
+}
+
+void switch_remote(uint8_t *manual)
+{
+	state.mode = MODE_REMOTE;
+	state.level = LEVEL_MEDIUM;
+	apply_state(manual);
 }
 
 void switch_auto(uint8_t active, uint8_t speed, uint8_t cadence)
@@ -238,7 +240,7 @@ void switch_auto(uint8_t active, uint8_t speed, uint8_t cadence)
 		return;
 
 	state.level = new_level;
-	apply_state();
+	apply_state(NULL);
 }
 
 static uint8_t switch_delay;
@@ -273,7 +275,7 @@ static void switch_short(void)
 		state.level = LEVEL_MEDIUM;
 	} else if (state.mode == MODE_MANUAL && state.level == LEVEL_BEAM) {
 		state.mode = MODE_AUTO;
-		state.level = LEVEL_START;
+		state.level = LEVEL_LOW;
 	} else if (state.mode == MODE_MANUAL) {
 		state.level++;
 	} else if (state.mode == MODE_AUTO) {
@@ -281,11 +283,11 @@ static void switch_short(void)
 		state.level = LEVEL_MEDIUM;
 	} else if (state.mode == MODE_REMOTE) {
 		state.mode = MODE_MANUAL;
-		state.level = LEVEL_START;
+		state.level = LEVEL_LOW;
 	} else {
 		NRF_LOG_INFO("I should not be here");
 	}
-	apply_state();
+	apply_state(NULL);
 
 	delay_timer_kick();
 }
@@ -294,12 +296,12 @@ static void switch_long(void)
 {
 	if (state.mode == MODE_STANDBY) {
 		state.mode = MODE_MANUAL;
-		state.level = LEVEL_START;
+		state.level = LEVEL_LOW;
 	} else {
 		state.mode = MODE_STANDBY;
 		state.level = LEVEL_OFF;
 	}
-	apply_state();
+	apply_state(NULL);
 }
 
 static void bsp_evt_handler(bsp_event_t event)
@@ -356,22 +358,6 @@ static void timer_init(void)
 	APP_ERROR_CHECK(err_code);
 }
 
-static void remote_rx_process(uint8_t *payload)
-{
-	ant_dump_message("RX", REMOTE_CHANNEL, payload);
-
-	state.mode = MODE_REMOTE;
-	state.level = LEVEL_MEDIUM;
-
-	tgt_levels[0] = payload[0];
-	tgt_levels[1] = payload[1];
-	tgt_levels[2] = payload[2];
-	tgt_levels[3] = payload[3];
-
-	pwm_update();
-	telemetry_update();
-}
-
 static void pwm_setup(void)
 {
 	ret_code_t err_code;
@@ -396,70 +382,6 @@ static void pwm_setup(void)
 
 	app_pwm_enable(&PWM1);
 	app_pwm_enable(&PWM2);
-}
-
-
-static void ant_evt_remote(ant_evt_t *ant_evt, void *context)
-{
-#if REMOTE_REOPEN
-	ret_code_t err_code;
-#endif
-	uint8_t channel = ant_evt->channel;
-
-	if (ant_evt->channel != REMOTE_CHANNEL)
-		return;
-
-	bsp_board_led_invert(0);
-
-	switch (ant_evt->event) {
-		case EVENT_RX:
-			remote_rx_process(ant_evt->message.ANT_MESSAGE_aucPayload);
-			break;
-		case EVENT_RX_SEARCH_TIMEOUT:
-		case EVENT_RX_FAIL_GO_TO_SEARCH:
-			break;
-		case EVENT_CHANNEL_CLOSED:
-			DEBUG_ANT("ANT %d: channel closed", channel);
-			bsp_board_led_off(0);
-#if REMOTE_REOPEN
-			err_code = sd_ant_channel_open(channel);
-			APP_ERROR_CHECK(err_code);
-#endif
-			break;
-		default:
-			DEBUG_ANT("ANT event %d %02x",
-					ant_evt->channel, ant_evt->event);
-			break;
-	}
-}
-
-NRF_SDH_ANT_OBSERVER(m_ant_observer, 1, ant_evt_remote, NULL);
-
-static void ant_channel_setup(uint16_t device_number)
-{
-	ret_code_t err_code;
-
-	if (!TARGET_HAS_REMOTE)
-		return;
-
-	/* Remote */
-	ant_channel_config_t r_channel_config = {
-		.channel_number    = REMOTE_CHANNEL,
-		.channel_type      = CHANNEL_TYPE_SLAVE,
-		.ext_assign        = 0x00,
-		.rf_freq           = REMOTE_RF_FREQ,
-		.transmission_type = REMOTE_CHAN_ID_TRANS_TYPE,
-		.device_type       = REMOTE_CHAN_ID_DEV_TYPE,
-		.device_number     = REMOTE_CHAN_ID_DEV_NUM,
-		.channel_period    = REMOTE_CHAN_PERIOD,
-		.network_number    = REMOTE_ANT_NETWORK_NUM,
-	};
-
-	err_code = ant_channel_init(&r_channel_config);
-	APP_ERROR_CHECK(err_code);
-
-	err_code = sd_ant_channel_open(REMOTE_CHANNEL);
-	APP_ERROR_CHECK(err_code);
 }
 
 static void softdevice_setup(void)
@@ -540,7 +462,7 @@ int main(void)
 	device_number = NRF_FICR->DEVICEADDR[0] & 0xffff;
 
 	telemetry_setup(device_number);
-	ant_channel_setup(device_number);
+	remote_setup();
 
 	NRF_LOG_INFO("Started... devnum: %d", device_number);
 
