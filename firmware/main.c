@@ -20,8 +20,6 @@
 #include "telemetry.h"
 #include "utils.h"
 
-#define DEBUG_ANT(a...) NRF_LOG_INFO(a)
-
 // Temp sensor addresses (MIC280)
 static uint8_t temps_addr[] = {0x4a, 0x4b};
 
