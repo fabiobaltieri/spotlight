@@ -1,4 +1,3 @@
-#include <stdbool.h>
 #include <stdint.h>
 #include "boards.h"
 #include "bsp.h"

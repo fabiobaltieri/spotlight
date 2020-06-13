@@ -1,4 +1,3 @@
-#include <stdbool.h>
 #include <stdint.h>
 #include "app_timer.h"
 #include "app_pwm.h"
