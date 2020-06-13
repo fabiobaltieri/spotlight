@@ -1,6 +1,5 @@
 #include <stdint.h>
 #include "app_timer.h"
-#include "app_pwm.h"
 #include "boards.h"
 #include "bsp.h"
 #include "nrf_delay.h"
@@ -14,6 +13,7 @@
 #include "nrf_log_ctrl.h"
 #include "nrf_log_default_backends.h"
 
+#include "levels.h"
 #include "mic280.h"
 #include "remote.h"
 #include "state.h"
@@ -21,48 +21,22 @@
 #include "utils.h"
 
 #define DEBUG_ANT(a...) NRF_LOG_INFO(a)
-#define DEBUG_LEVELS(a...) NRF_LOG_INFO(a)
 
 // Temp sensor addresses (MIC280)
 static uint8_t temps_addr[] = {0x4a, 0x4b};
 
 // Running state
-static uint8_t tgt_levels[] = {0, 0, 0, 0};
-static uint8_t cur_levels[] = {1, 1, 1, 1};
 static int8_t temps[] = {INT8_MIN, INT8_MIN};
 static int8_t die_temp;
 #define BATT_NUM (39420 / 2 / 2) // 3.6 * 10.95 * 1000
 #define BATT_DEN (1024 / 2 / 2) // 10bit
 
 // Module state
-APP_PWM_INSTANCE(PWM1, 1);
-APP_PWM_INSTANCE(PWM2, 2);
 static const nrf_drv_twi_t twi = NRF_DRV_TWI_INSTANCE(0);
 static nrf_saadc_value_t adc_buf;
 APP_TIMER_DEF(temp_tmr);
-APP_TIMER_DEF(pwm_tmr);
 APP_TIMER_DEF(delay_tmr);
 
-// Levels
-static struct level {
-	uint8_t a, b, c, d;
-} levels[] = {
-#if TARGET == TARGET_ACTIK
-	/* S    O  Red   nc */
-	{  0,   0,   0,   0}, // 0 - Off
-	{  1,   0,   0,   0}, // 1 - Low
-	{ 25,  25,   0,   0}, // 2 - Medium
-	{100, 100,   0,   0}, // 3 - High
-	{  0,   0, 100,   0}, // 4 - Red
-#else
-	/* S    O  O90    S */
-	{  0,   0,   0,   0}, // 0 - Off
-	{  0,   2,   0,   0}, // 1 - Low (150mW)
-	{  4,  10,  10,   4}, // 2 - Medium (1.5W)
-	{ 12,  38,  38,  12}, // 3 - High (5W)
-	{ 60,   0,   0,  60}, // 4 - Beam (7W)
-#endif
-};
 
 #define AUTO_CADENCE_TRESHOLD 142
 
@@ -145,56 +119,11 @@ static void timer_handler(void *context)
 	telemetry_update();
 }
 
-static void pwm_update(void)
-{
-	ret_code_t err_code;
-
-	if (!TARGET_HAS_PWM)
-		return;
-
-	if (memcmp(tgt_levels, cur_levels, sizeof(tgt_levels)) == 0)
-		return;
-
-	err_code = app_timer_start(pwm_tmr, APP_TIMER_TICKS(20), NULL);
-	APP_ERROR_CHECK(err_code);
-}
-
-static void pwm_timer_handler(void *context)
-{
-	pwm_adjust_step(&cur_levels[0], tgt_levels[0]);
-	pwm_adjust_step(&cur_levels[1], tgt_levels[1]);
-	pwm_adjust_step(&cur_levels[2], tgt_levels[2]);
-	pwm_adjust_step(&cur_levels[3], tgt_levels[3]);
-
-	while (app_pwm_channel_duty_set(&PWM1, 0, cur_levels[0]) == NRF_ERROR_BUSY);
-	while (app_pwm_channel_duty_set(&PWM1, 1, cur_levels[1]) == NRF_ERROR_BUSY);
-	while (app_pwm_channel_duty_set(&PWM2, 0, cur_levels[2]) == NRF_ERROR_BUSY);
-	while (app_pwm_channel_duty_set(&PWM2, 1, cur_levels[3]) == NRF_ERROR_BUSY);
-
-	DEBUG_LEVELS("levels: %3d %3d %3d %3d",
-			cur_levels[0], cur_levels[1],
-			cur_levels[2], cur_levels[3]);
-
-	pwm_update();
-}
-
-static void apply_state(uint8_t *manual)
-{
-	NRF_LOG_INFO("state mode: %d level: %d", state.mode, state.level);
-	if (manual) {
-		memcpy(tgt_levels, manual, sizeof(tgt_levels));
-	} else {
-		memcpy(tgt_levels, &levels[state.level], sizeof(tgt_levels));
-	}
-	pwm_update();
-	telemetry_update();
-}
-
 void switch_remote(uint8_t *manual)
 {
 	state.mode = MODE_REMOTE;
 	state.level = LEVEL_MEDIUM;
-	apply_state(manual);
+	levels_apply_state(manual);
 }
 
 void switch_auto(uint8_t active, uint8_t speed, uint8_t cadence)
@@ -219,7 +148,7 @@ void switch_auto(uint8_t active, uint8_t speed, uint8_t cadence)
 		return;
 
 	state.level = new_level;
-	apply_state(NULL);
+	levels_apply_state(NULL);
 }
 
 static uint8_t switch_delay;
@@ -266,7 +195,7 @@ static void switch_short(void)
 	} else {
 		NRF_LOG_INFO("I should not be here");
 	}
-	apply_state(NULL);
+	levels_apply_state(NULL);
 
 	delay_timer_kick();
 }
@@ -280,7 +209,7 @@ static void switch_long(void)
 		state.mode = MODE_STANDBY;
 		state.level = LEVEL_OFF;
 	}
-	apply_state(NULL);
+	levels_apply_state(NULL);
 }
 
 static void bsp_evt_handler(bsp_event_t event)
@@ -297,23 +226,6 @@ static void bsp_evt_handler(bsp_event_t event)
 	}
 }
 
-static void hello(void)
-{
-	while (app_pwm_channel_duty_set(&PWM1, 0, 1) == NRF_ERROR_BUSY);
-	nrf_delay_ms(100);
-	while (app_pwm_channel_duty_set(&PWM1, 0, 0) == NRF_ERROR_BUSY);
-	while (app_pwm_channel_duty_set(&PWM1, 1, 1) == NRF_ERROR_BUSY);
-	nrf_delay_ms(100);
-	while (app_pwm_channel_duty_set(&PWM1, 1, 0) == NRF_ERROR_BUSY);
-	while (app_pwm_channel_duty_set(&PWM2, 0, 1) == NRF_ERROR_BUSY);
-	nrf_delay_ms(100);
-	while (app_pwm_channel_duty_set(&PWM2, 0, 0) == NRF_ERROR_BUSY);
-	while (app_pwm_channel_duty_set(&PWM2, 1, 1) == NRF_ERROR_BUSY);
-	nrf_delay_ms(100);
-
-	pwm_update();
-}
-
 static void timer_init(void)
 {
 	ret_code_t err_code;
@@ -326,41 +238,10 @@ static void timer_init(void)
 	err_code = app_timer_start(temp_tmr, APP_TIMER_TICKS(1000), NULL);
 	APP_ERROR_CHECK(err_code);
 
-	/* PWM smoothing */
-	err_code = app_timer_create(
-			&pwm_tmr, APP_TIMER_MODE_SINGLE_SHOT, pwm_timer_handler);
-	APP_ERROR_CHECK(err_code);
-
 	/* Switch delay */
 	err_code = app_timer_create(
 			&delay_tmr, APP_TIMER_MODE_SINGLE_SHOT, delay_timer_handler);
 	APP_ERROR_CHECK(err_code);
-}
-
-static void pwm_setup(void)
-{
-	ret_code_t err_code;
-
-	if (!TARGET_HAS_PWM)
-		return;
-
-	app_pwm_config_t pwm1_cfg = APP_PWM_DEFAULT_CONFIG_2CH(
-			PWM_PERIOD_US, POWER_LED_1, POWER_LED_2);
-	app_pwm_config_t pwm2_cfg = APP_PWM_DEFAULT_CONFIG_2CH(
-			PWM_PERIOD_US, POWER_LED_3, POWER_LED_4);
-
-	pwm1_cfg.pin_polarity[0] = POWER_LED_POLARITY;
-	pwm1_cfg.pin_polarity[1] = POWER_LED_POLARITY;
-	pwm2_cfg.pin_polarity[0] = POWER_LED_POLARITY;
-	pwm2_cfg.pin_polarity[1] = POWER_LED_POLARITY;
-
-	err_code = app_pwm_init(&PWM1, &pwm1_cfg, NULL);
-	APP_ERROR_CHECK(err_code);
-	err_code = app_pwm_init(&PWM2, &pwm2_cfg, NULL);
-	APP_ERROR_CHECK(err_code);
-
-	app_pwm_enable(&PWM1);
-	app_pwm_enable(&PWM2);
 }
 
 static void softdevice_setup(void)
@@ -432,11 +313,11 @@ int main(void)
 	saadc_init();
 	twi_init();
 	timer_init();
-	pwm_setup();
+	levels_setup();
 
 	bsp_board_led_on(1);
 
-	hello();
+	levels_hello();
 
 	device_number = NRF_FICR->DEVICEADDR[0] & 0xffff;
 

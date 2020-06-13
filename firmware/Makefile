@@ -10,6 +10,7 @@ $(OUTPUT_DIRECTORY)/nrf52832_xxaa.out: \
 
 # Source files common to all targets
 SRC_FILES += \
+  $(PROJ_DIR)/levels.c \
   $(PROJ_DIR)/main.c \
   $(PROJ_DIR)/mic280.c \
   $(PROJ_DIR)/remote.c \
