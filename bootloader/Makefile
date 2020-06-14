@@ -259,3 +259,7 @@ erase:
 
 gen_key:
 	nrfutil keys display ../firmware/ota-key.pem --key pk --format code > dfu_public_key.c
+
+boot: default
+	nrfutil pkg generate --bootloader $(OUTPUT_DIRECTORY)/nrf52832_xxaa_s332.hex --hw-version 52 --sd-req 0xBA --bootloader-version 1 --key-file ota-key.pem $(OUTPUT_DIRECTORY)/nrf52832_xxaa_s332.zip
+	nrfutil dfu ble --package $(OUTPUT_DIRECTORY)/nrf52832_xxaa_s332.zip -ic NRF52 -f
