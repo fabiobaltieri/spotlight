@@ -16,7 +16,6 @@
 // Temp sensor addresses (MIC280)
 static uint8_t temps_addr[] = {0x4a, 0x4b};
 static int8_t temps[] = {INT8_MIN, INT8_MIN};
-static int8_t die_temp;
 
 #define BATT_NUM (39420 / 2 / 2) // 3.6 * 10.95 * 1000
 #define BATT_DEN (1024 / 2 / 2) // 10bit
@@ -29,9 +28,6 @@ static int8_t get_max_temp(void)
 {
 	int8_t out = INT8_MIN;
 	uint8_t i;
-
-	if (!TARGET_HAS_EXT_TEMP)
-		return die_temp;
 
 	for (i = 0; i < sizeof(temps); i++)
 		if (temps[i] > out)
@@ -70,16 +66,14 @@ static void timer_handler(void *context)
 	saadc_convert();
 
 	// Update temperatures
-	if (TARGET_HAS_EXT_TEMP)
+	if (TARGET_HAS_EXT_TEMP) {
 		for (i = 0; i < sizeof(temps_addr); i++)
 			temps[i] = mic280_read(&twi, temps_addr[i]);
-
-	sd_temp_get(&temp);
-	die_temp = temp / 4;
-
-	state.temp = get_max_temp();
-
-	// TODO: overtemperature protection
+		state.temp = get_max_temp();
+	} else {
+		sd_temp_get(&temp);
+		state.temp = temp / 4;
+	}
 
 	telemetry_update();
 }
@@ -102,13 +96,9 @@ static void twi_init(void)
 	nrf_drv_twi_enable(&twi);
 }
 
-void system_init(void)
+static void saadc_init(void)
 {
 	ret_code_t err_code;
-
-	twi_init();
-
-	/* Battery measurement ADC */
 
 	nrf_saadc_channel_config_t channel_config =
 		NRF_DRV_SAADC_DEFAULT_CHANNEL_CONFIG_SE(BATTERY_SENSE_INPUT);
@@ -120,6 +110,14 @@ void system_init(void)
 	APP_ERROR_CHECK(err_code);
 
 	saadc_convert();
+}
+
+void system_init(void)
+{
+	ret_code_t err_code;
+
+	twi_init();
+	saadc_init();
 
 	/* System status update cycle */
 
