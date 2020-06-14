@@ -13,6 +13,8 @@
 
 #include "remote.h"
 
+#if TARGET_HAS_REMOTE
+
 #define DEBUG_ANT(a...) NRF_LOG_INFO(a)
 
 // Remote Slave channel
@@ -78,9 +80,6 @@ void remote_setup(void)
 {
 	ret_code_t err_code;
 
-	if (!TARGET_HAS_REMOTE)
-		return;
-
 	/* Remote */
 	ant_channel_config_t r_channel_config = {
 		.channel_number    = REMOTE_CHANNEL,
@@ -101,3 +100,8 @@ void remote_setup(void)
 	APP_ERROR_CHECK(err_code);
 }
 
+#else
+void remote_setup(void)
+{
+}
+#endif
