@@ -46,12 +46,6 @@
 #define LED_1 22
 #define LED_2 20 // nc
 #define BUTTON_1 23 // nc
-#define POWER_LED_1 24 // nc
-#define POWER_LED_2 25 // nc
-#define POWER_LED_3 26 // nc
-#define POWER_LED_4 27 // nc
-#define POWER_LED_POLARITY APP_PWM_POLARITY_ACTIVE_HIGH
-#define PWM_PERIOD_US 20L
 #define TWI_SCL 18 // nc
 #define TWI_SDA 19 // nc
 #define BATTERY_SENSE_INPUT NRF_SAADC_INPUT_AIN4

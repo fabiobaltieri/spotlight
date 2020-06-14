@@ -10,6 +10,8 @@
 
 #include "levels.h"
 
+#if TARGET_HAS_PWM
+
 #define DEBUG_LEVELS(a...) NRF_LOG_INFO(a)
 
 APP_PWM_INSTANCE(PWM1, 1);
@@ -71,9 +73,6 @@ static void pwm_update(void)
 {
 	ret_code_t err_code;
 
-	if (!TARGET_HAS_PWM)
-		return;
-
 	if (memcmp(tgt_levels, cur_levels, sizeof(tgt_levels)) == 0)
 		return;
 
@@ -133,9 +132,6 @@ void levels_setup(void)
 {
 	ret_code_t err_code;
 
-	if (!TARGET_HAS_PWM)
-		return;
-
 	app_pwm_config_t pwm1_cfg = APP_PWM_DEFAULT_CONFIG_2CH(
 			PWM_PERIOD_US, POWER_LED_1, POWER_LED_2);
 	app_pwm_config_t pwm2_cfg = APP_PWM_DEFAULT_CONFIG_2CH(
@@ -159,3 +155,15 @@ void levels_setup(void)
 			&pwm_tmr, APP_TIMER_MODE_SINGLE_SHOT, pwm_timer_handler);
 	APP_ERROR_CHECK(err_code);
 }
+
+#else
+void levels_apply_state(uint8_t *manual)
+{
+}
+void levels_hello(void)
+{
+}
+void levels_setup(void)
+{
+}
+#endif
