@@ -17,7 +17,7 @@
 static uint8_t temps_addr[] = {0x4a, 0x4b};
 static int8_t temps[] = {INT8_MIN, INT8_MIN};
 
-#define BATT_NUM (39420 / 2 / 2) // 3.6 * 10.95 * 1000
+#define BATT_NUM (13200 / 2 / 2) // 1.2 * 11 * 1000
 #define BATT_DEN (1024 / 2 / 2) // 10bit
 
 APP_TIMER_DEF(temp_tmr);
@@ -102,6 +102,7 @@ static void saadc_init(void)
 
 	nrf_saadc_channel_config_t channel_config =
 		NRF_DRV_SAADC_DEFAULT_CHANNEL_CONFIG_SE(BATTERY_SENSE_INPUT);
+	channel_config.gain = NRF_SAADC_GAIN1_2;
 
 	err_code = nrf_drv_saadc_init(NULL, saadc_callback);
 	APP_ERROR_CHECK(err_code);
