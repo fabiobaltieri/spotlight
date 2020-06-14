@@ -8,6 +8,7 @@
 #include "nrf_sdh.h"
 #include "nrf_sdh_ant.h"
 
+#include "input.h"
 #include "state.h"
 #include "utils.h"
 

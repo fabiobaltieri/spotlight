@@ -10,13 +10,14 @@ $(OUTPUT_DIRECTORY)/nrf52832_xxaa.out: \
 
 # Source files common to all targets
 SRC_FILES += \
+  $(PROJ_DIR)/input.c \
   $(PROJ_DIR)/levels.c \
   $(PROJ_DIR)/main.c \
   $(PROJ_DIR)/mic280.c \
   $(PROJ_DIR)/remote.c \
+  $(PROJ_DIR)/system.c \
   $(PROJ_DIR)/telemetry.c \
   $(PROJ_DIR)/utils.c \
-  $(PROJ_DIR)/system.c \
   $(SDK_ROOT)/components/ant/ant_channel_config/ant_channel_config.c \
   $(SDK_ROOT)/components/boards/boards.c \
   $(SDK_ROOT)/components/libraries/atomic/nrf_atomic.c \
