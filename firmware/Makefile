@@ -16,6 +16,7 @@ SRC_FILES += \
   $(PROJ_DIR)/remote.c \
   $(PROJ_DIR)/telemetry.c \
   $(PROJ_DIR)/utils.c \
+  $(PROJ_DIR)/system.c \
   $(SDK_ROOT)/components/ant/ant_channel_config/ant_channel_config.c \
   $(SDK_ROOT)/components/boards/boards.c \
   $(SDK_ROOT)/components/libraries/atomic/nrf_atomic.c \
