@@ -20,7 +20,7 @@ static int8_t temps[] = {INT8_MIN, INT8_MIN};
 #define BATT_NUM (13200 / 2 / 2) // 1.2 * 11 * 1000
 #define BATT_DEN (1024 / 2 / 2) // 10bit
 
-APP_TIMER_DEF(temp_tmr);
+APP_TIMER_DEF(sys_tmr);
 static nrf_saadc_value_t adc_buf;
 static const nrf_drv_twi_t twi = NRF_DRV_TWI_INSTANCE(0);
 
@@ -123,9 +123,9 @@ void system_init(void)
 	/* System status update cycle */
 
 	err_code = app_timer_create(
-			&temp_tmr, APP_TIMER_MODE_REPEATED, timer_handler);
+			&sys_tmr, APP_TIMER_MODE_REPEATED, timer_handler);
 	APP_ERROR_CHECK(err_code);
 
-	err_code = app_timer_start(temp_tmr, APP_TIMER_TICKS(1000), NULL);
+	err_code = app_timer_start(sys_tmr, APP_TIMER_TICKS(1000), NULL);
 	APP_ERROR_CHECK(err_code);
 }
