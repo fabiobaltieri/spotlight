@@ -1,7 +1,5 @@
 #include <stdint.h>
-#include "ant_channel_config.h"
-#include "ant_parameters.h"
-#include "app_error.h"
+#include <stdio.h>
 #include "nrf_log.h"
 
 #include "utils.h"
