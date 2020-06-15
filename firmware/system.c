@@ -2,8 +2,6 @@
 #include "app_timer.h"
 #include "boards.h"
 #include "nrf_drv_saadc.h"
-#include "nrf_drv_saadc.h"
-#include "nrf_drv_twi.h"
 #include "nrf_drv_twi.h"
 #include "nrf_log.h"
 #include "nrf_pwr_mgmt.h"
