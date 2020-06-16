@@ -50,18 +50,6 @@ static void maybe_shutdown(void)
         nrf_pwr_mgmt_shutdown(NRF_PWR_MGMT_SHUTDOWN_GOTO_SYSOFF);
 }
 
-static int8_t get_max_temp(void)
-{
-	int8_t out = INT8_MIN;
-	uint8_t i;
-
-	for (i = 0; i < sizeof(temps); i++)
-		if (temps[i] > out)
-			out = temps[i];
-
-	return out;
-}
-
 static void saadc_callback(nrf_drv_saadc_evt_t const *evt)
 {
 	uint32_t adc_result;
@@ -81,6 +69,18 @@ static void saadc_convert(void)
 
 	err_code = nrf_drv_saadc_sample();
 	APP_ERROR_CHECK(err_code);
+}
+
+static int8_t get_max_temp(void)
+{
+	int8_t out = INT8_MIN;
+	uint8_t i;
+
+	for (i = 0; i < sizeof(temps); i++)
+		if (temps[i] > out)
+			out = temps[i];
+
+	return out;
 }
 
 static void timer_handler(void *context)
