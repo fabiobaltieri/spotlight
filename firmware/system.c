@@ -6,6 +6,7 @@
 #include "nrf_log.h"
 #include "nrf_pwr_mgmt.h"
 
+#include "levels.h"
 #include "mic280.h"
 #include "state.h"
 #include "telemetry.h"
@@ -135,6 +136,18 @@ static void saadc_convert(void)
 	APP_ERROR_CHECK(err_code);
 }
 
+static void maybe_reserve(void)
+{
+	if (state.level != LEVEL_HIGH)
+		return;
+
+	if (state.soc > 0)
+		return;
+
+	state.level = LEVEL_MEDIUM;
+	levels_apply_state(NULL);
+}
+
 #ifdef TARGET_HAS_EXT_TEMP
 #define MIC280_ADDR_A 0x4a
 #define MIC280_ADDR_B 0x4b
@@ -162,6 +175,7 @@ static void timer_handler(void *context)
 {
 
 	maybe_shutdown();
+	maybe_reserve();
 	update_temp();
 
 	// Update the battery voltage (for the next sample)
