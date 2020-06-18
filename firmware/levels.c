@@ -10,7 +10,7 @@
 
 #include "levels.h"
 
-#if TARGET_HAS_PWM
+#ifdef TARGET_HAS_PWM
 
 #define DEBUG_LEVELS(a...) NRF_LOG_INFO(a)
 

@@ -12,10 +12,6 @@
 
 #include "system.h"
 
-// Temp sensor addresses (MIC280)
-static uint8_t temps_addr[] = {0x4a, 0x4b};
-static int8_t temps[] = {INT8_MIN, INT8_MIN};
-
 #define BATT_NUM (13200 / 2 / 2) // 1.2 * 11 * 1000
 #define BATT_DEN (1024 / 2 / 2) // 10bit
 
@@ -71,6 +67,10 @@ static void saadc_convert(void)
 	APP_ERROR_CHECK(err_code);
 }
 
+#ifdef TARGET_HAS_EXT_TEMP
+static uint8_t temps_addr[] = {0x4a, 0x4b};
+static int8_t temps[] = {INT8_MIN, INT8_MIN};
+
 static int8_t get_max_temp(void)
 {
 	int8_t out = INT8_MIN;
@@ -83,25 +83,30 @@ static int8_t get_max_temp(void)
 	return out;
 }
 
-static void timer_handler(void *context)
+static void update_temp(void)
 {
 	uint8_t i;
+	for (i = 0; i < sizeof(temps_addr); i++)
+		temps[i] = mic280_read(&twi, temps_addr[i]);
+	state.temp = get_max_temp();
+}
+#else
+static void update_temp(void)
+{
 	int32_t temp;
+	sd_temp_get(&temp);
+	state.temp = temp / 4;
+}
+#endif
+
+static void timer_handler(void *context)
+{
 
 	maybe_shutdown();
+	update_temp();
 
 	// Update the battery voltage (for the next sample)
 	saadc_convert();
-
-	// Update temperatures
-	if (TARGET_HAS_EXT_TEMP) {
-		for (i = 0; i < sizeof(temps_addr); i++)
-			temps[i] = mic280_read(&twi, temps_addr[i]);
-		state.temp = get_max_temp();
-	} else {
-		sd_temp_get(&temp);
-		state.temp = temp / 4;
-	}
 
 	telemetry_update();
 }

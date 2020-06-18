@@ -1,9 +1,8 @@
 /* Per target definitions */
 #if TARGET == TARGET_PCA10040
 
-#define TARGET_HAS_REMOTE 1
-#define TARGET_HAS_EXT_TEMP 0
-#define TARGET_HAS_PWM 1
+#define TARGET_HAS_REMOTE
+#define TARGET_HAS_PWM
 
 #define LED_1 17
 #define LED_2 18
@@ -20,9 +19,9 @@
 
 #elif TARGET == TARGET_SPOTLIGHT
 
-#define TARGET_HAS_REMOTE 1
-#define TARGET_HAS_EXT_TEMP 1
-#define TARGET_HAS_PWM 1
+#define TARGET_HAS_REMOTE
+#define TARGET_HAS_EXT_TEMP
+#define TARGET_HAS_PWM
 
 #define LED_1 7
 #define LED_2 8
@@ -39,10 +38,6 @@
 
 #elif TARGET == TARGET_RETROFIT
 
-#define TARGET_HAS_REMOTE 0
-#define TARGET_HAS_EXT_TEMP 0
-#define TARGET_HAS_PWM 0
-
 #define LED_1 22
 #define LED_2 20 // nc
 #define BUTTON_1 23 // nc
@@ -52,9 +47,7 @@
 
 #elif TARGET == TARGET_ACTIK
 
-#define TARGET_HAS_REMOTE 0
-#define TARGET_HAS_EXT_TEMP 0
-#define TARGET_HAS_PWM 1
+#define TARGET_HAS_PWM
 
 #define LED_1 30 // nc
 #define LED_2 31

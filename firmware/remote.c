@@ -13,7 +13,7 @@
 
 #include "remote.h"
 
-#if TARGET_HAS_REMOTE
+#ifdef TARGET_HAS_REMOTE
 
 #define DEBUG_ANT(a...) NRF_LOG_INFO(a)
 
