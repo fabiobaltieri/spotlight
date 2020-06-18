@@ -68,27 +68,18 @@ static void saadc_convert(void)
 }
 
 #ifdef TARGET_HAS_EXT_TEMP
-static uint8_t temps_addr[] = {0x4a, 0x4b};
-static int8_t temps[] = {INT8_MIN, INT8_MIN};
-
-static int8_t get_max_temp(void)
-{
-	int8_t out = INT8_MIN;
-	uint8_t i;
-
-	for (i = 0; i < sizeof(temps); i++)
-		if (temps[i] > out)
-			out = temps[i];
-
-	return out;
-}
-
+#define MIC280_ADDR_A 0x4a
+#define MIC280_ADDR_B 0x4b
 static void update_temp(void)
 {
-	uint8_t i;
-	for (i = 0; i < sizeof(temps_addr); i++)
-		temps[i] = mic280_read(&twi, temps_addr[i]);
-	state.temp = get_max_temp();
+	uint8_t t1, t2;
+	t1 = mic280_read(&twi, MIC280_ADDR_A);
+	t2 = mic280_read(&twi, MIC280_ADDR_B);
+
+	if (t1 > t2)
+		state.temp = t1;
+	else
+		state.temp = t2;
 }
 #else
 static void update_temp(void)
