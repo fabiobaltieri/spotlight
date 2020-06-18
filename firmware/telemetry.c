@@ -47,7 +47,7 @@ void telemetry_update(void)
 	payload[0] = PAGE_0; // Page 0
 
 	payload[1] = state.mode | (state.level << 4); // Mode + Level
-	payload[2] = state.batt_mv / 100; // Battery (V * 10, TODO: percentage)
+	payload[2] = state.soc;
 	payload[3] = state.temp; // Temperature (C)
 	payload[4] = 0xff;
 	payload[5] = 0xff;

@@ -46,6 +46,73 @@ static void maybe_shutdown(void)
         nrf_pwr_mgmt_shutdown(NRF_PWR_MGMT_SHUTDOWN_GOTO_SYSOFF);
 }
 
+static uint8_t level_changed(void)
+{
+	static uint8_t old_level;
+
+	if (old_level == state.level)
+		return 0;
+
+	old_level = state.level;
+
+	return 1;
+}
+
+#define PEAK_VALS 10
+static uint8_t peak(uint8_t in)
+{
+	static uint8_t vals[PEAK_VALS];
+	static uint8_t idx;
+	uint8_t i;
+	uint8_t out;
+
+	vals[idx] = in;
+	idx = (idx + 1) % PEAK_VALS;
+
+	out = 0;
+	for (i = 0; i < PEAK_VALS; i++)
+		if (vals[i] > out)
+			out = vals[i];
+
+	return out;
+}
+
+static void update_soc(uint16_t batt_mv)
+{
+	uint16_t full, empty;
+	int32_t soc;
+
+	if (level_changed())
+		return;
+
+
+#if TARGET == TARGET_SPOTLIGHT
+	if (state.level == LEVEL_HIGH || state.level == LEVEL_BEAM) {
+		full = 7700;
+		empty = 5900;
+	} else {
+		full = 8200;
+		empty = 6000;
+	}
+#else
+	if (state.level == LEVEL_HIGH) {
+		full = 3700;
+		empty = 2900;
+	} else {
+		full = 4100;
+		empty = 3000;
+	}
+#endif
+
+	soc = (batt_mv - empty) * 100 / (full - empty);
+	if (soc > 100)
+		soc = 100;
+	else if (soc < 0)
+		soc = 0;
+
+	state.soc = peak(soc);
+}
+
 static void saadc_callback(nrf_drv_saadc_evt_t const *evt)
 {
 	uint32_t adc_result;
@@ -53,6 +120,7 @@ static void saadc_callback(nrf_drv_saadc_evt_t const *evt)
 	if (evt->type == NRF_DRV_SAADC_EVT_DONE) {
 		adc_result = evt->data.done.p_buffer[0];
 		state.batt_mv = (adc_result * BATT_NUM) / BATT_DEN;
+		update_soc(state.batt_mv);
 	}
 }
 
