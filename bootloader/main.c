@@ -48,9 +48,9 @@ int main(void)
 	nrf_bootloader_mbr_addrs_populate();
 
 	// Protect MBR and bootloader code from being overwritten.
-	ret_val = nrf_bootloader_flash_protect(0, MBR_SIZE, false);
+	ret_val = nrf_bootloader_flash_protect(0, MBR_SIZE);
 	APP_ERROR_CHECK(ret_val);
-	ret_val = nrf_bootloader_flash_protect(BOOTLOADER_START_ADDR, BOOTLOADER_SIZE, false);
+	ret_val = nrf_bootloader_flash_protect(BOOTLOADER_START_ADDR, BOOTLOADER_SIZE);
 	APP_ERROR_CHECK(ret_val);
 
 	(void) NRF_LOG_INIT(nrf_bootloader_dfu_timer_counter_get);
