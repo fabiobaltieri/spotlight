@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.2" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
+<grid distance="0.2" unitdist="mm" unit="mm" style="lines" multiple="1" display="no" altdistance="5" altunitdist="mil" altunit="mil"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
@@ -183,12 +183,6 @@
 <wire x1="15" y1="18.75" x2="15" y2="20.9" width="0.25" layer="30"/>
 <wire x1="15.5" y1="20.9" x2="15.5" y2="18.75" width="0.25" layer="30"/>
 <wire x1="16" y1="18.75" x2="16" y2="20.9" width="0.25" layer="30"/>
-<polygon width="0.2" layer="41">
-<vertex x="8" y="5.2"/>
-<vertex x="12.2" y="5.2"/>
-<vertex x="12.2" y="8.4"/>
-<vertex x="8" y="8.4"/>
-</polygon>
 <wire x1="26" y1="5" x2="26" y2="5.6" width="0.1524" layer="41"/>
 <wire x1="26" y1="5.6" x2="26.2" y2="5.8" width="0.1524" layer="41"/>
 <wire x1="26.2" y1="5.8" x2="26.2" y2="6.4" width="0.1524" layer="41"/>
@@ -2048,7 +2042,7 @@ for trimmer refence see : &lt;u&gt;www.electrospec-inc.com/cross_references/trim
 <variantdefs>
 </variantdefs>
 <classes>
-<class number="0" name="default" width="0" drill="0">
+<class number="0" name="default" width="0.2" drill="0">
 </class>
 </classes>
 <designrules name="balto *">
@@ -2580,7 +2574,7 @@ for trimmer refence see : &lt;u&gt;www.electrospec-inc.com/cross_references/trim
 <wire x1="18.2" y1="2.7745" x2="18.6" y2="2.3745" width="0.2" layer="1"/>
 <wire x1="19.2" y1="2.2" x2="18.7745" y2="2.2" width="0.2" layer="1"/>
 <wire x1="18.7745" y1="2.2" x2="18.6" y2="2.3745" width="0.2" layer="1"/>
-<wire x1="6" y1="3" x2="4.45" y2="3" width="0.1524" layer="1"/>
+<wire x1="6" y1="3" x2="4.45" y2="3" width="0.2" layer="1"/>
 </signal>
 <signal name="VCC">
 <contactref element="U7" pad="1"/>
@@ -2636,8 +2630,8 @@ for trimmer refence see : &lt;u&gt;www.electrospec-inc.com/cross_references/trim
 <signal name="N$23">
 <contactref element="R15" pad="1"/>
 <contactref element="LED2" pad="C"/>
-<wire x1="4.4255" y1="1.8" x2="3.55" y2="1.8" width="0.1524" layer="1"/>
-<wire x1="3.55" y1="1.8" x2="2.35" y2="3" width="0.1524" layer="1"/>
+<wire x1="4.4255" y1="1.8" x2="3.55" y2="1.8" width="0.2" layer="1"/>
+<wire x1="3.55" y1="1.8" x2="2.35" y2="3" width="0.2" layer="1"/>
 </signal>
 <signal name="ANT">
 <contactref element="L1" pad="P$1"/>
@@ -2729,8 +2723,8 @@ for trimmer refence see : &lt;u&gt;www.electrospec-inc.com/cross_references/trim
 <via x="6.6" y="2.6" extent="1-16" drill="0.254"/>
 <wire x1="11.2" y1="2" x2="8.8" y2="4.4" width="0.2" layer="16"/>
 <wire x1="8.8" y1="4.4" x2="7.6" y2="4.4" width="0.2" layer="16"/>
-<wire x1="6.6" y1="2.6" x2="6.6" y2="2.4255" width="0.1524" layer="1"/>
-<wire x1="6.6" y1="2.4255" x2="5.9745" y2="1.8" width="0.1524" layer="1"/>
+<wire x1="6.6" y1="2.6" x2="6.6" y2="2.4255" width="0.2" layer="1"/>
+<wire x1="6.6" y1="2.4255" x2="5.9745" y2="1.8" width="0.2" layer="1"/>
 </signal>
 <signal name="SCL">
 <contactref element="U13" pad="3"/>
@@ -2948,6 +2942,14 @@ for trimmer refence see : &lt;u&gt;www.electrospec-inc.com/cross_references/trim
 <wire x1="11.4" y1="9.6" x2="11.2255" y2="9.6" width="0.2" layer="1"/>
 <wire x1="11.2255" y1="9.6" x2="10.6255" y2="10.2" width="0.2" layer="1"/>
 </signal>
+<signal name="N$6">
+<polygon width="0.2" layer="1" pour="cutout">
+<vertex x="8" y="5.2"/>
+<vertex x="12.2" y="5.2"/>
+<vertex x="12.2" y="8.4"/>
+<vertex x="8" y="8.4"/>
+</polygon>
+</signal>
 </signals>
 <mfgpreviewcolors>
 <mfgpreviewcolor name="soldermaskcolor" color="0xC8008000"/>
@@ -2985,39 +2987,16 @@ for trimmer refence see : &lt;u&gt;www.electrospec-inc.com/cross_references/trim
 <approved hash="19,1,ba5fb47ef6bcf89d"/>
 <approved hash="19,1,a191071964d6aaba"/>
 <approved hash="6,1,cb9bf99701ea2b9e"/>
-<approved hash="6,1,8181a5ee2d75edd5"/>
 <approved hash="6,1,e14d7c5338c045a3"/>
 <approved hash="6,1,e896271b22990d69"/>
-<approved hash="6,1,3672655d6553367c"/>
-<approved hash="6,1,b8588ff78feab845"/>
-<approved hash="6,1,491af73cfe3f4c1b"/>
 <approved hash="6,1,fe927fa53de45af8"/>
 <approved hash="6,1,f1cf226b276d12e2"/>
-<approved hash="6,1,d217d20bbed6beca"/>
-<approved hash="6,1,f20eef6eee8ff3ef"/>
 <approved hash="19,1,91c63c483d36ff4c"/>
 <approved hash="5,1,9e95293af236b6f2"/>
 <approved hash="19,1,5769ae4b3e40c674"/>
 <approved hash="6,1,b31eda8d4f8dc393"/>
 <approved hash="5,1,dcdbdeb218ec55b5"/>
 <approved hash="5,1,ac49328307696630"/>
-<approved hash="6,1,68322a0e2b2e6912"/>
-<approved hash="6,1,25edc20b997f82d6"/>
-<approved hash="6,1,285fa611c292f7fe"/>
-<approved hash="6,1,21533ea4a8621a0b"/>
-<approved hash="6,1,582029c02dbb5c5b"/>
-<approved hash="6,1,d2ea7d1c9a1ed367"/>
-<approved hash="6,1,d111bb41edc99efb"/>
-<approved hash="6,1,8b634b6f17b8d7b4"/>
-<approved hash="6,1,ff3bff04cc9bcea4"/>
-<approved hash="6,1,a4b6521d5bd4a56f"/>
-<approved hash="6,1,79cbc8bbca79790b"/>
-<approved hash="6,1,b4c79dfac9bd0238"/>
-<approved hash="6,1,d9a4cc50cd31d0cd"/>
-<approved hash="6,1,f2dcb2d0ef28af24"/>
-<approved hash="6,1,1db0c502be769ae3"/>
-<approved hash="6,1,8af39e62fe161800"/>
-<approved hash="6,1,c64356f998b2d043"/>
 <approved hash="23,16,2d94327030142ff0"/>
 <approved hash="23,16,6f942e702c146df0"/>
 <approved hash="23,16,8d95c271c0178ff3"/>
