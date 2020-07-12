@@ -2247,7 +2247,7 @@ for trimmer refence see : &lt;u&gt;www.electrospec-inc.com/cross_references/trim
 <attribute name="NAME" x="11.962" y="8.324003125" size="1.27" layer="25" rot="R270"/>
 <attribute name="VALUE" x="9.168" y="8.324003125" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="C32" library="balto" package="0603" value=".1u" x="25" y="8.4" smashed="yes" rot="R180">
+<element name="C32" library="balto" package="0603" value="1u" x="25" y="8.4" smashed="yes" rot="R180">
 <attribute name="NAME" x="26.524" y="7.638" size="1.27" layer="25" rot="R180"/>
 <attribute name="VALUE" x="26.524" y="10.432" size="1.27" layer="27" rot="R180"/>
 </element>

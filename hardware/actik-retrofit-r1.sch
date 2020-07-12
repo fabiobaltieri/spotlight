@@ -9331,7 +9331,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 </classes>
 <parts>
 <part name="LICENSE1" library="balto" deviceset="CC_BY-SA" device="" value="Fabio Baltieri"/>
-<part name="C32" library="balto" deviceset="C" device="0603" value=".1u"/>
+<part name="C32" library="balto" deviceset="C" device="0603" value="1u"/>
 <part name="GND41" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="U7" library="SparkFun-PowerIC" deviceset="V_REG_LDO" device="SMD" value="MIC5301"/>
 <part name="GND42" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
