@@ -36,15 +36,6 @@
 #define TWI_SDA 26
 #define BATTERY_SENSE_INPUT NRF_SAADC_INPUT_AIN3
 
-#elif TARGET == TARGET_RETROFIT
-
-#define LED_1 22
-#define LED_2 20 // nc
-#define BUTTON_1 23 // nc
-#define TWI_SCL 18 // nc
-#define TWI_SDA 19 // nc
-#define BATTERY_SENSE_INPUT NRF_SAADC_INPUT_AIN4
-
 #elif TARGET == TARGET_ACTIK
 
 #define TARGET_HAS_PWM

@@ -1,7 +1,6 @@
 /* Target definition */
 #define TARGET_PCA10040 1
 #define TARGET_SPOTLIGHT 2
-#define TARGET_RETROFIT 3
 #define TARGET_ACTIK 4
 
 #define TARGET TARGET_PCA10040
