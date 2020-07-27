@@ -2382,7 +2382,7 @@ for trimmer refence see : &lt;u&gt;www.electrospec-inc.com/cross_references/trim
 <attribute name="SPICEPREFIX" value="R" x="13.7" y="18" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="11.16" y="14.825" size="1.27" layer="27"/>
 </element>
-<element name="R1" library="balto" package="0603" value="tbd" x="11.4" y="10.2" smashed="yes" rot="R180">
+<element name="R1" library="balto" package="0603" value="220" x="11.4" y="10.2" smashed="yes" rot="R180">
 <attribute name="NAME" x="12.924" y="9.438" size="1.27" layer="25" rot="R180"/>
 <attribute name="VALUE" x="12.924" y="12.232" size="1.27" layer="27" rot="R180"/>
 </element>

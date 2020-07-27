@@ -9403,7 +9403,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <part name="P+3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
 <part name="R9" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R3225" package3d_urn="urn:adsk.eagle:package:23549/2" value="1.4"/>
 <part name="R2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R3225" package3d_urn="urn:adsk.eagle:package:23549/2" value="1.4"/>
-<part name="R1" library="balto" deviceset="R" device="0603" value="tbd"/>
+<part name="R1" library="balto" deviceset="R" device="0603" value="220"/>
 <part name="R3" library="balto" deviceset="R" device="0603" value="12k"/>
 <part name="R4" library="balto" deviceset="R" device="0603" value="12k"/>
 <part name="R5" library="balto" deviceset="R" device="0603" value="5k6"/>
