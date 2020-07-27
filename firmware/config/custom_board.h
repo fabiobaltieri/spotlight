@@ -41,17 +41,17 @@
 #define TARGET_HAS_PWM
 
 #define LED_1 30 // nc
-#define LED_2 31
-#define BUTTON_1 29
-#define POWER_LED_1 22
-#define POWER_LED_2 5
-#define POWER_LED_3 6
+#define LED_2 27
+#define BUTTON_1 14
+#define POWER_LED_1 12
+#define POWER_LED_2 19
+#define POWER_LED_3 22
 #define POWER_LED_4 11 // nc
 #define POWER_LED_POLARITY APP_PWM_POLARITY_ACTIVE_HIGH
 #define PWM_PERIOD_US 2000L
 #define TWI_SCL 8
 #define TWI_SDA 7
-#define BATTERY_SENSE_INPUT NRF_SAADC_INPUT_AIN2
+#define BATTERY_SENSE_INPUT NRF_SAADC_INPUT_AIN0
 
 #else
 #error "TARGET undefined"
