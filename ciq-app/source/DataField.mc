@@ -76,9 +76,21 @@ class DataField extends WatchUi.SimpleDataField {
 		var level = levels[device.level];
 		var temp = device.temp;
 		var battery = device.battery;
+		var tte = device.tte;
+		var extra;
 
 		if (temp == -128) {
 			temp = "-";
+		}
+
+		if (tte == 0xff) {
+			extra = temp;
+		} else if (tte == 0xfe) {
+			extra = "--";
+		} else if (tte > 99) {
+			extra = (tte + 30) / 60 + "h";
+		} else {
+			extra = tte + "m";
 		}
 
 		if (battery == 0xff) {
@@ -88,7 +100,7 @@ class DataField extends WatchUi.SimpleDataField {
 		}
 
 		if (full) {
-			return mode + level + " " + battery + " " + temp;
+			return mode + level + " " + battery + " " + extra;
 		} else {
 			return mode + level + " " + battery;
 		}
