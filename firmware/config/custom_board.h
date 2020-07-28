@@ -39,6 +39,7 @@
 #elif TARGET == TARGET_ACTIK
 
 #define TARGET_HAS_PWM
+#define TARGET_HAS_FUEL_GAUGE
 
 #define LED_1 30 // nc
 #define LED_2 27
@@ -51,7 +52,6 @@
 #define PWM_PERIOD_US 2000L
 #define TWI_SCL 8
 #define TWI_SDA 7
-#define BATTERY_SENSE_INPUT NRF_SAADC_INPUT_AIN0
 
 #else
 #error "TARGET undefined"

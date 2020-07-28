@@ -19,7 +19,6 @@
 #define SHUTDOWN_DELAY (60 * 15)
 
 APP_TIMER_DEF(sys_tmr);
-static nrf_saadc_value_t adc_buf;
 static const nrf_drv_twi_t twi = NRF_DRV_TWI_INSTANCE(0);
 
 static void maybe_shutdown(void)
@@ -46,6 +45,9 @@ static void maybe_shutdown(void)
 
         nrf_pwr_mgmt_shutdown(NRF_PWR_MGMT_SHUTDOWN_GOTO_SYSOFF);
 }
+
+#ifndef TARGET_HAS_FUEL_GAUGE
+static nrf_saadc_value_t adc_buf;
 
 static uint8_t level_changed(void)
 {
@@ -86,8 +88,6 @@ static void update_soc(uint16_t batt_mv)
 	if (level_changed())
 		return;
 
-
-#if TARGET == TARGET_SPOTLIGHT
 	if (state.level == LEVEL_HIGH || state.level == LEVEL_BEAM) {
 		full = 7700;
 		empty = 5900;
@@ -95,15 +95,6 @@ static void update_soc(uint16_t batt_mv)
 		full = 8200;
 		empty = 6000;
 	}
-#else
-	if (state.level == LEVEL_HIGH) {
-		full = 3700;
-		empty = 2900;
-	} else {
-		full = 4100;
-		empty = 3000;
-	}
-#endif
 
 	soc = (batt_mv - empty) * 100 / (full - empty);
 	if (soc > 100)
@@ -112,6 +103,7 @@ static void update_soc(uint16_t batt_mv)
 		soc = 0;
 
 	state.soc = peak(soc);
+	state.tte = 0xff;
 }
 
 static void saadc_callback(nrf_drv_saadc_evt_t const *evt)
@@ -135,6 +127,28 @@ static void saadc_convert(void)
 	err_code = nrf_drv_saadc_sample();
 	APP_ERROR_CHECK(err_code);
 }
+
+static void saadc_init(void)
+{
+	ret_code_t err_code;
+
+	nrf_saadc_channel_config_t channel_config =
+		NRF_DRV_SAADC_DEFAULT_CHANNEL_CONFIG_SE(BATTERY_SENSE_INPUT);
+	channel_config.gain = NRF_SAADC_GAIN1_2;
+
+	err_code = nrf_drv_saadc_init(NULL, saadc_callback);
+	APP_ERROR_CHECK(err_code);
+
+	err_code = nrf_drv_saadc_channel_init(0, &channel_config);
+	APP_ERROR_CHECK(err_code);
+
+	saadc_convert();
+}
+
+#else
+static void saadc_convert(void) {}
+static void saadc_init(void) {}
+#endif
 
 static void maybe_reserve(void)
 {
@@ -177,8 +191,6 @@ static void timer_handler(void *context)
 	maybe_shutdown();
 	maybe_reserve();
 	update_temp();
-
-	// Update the battery voltage (for the next sample)
 	saadc_convert();
 
 	telemetry_update();
@@ -200,23 +212,6 @@ static void twi_init(void)
 	APP_ERROR_CHECK(err_code);
 
 	nrf_drv_twi_enable(&twi);
-}
-
-static void saadc_init(void)
-{
-	ret_code_t err_code;
-
-	nrf_saadc_channel_config_t channel_config =
-		NRF_DRV_SAADC_DEFAULT_CHANNEL_CONFIG_SE(BATTERY_SENSE_INPUT);
-	channel_config.gain = NRF_SAADC_GAIN1_2;
-
-	err_code = nrf_drv_saadc_init(NULL, saadc_callback);
-	APP_ERROR_CHECK(err_code);
-
-	err_code = nrf_drv_saadc_channel_init(0, &channel_config);
-	APP_ERROR_CHECK(err_code);
-
-	saadc_convert();
 }
 
 void system_init(void)
