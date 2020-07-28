@@ -8,7 +8,25 @@
 
 #define MAX17055_ADDR 0x36
 
-#define MAX17055_STATUS  0x00
+#define MAX17055_Status		0x00
+#define MAX17055_RepCap		0x05
+#define MAX17055_RepSOC		0x06
+#define MAX17055_VCell		0x09
+#define MAX17055_TTE		0x11
+#define MAX17055_DesignCap	0x18
+#define MAX17055_IChgTerm	0x1e
+#define MAX17055_VEmpty		0x3a
+#define MAX17055_FStat		0x3d
+#define MAX17055_dQAcc		0x45
+#define MAX17055_dPAcc		0x46
+#define MAX17055_Command	0x60
+#define MAX17055_HibCfg		0xba
+#define MAX17055_ModelCfg	0xdb
+
+#define STATUS_POR 0x0002
+#define STATUS_POR_MASK 0xfffd
+#define FSTAT_DNR 0x0001
+#define MODELCFG_REFRESH 0x8000
 
 static uint16_t max17055_read(const nrf_drv_twi_t *twi, uint8_t addr)
 {
@@ -52,55 +70,55 @@ void max17055_init(const nrf_drv_twi_t *twi)
 	uint16_t hib_cfg;
 	uint16_t status;
 
-	if (max17055_read(twi, 0x00) & 0x0002) { // status POR
+	if (!(max17055_read(twi, MAX17055_Status) & STATUS_POR)) {
 		return;
 	}
 
-	while (max17055_read(twi, 0x3d) & 0x0001) { // fstat DNR
+	while (max17055_read(twi, MAX17055_FStat) & FSTAT_DNR) {
 		nrf_delay_ms(30);
 		bsp_board_led_invert(1);
 	}
 
-	hib_cfg = max17055_read(twi, 0xba);
-	max17055_write(twi, 0x60, 0x90);
-	max17055_write(twi, 0xba, 0x0);
-	max17055_write(twi, 0x60, 0x0);
+	hib_cfg = max17055_read(twi, MAX17055_HibCfg);
+	max17055_write(twi, MAX17055_Command, 0x90);
+	max17055_write(twi, MAX17055_HibCfg, 0x0);
+	max17055_write(twi, MAX17055_Command, 0x0);
 
-	uint16_t design_cap = 1250 * 2;
-	max17055_write(twi, 0x18, design_cap);
-	max17055_write(twi, 0x45, design_cap / 32);
-	max17055_write(twi, 0x1e, 0x0640);
-	max17055_write(twi, 0x3a, (280 << 7) | 61);
+	uint16_t design_cap = MAX17055_CAP * 2;
+	max17055_write(twi, MAX17055_DesignCap, design_cap);
+	max17055_write(twi, MAX17055_dQAcc, design_cap / 32);
+	max17055_write(twi, MAX17055_IChgTerm, MAX17055_ICHGTERM / 156.25 * 1000);
+	max17055_write(twi, MAX17055_VEmpty, ((MAX17055_VE / 10) << 7) | (MAX17055_VR / 40));
 
-	max17055_write(twi, 0x46, 44138 / 32);
-	max17055_write(twi, 0xdb, 0x8000);
-	while (max17055_read(twi, 0xdb) & 0x8000) { // cfg refresh
+	max17055_write(twi, MAX17055_dPAcc, 44138 / 32);
+	max17055_write(twi, MAX17055_ModelCfg, MODELCFG_REFRESH);
+	while (max17055_read(twi, MAX17055_ModelCfg) & MODELCFG_REFRESH) {
 		nrf_delay_ms(30);
 		bsp_board_led_invert(1);
 	}
 
-	max17055_write(twi, 0xba, hib_cfg);
+	max17055_write(twi, MAX17055_HibCfg, hib_cfg);
 
-	status = max17055_read(twi, 0x00);
-	max17055_write_verify(twi, 0x00, status & 0xfffd);
+	status = max17055_read(twi, MAX17055_Status);
+	max17055_write_verify(twi, MAX17055_Status, status & STATUS_POR_MASK);
 }
 
 uint16_t max17055_soc(const nrf_drv_twi_t *twi)
 {
-	return (max17055_read(twi, 0x06) + 0x7f) >> 8;
+	return (max17055_read(twi, MAX17055_RepSOC) + 0x7f) >> 8;
 }
 
 uint16_t max17055_batt_mv(const nrf_drv_twi_t *twi)
 {
-	return max17055_read(twi, 0x09) * 1.25 / 16;
+	return max17055_read(twi, MAX17055_VCell) * 1.25 / 16;
 }
 
 uint16_t max17055_tte_mins(const nrf_drv_twi_t *twi)
 {
 	float tte;
-	tte = max17055_read(twi, 0x11) * 5.625 / 60;
-	if (tte > 0xffff)
-		return 0xffff;
+	tte = max17055_read(twi, MAX17055_TTE) * 5.625 / 60;
+	if (tte > UINT16_MAX)
+		return UINT16_MAX;
 	return tte;
 }
 

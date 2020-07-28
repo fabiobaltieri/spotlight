@@ -53,6 +53,11 @@
 #define TWI_SCL 8
 #define TWI_SDA 7
 
+#define MAX17055_CAP 1250 /* mAh */
+#define MAX17055_VE 2800 /* mV */
+#define MAX17055_VR 3400 /* mV */
+#define MAX17055_ICHGTERM 250 /* mA */
+
 #else
 #error "TARGET undefined"
 #endif
