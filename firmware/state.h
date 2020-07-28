@@ -20,7 +20,7 @@ struct state {
 	uint8_t mode;
 	uint8_t level;
 	uint16_t batt_mv;
-	uint16_t soc;
+	uint8_t soc;
 	int8_t temp;
 	uint8_t tte;
 };
