@@ -122,10 +122,7 @@ class AntDevice extends Ant.GenericChannel {
 	}
 
 	hidden function s8(val) {
-		if (val & 0x80) {
-			return val | 0xffffff00;
-		}
-		return val;
+		return (val << 24) >> 24;
 	}
 
 	hidden function doMessage(data) {
