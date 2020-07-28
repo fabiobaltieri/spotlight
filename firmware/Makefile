@@ -13,6 +13,7 @@ SRC_FILES += \
   $(PROJ_DIR)/input.c \
   $(PROJ_DIR)/levels.c \
   $(PROJ_DIR)/main.c \
+  $(PROJ_DIR)/max17055.c \
   $(PROJ_DIR)/mic280.c \
   $(PROJ_DIR)/remote.c \
   $(PROJ_DIR)/system.c \

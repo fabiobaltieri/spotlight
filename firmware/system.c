@@ -7,6 +7,7 @@
 #include "nrf_pwr_mgmt.h"
 
 #include "levels.h"
+#include "max17055.h"
 #include "mic280.h"
 #include "state.h"
 #include "telemetry.h"
@@ -185,6 +186,27 @@ static void update_temp(void)
 }
 #endif
 
+#ifdef TARGET_HAS_FUEL_GAUGE
+static void fuel_gauge_update(void)
+{
+	state.soc = max17055_soc(&twi);
+	state.batt_mv = max17055_batt_mv(&twi);
+	uint16_t tte = max17055_tte_mins(&twi);
+	if (tte > 0xfe)
+		state.tte = 0xfe;
+	else
+		state.tte = tte;
+}
+
+static void fuel_gauge_init(void)
+{
+	max17055_init(&twi);
+}
+#else
+static void fuel_gauge_update(void) {}
+static void fuel_gauge_init(void) {}
+#endif
+
 static void timer_handler(void *context)
 {
 
@@ -192,6 +214,7 @@ static void timer_handler(void *context)
 	maybe_reserve();
 	update_temp();
 	saadc_convert();
+	fuel_gauge_update();
 
 	telemetry_update();
 }
@@ -220,6 +243,7 @@ void system_init(void)
 
 	twi_init();
 	saadc_init();
+	fuel_gauge_init();
 
 	/* System status update cycle */
 
