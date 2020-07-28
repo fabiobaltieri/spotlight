@@ -21,6 +21,7 @@ class AntDevice extends Ant.GenericChannel {
 	var level;
 	var battery;
 	var temp;
+	var tte;
 
 	hidden function debug(str) {
 		//System.println("[Ant] " + str);
@@ -135,6 +136,7 @@ class AntDevice extends Ant.GenericChannel {
 		level = (data[1] >> 4) & 0x0f;
 		battery = data[2];
 		temp = s8(data[3]);
+		tte = data[4];
 
 		data_valid = true;
 	}
