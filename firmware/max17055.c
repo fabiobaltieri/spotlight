@@ -6,6 +6,8 @@
 
 #include "max17055.h"
 
+#ifdef TARGET_HAS_FUEL_GAUGE
+
 #define MAX17055_ADDR 0x36
 
 #define MAX17055_Status		0x00
@@ -122,3 +124,4 @@ uint16_t max17055_tte_mins(const nrf_drv_twi_t *twi)
 	return tte;
 }
 
+#endif
