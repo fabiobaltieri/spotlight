@@ -189,9 +189,11 @@ static void update_temp(void)
 #ifdef TARGET_HAS_FUEL_GAUGE
 static void fuel_gauge_update(void)
 {
+	uint16_t tte;
+
 	state.soc = max17055_soc(&twi);
 	state.batt_mv = max17055_batt_mv(&twi);
-	uint16_t tte = max17055_tte_mins(&twi);
+	tte = max17055_tte_mins(&twi);
 	if (tte > 0xfe)
 		state.tte = 0xfe;
 	else
