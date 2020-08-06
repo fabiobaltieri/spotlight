@@ -71,6 +71,7 @@ void max17055_init(const nrf_drv_twi_t *twi)
 {
 	uint16_t hib_cfg;
 	uint16_t status;
+	uint16_t design_cap;
 
 	if (!(max17055_read(twi, MAX17055_Status) & STATUS_POR)) {
 		return;
@@ -86,7 +87,7 @@ void max17055_init(const nrf_drv_twi_t *twi)
 	max17055_write(twi, MAX17055_HibCfg, 0x0);
 	max17055_write(twi, MAX17055_Command, 0x0);
 
-	uint16_t design_cap = MAX17055_CAP * 2;
+	design_cap = MAX17055_CAP * 2;
 	max17055_write(twi, MAX17055_DesignCap, design_cap);
 	max17055_write(twi, MAX17055_dQAcc, design_cap / 32);
 	max17055_write(twi, MAX17055_IChgTerm, MAX17055_ICHGTERM / 156.25 * 1000);

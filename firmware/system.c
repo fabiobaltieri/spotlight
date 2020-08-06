@@ -81,7 +81,7 @@ static uint8_t peak(uint8_t in)
 	return out;
 }
 
-static void update_soc(uint16_t batt_mv)
+static void soc_update(uint16_t batt_mv)
 {
 	uint16_t full, empty;
 	int32_t soc;
@@ -114,7 +114,7 @@ static void saadc_callback(nrf_drv_saadc_evt_t const *evt)
 	if (evt->type == NRF_DRV_SAADC_EVT_DONE) {
 		adc_result = evt->data.done.p_buffer[0];
 		state.batt_mv = (adc_result * BATT_NUM) / BATT_DEN;
-		update_soc(state.batt_mv);
+		soc_update(state.batt_mv);
 	}
 }
 
@@ -166,7 +166,7 @@ static void maybe_reserve(void)
 #ifdef TARGET_HAS_EXT_TEMP
 #define MIC280_ADDR_A 0x4a
 #define MIC280_ADDR_B 0x4b
-static void update_temp(void)
+static void temp_update(void)
 {
 	uint8_t t1, t2;
 	t1 = mic280_read(&twi, MIC280_ADDR_A);
@@ -178,7 +178,7 @@ static void update_temp(void)
 		state.temp = t2;
 }
 #else
-static void update_temp(void)
+static void temp_update(void)
 {
 	int32_t temp;
 	sd_temp_get(&temp);
@@ -214,7 +214,7 @@ static void timer_handler(void *context)
 
 	maybe_shutdown();
 	maybe_reserve();
-	update_temp();
+	temp_update();
 	saadc_convert();
 	fuel_gauge_update();
 
