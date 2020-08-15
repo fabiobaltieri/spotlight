@@ -156,8 +156,13 @@ static void maybe_reserve(void)
 	if (state.level != LEVEL_HIGH)
 		return;
 
+#ifdef MAX17055_VE
+	if (state.batt_mv > MAX17055_VE)
+		return;
+#else
 	if (state.soc > 0)
 		return;
+#endif
 
 	state.level = LEVEL_MEDIUM;
 	levels_apply_state(NULL);
