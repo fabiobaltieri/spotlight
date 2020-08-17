@@ -20,7 +20,7 @@
 #define SHUTDOWN_DELAY (60 * 15)
 
 APP_TIMER_DEF(sys_tmr);
-static const nrf_drv_twi_t twi = NRF_DRV_TWI_INSTANCE(0);
+static const nrf_drv_twi_t twi = NRF_DRV_TWI_INSTANCE(SYSTEM_TWI_INSTANCE);
 
 static void maybe_shutdown(void)
 {
