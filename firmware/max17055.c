@@ -108,7 +108,7 @@ void max17055_init(const nrf_drv_twi_t *twi)
 
 uint16_t max17055_soc(const nrf_drv_twi_t *twi)
 {
-	return (max17055_read(twi, MAX17055_RepSOC) + 0x7f) >> 8;
+	return max17055_read(twi, MAX17055_RepSOC);
 }
 
 uint16_t max17055_batt_mv(const nrf_drv_twi_t *twi)
