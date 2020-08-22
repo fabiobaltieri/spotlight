@@ -25,7 +25,9 @@ class DataField extends WatchUi.SimpleDataField {
 		SimpleDataField.initialize();
 		label = "Spotlight";
 		ant_device = device;
+	}
 
+	function initialize_fields() {
 		level_field = createField(
 				"level",
 				LEVEL_FIELD_ID,
@@ -107,6 +109,13 @@ class DataField extends WatchUi.SimpleDataField {
 	}
 
 	hidden function log_fields() {
+		if (level_field == null) {
+			if (!ant_device.data_valid) {
+				return;
+			} else {
+				initialize_fields();
+			}
+		}
 		if (!ant_device.data_valid) {
 			level_field.setData(-1);
 			batt_field.setData(0);
