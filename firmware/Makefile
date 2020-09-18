@@ -200,13 +200,11 @@ $(foreach target, $(TARGETS), $(call define_target, $(target)))
 
 # Flash the program
 flash: default
-	@echo Flashing: $(OUTPUT_DIRECTORY)/nrf52832_xxaa.hex
 	nrfjprog -f nrf52 --program $(OUTPUT_DIRECTORY)/nrf52832_xxaa.hex --sectorerase
 	nrfjprog -f nrf52 --reset
 
 flash_softdevice:
-	@echo Flashing: ANT_s332_nrf52832_6.1.1.hex
-	nrfjprog -f nrf52 --program $(SDK_ROOT)/components/softdevice/s332/ANT_s332_nrf52832_6.1.1.hex --sectorerase
+	nrfjprog -f nrf52 --program $(SDK_ROOT)/components/softdevice/s332/ANT_s332_nrf52_7.0.1.hex --sectorerase
 	nrfjprog -f nrf52 --reset
 
 erase:
