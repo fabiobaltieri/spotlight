@@ -13,22 +13,29 @@
 #define MAX17055_Status		0x00
 #define MAX17055_RepCap		0x05
 #define MAX17055_RepSOC		0x06
+#define MAX17055_Temp		0x08
 #define MAX17055_VCell		0x09
+#define MAX17055_Current	0x0a
+#define MAX17055_AvgCurrent	0x0b
 #define MAX17055_TTE		0x11
 #define MAX17055_DesignCap	0x18
 #define MAX17055_IChgTerm	0x1e
+#define MAX17055_Config		0x1d
+#define MAX17055_TTF		0x20
 #define MAX17055_VEmpty		0x3a
 #define MAX17055_FStat		0x3d
 #define MAX17055_dQAcc		0x45
 #define MAX17055_dPAcc		0x46
 #define MAX17055_Command	0x60
 #define MAX17055_HibCfg		0xba
+#define MAX17055_Config2	0xbb
 #define MAX17055_ModelCfg	0xdb
 
 #define STATUS_POR 0x0002
 #define STATUS_POR_MASK 0xfffd
 #define FSTAT_DNR 0x0001
 #define MODELCFG_REFRESH 0x8000
+#define CONFIG_CPMODE 0x0002
 
 static uint16_t max17055_read(const nrf_drv_twi_t *twi, uint8_t addr)
 {
@@ -116,6 +123,16 @@ uint16_t max17055_batt_mv(const nrf_drv_twi_t *twi)
 	return max17055_read(twi, MAX17055_VCell) * 1.25 / 16;
 }
 
+int32_t max17055_batt_i(const nrf_drv_twi_t *twi)
+{
+	return (int16_t)max17055_read(twi, MAX17055_AvgCurrent) * 156.25;
+}
+
+uint8_t max17055_temp(const nrf_drv_twi_t *twi)
+{
+	return ((uint16_t)max17055_read(twi, MAX17055_Temp)) >> 8;
+}
+
 uint16_t max17055_tte_mins(const nrf_drv_twi_t *twi)
 {
 	float tte;
@@ -125,4 +142,12 @@ uint16_t max17055_tte_mins(const nrf_drv_twi_t *twi)
 	return tte;
 }
 
+uint16_t max17055_ttf_mins(const nrf_drv_twi_t *twi)
+{
+	float tte;
+	tte = max17055_read(twi, MAX17055_TTF) * 5.625 / 60;
+	if (tte > UINT16_MAX)
+		return UINT16_MAX;
+	return tte;
+}
 #endif
