@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.5.0">
+<eagle version="9.6.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -2275,7 +2275,7 @@ for trimmer refence see : &lt;u&gt;www.electrospec-inc.com/cross_references/trim
 <attribute name="NAME" x="21.476" y="6.962" size="1.27" layer="25"/>
 <attribute name="VALUE" x="21.476" y="4.168" size="1.27" layer="27"/>
 </element>
-<element name="C8" library="balto" package="0603" value="dnp" x="6.6" y="6.8" smashed="yes" rot="R270">
+<element name="C8" library="balto" package="0603" value="1.5p" x="6.6" y="6.8" smashed="yes" rot="R270">
 <attribute name="NAME" x="7.362" y="8.324" size="1.27" layer="25" rot="R270"/>
 <attribute name="VALUE" x="4.568" y="8.324" size="1.27" layer="27" rot="R270"/>
 </element>

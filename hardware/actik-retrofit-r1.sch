@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.5.0">
+<eagle version="9.6.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -9362,7 +9362,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <part name="C5" library="balto" deviceset="C" device="0603" value="12p"/>
 <part name="C6" library="balto" deviceset="C" device="0603" value="12p"/>
 <part name="C7" library="balto" deviceset="C" device="0603" value="12p"/>
-<part name="C8" library="balto" deviceset="C" device="0603" value="dnp"/>
+<part name="C8" library="balto" deviceset="C" device="0603" value="1.5p"/>
 <part name="GND10" library="supply1" deviceset="GND" device=""/>
 <part name="GND11" library="supply1" deviceset="GND" device=""/>
 <part name="C9" library="balto" deviceset="C" device="0603" value="1u"/>
@@ -9453,6 +9453,8 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <wire x1="149.86" y1="177.8" x2="43.18" y2="177.8" width="0.1524" layer="97"/>
 <text x="81.28" y="137.16" size="1.778" layer="97">kelvin</text>
 <text x="101.6" y="137.16" size="1.778" layer="97">kelvin</text>
+<text x="106.68" y="35.56" size="1.778" layer="97">6.8nH ind
+series</text>
 </plain>
 <instances>
 <instance part="LICENSE1" gate="G$1" x="165.1" y="25.4" smashed="yes"/>
@@ -10327,6 +10329,10 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 </schematic>
 </drawing>
 <compatibility>
+<note version="6.3" minversion="6.2.2" severity="warning">
+Since Version 6.2.2 text objects can contain more than one line,
+which will not be processed correctly with this version.
+</note>
 <note version="8.2" severity="warning">
 Since Version 8.2, EAGLE supports online libraries. The ids
 of those online libraries will not be understood (or retained)
