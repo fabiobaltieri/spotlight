@@ -22,10 +22,10 @@
 #define REMOTE_CHANNEL 1
 #define REMOTE_ANT_NETWORK_NUM 0
 #define REMOTE_CHAN_ID_DEV_NUM 0
-#define REMOTE_CHAN_ID_DEV_TYPE 0xfc
+#define REMOTE_CHAN_ID_DEV_TYPE 0x7c
 #define REMOTE_CHAN_ID_TRANS_TYPE 0
 #define REMOTE_CHAN_PERIOD 16384
-#define REMOTE_RF_FREQ 66
+#define REMOTE_RF_FREQ 48
 
 static void remote_rx_process(uint8_t *payload)
 {

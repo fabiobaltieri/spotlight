@@ -19,10 +19,10 @@
 #define ANT_NETWORK_NUM 0
 #define BROADCAST_CHANNEL_NUMBER 0
 #define CHAN_ID_DEV_NUM 666
-#define CHAN_ID_DEV_TYPE 0xfc
+#define CHAN_ID_DEV_TYPE 0x7c
 #define CHAN_ID_TRANS_TYPE 1
 #define CHAN_PERIOD 16384
-#define RF_FREQ 66
+#define RF_FREQ 48
 
 static struct config {
 	uint8_t a, b, c, d;

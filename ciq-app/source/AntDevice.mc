@@ -4,10 +4,10 @@ using Toybox.System;
 using Toybox.Ant;
 
 class AntDevice extends Ant.GenericChannel {
-	const DEVICE_TYPE = 0xfb;
+	const DEVICE_TYPE = 0x7b;
 	const PERIOD = 16384;
 	const DEV_NUMBER = 0; /* 0 for search */
-	const CHANNEL = 66;
+	const CHANNEL = 48;
 	var device_cfg;
 
 	const REOPEN_DELAY = 20;
