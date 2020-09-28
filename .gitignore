@@ -2,8 +2,10 @@
 *.prg.debug.xml
 *.iq
 *_contributions.json
+
 *.swp
 */_build
+ota-key.pem
 
 *.[bs]#?
 *.dri
