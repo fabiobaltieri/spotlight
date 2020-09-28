@@ -2,7 +2,7 @@ SDK_PATH = $(HOME)/ciq
 KEY = developer_key.der
 
 NAME = spotlight
-APP_ID = d19a5b17-078e-49c9-a6b3-9f1e47f60a80
+APP_ID = 5262d1b3-5642-43ec-a2cd-1bfdbd3fb12f
 
 JUNGLE = monkey.jungle
 ifeq ($(DEVICE),)
