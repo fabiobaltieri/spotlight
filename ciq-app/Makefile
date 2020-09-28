@@ -1,5 +1,5 @@
 SDK_PATH = $(HOME)/ciq
-KEY = $(HOME)/.Garmin/key/developer_key.der
+KEY = developer_key.der
 
 NAME = spotlight
 APP_ID = d19a5b17-078e-49c9-a6b3-9f1e47f60a80
