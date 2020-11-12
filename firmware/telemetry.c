@@ -2,7 +2,6 @@
 #include "ant_channel_config.h"
 #include "ant_interface.h"
 #include "ant_parameters.h"
-#include "app_timer.h"
 #include "boards.h"
 #include "nrf_log.h"
 #include "nrf_sdh.h"
@@ -26,13 +25,6 @@
 
 #define PAGE_0 0x00
 #define PAGE_16 0x10
-
-APP_TIMER_DEF(blink_tmr);
-
-static void blink_timer_handler(void *context)
-{
-        bsp_board_led_off(1);
-}
 
 static uint8_t payload_unchanged(uint8_t *new)
 {
@@ -95,7 +87,6 @@ static void telemetry_rx_process(uint8_t *payload)
 
 static void ant_evt_telemetry(ant_evt_t *ant_evt, void *context)
 {
-	ret_code_t err_code;
 	uint8_t channel = ant_evt->channel;
 
 	if (ant_evt->channel != TELEMETRY_CHANNEL)
@@ -103,9 +94,6 @@ static void ant_evt_telemetry(ant_evt_t *ant_evt, void *context)
 
 	switch (ant_evt->event) {
 		case EVENT_TX:
-			bsp_board_led_on(1);
-			err_code = app_timer_start(blink_tmr, APP_TIMER_TICKS(10), NULL);
-			APP_ERROR_CHECK(err_code);
 			break;
 		case EVENT_RX:
 			telemetry_rx_process(ant_evt->message.ANT_MESSAGE_aucPayload);
@@ -125,10 +113,6 @@ NRF_SDH_ANT_OBSERVER(m_ant_observer, 1, ant_evt_telemetry, NULL);
 void telemetry_setup(uint16_t device_number)
 {
 	ret_code_t err_code;
-
-	err_code = app_timer_create(
-			&blink_tmr, APP_TIMER_MODE_SINGLE_SHOT, blink_timer_handler);
-	APP_ERROR_CHECK(err_code);
 
 	/* Telemetry */
 	ant_channel_config_t t_channel_config = {
