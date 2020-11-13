@@ -20,7 +20,11 @@
 #define SHUTDOWN_DELAY (60 * 15)
 
 APP_TIMER_DEF(sys_tmr);
+
 static const nrf_drv_twi_t twi = NRF_DRV_TWI_INSTANCE(SYSTEM_TWI_INSTANCE);
+
+APP_TIMER_DEF(blink_tmr);
+static uint8_t blink_timer_counter;
 
 static void maybe_shutdown(void)
 {
@@ -45,6 +49,47 @@ static void maybe_shutdown(void)
 	bsp_board_led_off(1);
 
         nrf_pwr_mgmt_shutdown(NRF_PWR_MGMT_SHUTDOWN_GOTO_SYSOFF);
+}
+
+static void blink_timer_handler(void *context)
+{
+	ret_code_t err_code;
+
+        bsp_board_led_invert(1);
+
+	if (!blink_timer_counter)
+		return;
+	else if (blink_timer_counter & 1)
+		err_code = app_timer_start(blink_tmr, APP_TIMER_TICKS(10), NULL);
+	else
+		err_code = app_timer_start(blink_tmr, APP_TIMER_TICKS(300), NULL);
+	APP_ERROR_CHECK(err_code);
+
+	blink_timer_counter--;
+}
+
+static void battery_blink(void)
+{
+	ret_code_t err_code;
+
+	static uint8_t skip;
+
+	if (skip-- > 0)
+		return;
+	skip = 3;
+
+	if (state.soc > 75)
+		blink_timer_counter = 6;
+	else if (state.soc > 50)
+		blink_timer_counter = 4;
+	else if (state.soc > 25)
+		blink_timer_counter = 2;
+	else
+		blink_timer_counter = 0;
+
+	bsp_board_led_on(1);
+	err_code = app_timer_start(blink_tmr, APP_TIMER_TICKS(10), NULL);
+	APP_ERROR_CHECK(err_code);
 }
 
 #ifndef TARGET_HAS_FUEL_GAUGE
@@ -224,6 +269,8 @@ static void timer_handler(void *context)
 	fuel_gauge_update();
 
 	telemetry_update();
+
+	battery_blink();
 }
 
 static void twi_init(void)
@@ -259,5 +306,9 @@ void system_init(void)
 	APP_ERROR_CHECK(err_code);
 
 	err_code = app_timer_start(sys_tmr, APP_TIMER_TICKS(1000), NULL);
+	APP_ERROR_CHECK(err_code);
+
+	err_code = app_timer_create(
+			&blink_tmr, APP_TIMER_MODE_SINGLE_SHOT, blink_timer_handler);
 	APP_ERROR_CHECK(err_code);
 }
