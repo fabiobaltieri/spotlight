@@ -147,6 +147,16 @@ void levels_setup(void)
 	err_code = app_pwm_init(&PWM2, &pwm2_cfg, NULL);
 	APP_ERROR_CHECK(err_code);
 
+#if TARGET == TARGET_ACTIK
+	/* LED 3 is driving a red LED directly. */
+	nrf_gpio_cfg(POWER_LED_3,
+		     NRF_GPIO_PIN_DIR_OUTPUT,
+		     NRF_GPIO_PIN_INPUT_DISCONNECT,
+		     NRF_GPIO_PIN_NOPULL,
+		     NRF_GPIO_PIN_S0H1,
+		     NRF_GPIO_PIN_NOSENSE);
+#endif
+
 	app_pwm_enable(&PWM1);
 	app_pwm_enable(&PWM2);
 
