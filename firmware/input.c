@@ -10,8 +10,6 @@
 APP_TIMER_DEF(delay_tmr);
 static uint8_t switch_delay;
 
-#define AUTO_CADENCE_TRESHOLD 142
-
 static void delay_timer_handler(void *context)
 {
 	switch_delay = 1;
@@ -93,11 +91,9 @@ void switch_auto(uint8_t active, uint8_t speed, uint8_t cadence)
 			active, speed, cadence);
 
 	if (!active)
-		new_level = LEVEL_LOW;
-	else if (cadence > AUTO_CADENCE_TRESHOLD)
-		new_level = LEVEL_HIGH;
+		new_level = LEVEL_OFF;
 	else
-		new_level = LEVEL_MEDIUM;
+		new_level = LEVEL_HIGH;
 
 	if (new_level == state.level)
 		return;
