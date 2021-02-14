@@ -7,6 +7,8 @@
 #include "state.h"
 #include "system.h"
 
+#include "input.h"
+
 APP_TIMER_DEF(delay_tmr);
 static uint8_t switch_delay;
 
