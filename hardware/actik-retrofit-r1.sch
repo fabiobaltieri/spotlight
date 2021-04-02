@@ -276,10 +276,10 @@
 </symbol>
 <symbol name="CC_BY-SA_TEXT">
 <text x="0" y="7.62" size="1.6764" layer="95">Released under the Creative Commons</text>
-<text x="0" y="2.54" size="1.3716" layer="95">http://creativecommons.org/licenses/by-sa/3.0</text>
+<text x="0" y="2.54" size="1.3716" layer="95">https://creativecommons.org/licenses/by-sa/4.0</text>
 <text x="0" y="0" size="1.778" layer="95">Design by:</text>
 <text x="16.764" y="0" size="1.778" layer="96">&gt;VALUE</text>
-<text x="0" y="5.08" size="1.6764" layer="95">Attribution Share-Alike 3.0 License</text>
+<text x="0" y="5.08" size="1.6764" layer="95">Attribution Share-Alike 4.0 License</text>
 </symbol>
 <symbol name="C">
 <wire x1="0" y1="0" x2="0" y2="-0.508" width="0.1524" layer="94"/>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.5.0">
+<eagle version="9.6.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -149,10 +149,10 @@
 <packages>
 <package name="0603">
 <description>&lt;b&gt;0603 Resistor&lt;/b&gt;</description>
-<rectangle x1="-0.8" y1="-0.4" x2="-0.5" y2="0.4" layer="21"/>
-<rectangle x1="0.5" y1="-0.4" x2="0.8" y2="0.4" layer="21"/>
-<rectangle x1="-0.5" y1="-0.4" x2="0.5" y2="-0.3" layer="21"/>
-<rectangle x1="-0.5" y1="0.3" x2="0.5" y2="0.4" layer="21"/>
+<rectangle x1="-0.8" y1="-0.4" x2="-0.5" y2="0.4" layer="51"/>
+<rectangle x1="0.5" y1="-0.4" x2="0.8" y2="0.4" layer="51"/>
+<rectangle x1="-0.5" y1="-0.4" x2="0.5" y2="-0.3" layer="51"/>
+<rectangle x1="-0.5" y1="0.3" x2="0.5" y2="0.4" layer="51"/>
 <smd name="1" x="-0.7745" y="0" dx="0.787" dy="0.864" layer="1"/>
 <smd name="2" x="0.7745" y="0" dx="0.787" dy="0.864" layer="1"/>
 <text x="-1.524" y="0.762" size="1.27" layer="25">&gt;NAME</text>
@@ -192,13 +192,13 @@
 <description>&lt;b&gt;WE-TPC SMD Shielded Tiny PowerInductor&lt;/b&gt;</description>
 <text x="-11.43" y="7.62" size="1.27" layer="25">&gt;NAME</text>
 <wire x1="-5" y1="1.67" x2="-5" y2="-1.67" width="0.127" layer="21"/>
-<wire x1="-5" y1="-1.67" x2="-1.67" y2="-5" width="0.127" layer="21"/>
-<wire x1="-1.67" y1="-5" x2="1.67" y2="-5" width="0.127" layer="21"/>
-<wire x1="1.67" y1="-5" x2="5" y2="-1.67" width="0.127" layer="21"/>
+<wire x1="-5" y1="-1.67" x2="-1.67" y2="-5" width="0.127" layer="51"/>
+<wire x1="-1.67" y1="-5" x2="1.67" y2="-5" width="0.127" layer="51"/>
+<wire x1="1.67" y1="-5" x2="5" y2="-1.67" width="0.127" layer="51"/>
 <wire x1="5" y1="-1.67" x2="5" y2="1.67" width="0.127" layer="21"/>
-<wire x1="5" y1="1.67" x2="1.67" y2="5" width="0.127" layer="21"/>
-<wire x1="1.67" y1="5" x2="-1.67" y2="5" width="0.127" layer="21"/>
-<wire x1="-1.67" y1="5" x2="-5" y2="1.67" width="0.127" layer="21"/>
+<wire x1="5" y1="1.67" x2="1.67" y2="5" width="0.127" layer="51"/>
+<wire x1="1.67" y1="5" x2="-1.67" y2="5" width="0.127" layer="51"/>
+<wire x1="-1.67" y1="5" x2="-5" y2="1.67" width="0.127" layer="51"/>
 <smd name="P$1" x="0" y="-4.5" dx="4.6" dy="1.8" layer="1"/>
 <smd name="P$2" x="0" y="4.5" dx="4.6" dy="1.8" layer="1"/>
 </package>
@@ -256,10 +256,10 @@
 </symbol>
 <symbol name="CC_BY-SA_TEXT">
 <text x="0" y="7.62" size="1.6764" layer="95">Released under the Creative Commons</text>
-<text x="0" y="2.54" size="1.3716" layer="95">http://creativecommons.org/licenses/by-sa/3.0</text>
+<text x="0" y="2.54" size="1.3716" layer="95">https://creativecommons.org/licenses/by-sa/4.0</text>
 <text x="0" y="0" size="1.778" layer="95">Design by:</text>
 <text x="16.764" y="0" size="1.778" layer="96">&gt;VALUE</text>
-<text x="0" y="5.08" size="1.6764" layer="95">Attribution Share-Alike 3.0 License</text>
+<text x="0" y="5.08" size="1.6764" layer="95">Attribution Share-Alike 4.0 License</text>
 </symbol>
 <symbol name="C">
 <wire x1="0" y1="0" x2="0" y2="-0.508" width="0.1524" layer="94"/>

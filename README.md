@@ -12,4 +12,4 @@ the Free Software Foundation, either version 3 of the License, or
 ## License (hardware)
 
 Hardware files are licensed under a
-Creative Commons Attribution-ShareAlike 3.0 Unported License.
+Creative Commons Attribution-ShareAlike 4.0 International License.
