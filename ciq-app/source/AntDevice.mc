@@ -139,6 +139,15 @@ class AntDevice extends Ant.GenericChannel {
 		tte = data[4];
 
 		data_valid = true;
+
+		/*
+		System.println("devnum=" + deviceNum +
+				" tte=" + tte +
+				" soc=" + battery +
+				" vbatt=" + (data[6] + (data[7] << 8)) +
+				" temp=" + temp
+			      );
+		*/
 	}
 
 	function onMessage(msg) {
