@@ -3,7 +3,7 @@
 #define TARGET_SPOTLIGHT 2
 #define TARGET_ACTIK 4
 
-#define TARGET TARGET_PCA10040
+#define TARGET TARGET_ACTIK
 
 /* SDK config overrides */
 
