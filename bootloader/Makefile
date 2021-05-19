@@ -260,4 +260,4 @@ gen_key:
 
 boot: default
 	nrfutil pkg generate --bootloader $(OUTPUT_DIRECTORY)/nrf52832_xxaa_s332.hex --hw-version 52 --sd-req 0xCF --bootloader-version 1 --key-file ota-key.pem $(OUTPUT_DIRECTORY)/nrf52832_xxaa_s332.zip
-	nrfutil dfu ble --package $(OUTPUT_DIRECTORY)/nrf52832_xxaa_s332.zip -ic NRF52 -f
+	nrfutil dfu ble --package $(OUTPUT_DIRECTORY)/nrf52832_xxaa_s332.zip -ic NRF52
