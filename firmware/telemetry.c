@@ -53,7 +53,6 @@ void telemetry_update(void)
 	payload[6] = state.batt_mv & 0xff; // Battery voltage (mV)
 	payload[7] = state.batt_mv >> 8;
 
-
 	if (payload_unchanged(payload))
 		return;
 
