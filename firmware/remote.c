@@ -47,7 +47,7 @@ static void ant_evt_remote(ant_evt_t *ant_evt, void *context)
 #endif
 	uint8_t channel = ant_evt->channel;
 
-	if (ant_evt->channel != REMOTE_CHANNEL)
+	if (channel != REMOTE_CHANNEL)
 		return;
 
 	bsp_board_led_invert(0);
@@ -68,8 +68,7 @@ static void ant_evt_remote(ant_evt_t *ant_evt, void *context)
 #endif
 			break;
 		default:
-			DEBUG_ANT("ANT event %d %02x",
-					ant_evt->channel, ant_evt->event);
+			DEBUG_ANT("ANT event %d %02x", channel, ant_evt->event);
 			break;
 	}
 }

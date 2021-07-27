@@ -88,7 +88,7 @@ static void ant_evt_telemetry(ant_evt_t *ant_evt, void *context)
 {
 	uint8_t channel = ant_evt->channel;
 
-	if (ant_evt->channel != TELEMETRY_CHANNEL)
+	if (channel != TELEMETRY_CHANNEL)
 		return;
 
 	switch (ant_evt->event) {
@@ -101,8 +101,7 @@ static void ant_evt_telemetry(ant_evt_t *ant_evt, void *context)
 			DEBUG_ANT("ANT %d: channel collision", channel);
 			break;
 		default:
-			DEBUG_ANT("ANT event %d %02x",
-					ant_evt->channel, ant_evt->event);
+			DEBUG_ANT("ANT event %d %02x", channel, ant_evt->event);
 			break;
 	}
 }
