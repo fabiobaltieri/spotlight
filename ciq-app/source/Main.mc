@@ -10,7 +10,7 @@ class Main extends Application.AppBase {
 	}
 
 	function onStart(state) {
-		antDevice = new AntDevice();
+		antDevice = new Spotlight();
 	}
 
 	function getInitialView() {

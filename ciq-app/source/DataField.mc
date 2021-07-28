@@ -46,7 +46,7 @@ class DataField extends WatchUi.SimpleDataField {
 	}
 
 	hidden function send_back() {
-		ant_device.send_back(active, speed, cadence);
+		ant_device.tx(active, speed, cadence);
 	}
 
 	function onTimerStart() {

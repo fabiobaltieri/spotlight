@@ -4,24 +4,13 @@ using Toybox.System;
 using Toybox.Ant;
 
 class AntDevice extends Ant.GenericChannel {
-	const DEVICE_TYPE = 0x7b;
-	const PERIOD = 16384;
-	const DEV_NUMBER = 0; /* 0 for search */
-	const CHANNEL = 48;
 	var device_cfg;
 
-	const REOPEN_DELAY = 20;
 	var open_delay = 1;
 	var opened = false;
 	var searching = false;
-	var data_valid = false;
 
 	var deviceNum;
-	var mode;
-	var level;
-	var battery;
-	var temp;
-	var tte;
 
 	hidden function debug(str) {
 		//System.println("[Ant] " + str);
@@ -108,46 +97,14 @@ class AntDevice extends Ant.GenericChannel {
 		return out;
 	}
 
-	function send_back(active, speed, cadence) {
-		var data = [0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff];
-
-		data[0] = 0x10; // Page 16
-
-		data[1] = active;
-		data[2] = u8cap(speed);
-		data[3] = u8cap(cadence);
-
-		var message = new Ant.Message();
-		message.setPayload(data);
-		GenericChannel.sendBroadcast(message);
-	}
-
 	hidden function s8(val) {
 		return (val << 24) >> 24;
 	}
 
-	hidden function doMessage(data) {
-		if (data[0] != 0) {
-			// Page 0
-			return;
-		}
-
-		mode = data[1] & 0x0f;
-		level = (data[1] >> 4) & 0x0f;
-		battery = data[2];
-		temp = s8(data[3]);
-		tte = data[4];
-
-		data_valid = true;
-
-		/*
-		System.println("devnum=" + deviceNum +
-				" tte=" + tte +
-				" soc=" + battery +
-				" vbatt=" + (data[6] + (data[7] << 8)) +
-				" temp=" + temp
-			      );
-		*/
+	hidden function tx(data) {
+		var message = new Ant.Message();
+		message.setPayload(data);
+		GenericChannel.sendBroadcast(message);
 	}
 
 	function onMessage(msg) {
@@ -161,7 +118,7 @@ class AntDevice extends Ant.GenericChannel {
 			// Data
 			deviceNum = msg.deviceNumber;
 			debug("data, dev: " + deviceNum + ": " + payloadHex(payload));
-			doMessage(payload);
+			rx(payload);
 			searching = false;
 		} else {
 			// Other...
