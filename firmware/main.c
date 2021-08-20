@@ -77,7 +77,7 @@ static void log_init(void)
 
 int main(void)
 {
-	static uint16_t device_number;
+	uint16_t device_number;
 
 	log_init();
 	utils_setup();
