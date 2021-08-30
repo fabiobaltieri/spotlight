@@ -242,7 +242,7 @@ static void fuel_gauge_update(void)
 	uint16_t tte;
 
 	state.soc = (max17055_soc(&twi) + 0x7f) >> 8;
-	state.batt_mv = max17055_batt_mv(&twi);
+	state.batt_mv = max17055_ocv_mv(&twi);
 	tte = max17055_tte_mins(&twi);
 	if (tte > 0xfe)
 		state.tte = 0xfe;
