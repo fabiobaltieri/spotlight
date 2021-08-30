@@ -17,6 +17,7 @@
 #define MAX17055_VCell		0x09
 #define MAX17055_Current	0x0a
 #define MAX17055_AvgCurrent	0x0b
+#define MAX17055_FullCapRep	0x10
 #define MAX17055_TTE		0x11
 #define MAX17055_DesignCap	0x18
 #define MAX17055_IChgTerm	0x1e
@@ -30,6 +31,7 @@
 #define MAX17055_HibCfg		0xba
 #define MAX17055_Config2	0xbb
 #define MAX17055_ModelCfg	0xdb
+#define MAX17055_VFOCV		0xfb
 
 #define STATUS_POR 0x0002
 #define STATUS_POR_MASK 0xfffd
@@ -74,7 +76,7 @@ static void max17055_write_verify(const nrf_drv_twi_t *twi, uint8_t addr, uint16
 	}
 }
 
-void max17055_init(const nrf_drv_twi_t *twi)
+void max17055_init(const nrf_drv_twi_t *twi, uint16_t battery_cap)
 {
 	uint16_t hib_cfg;
 	uint16_t status;
@@ -94,7 +96,7 @@ void max17055_init(const nrf_drv_twi_t *twi)
 	max17055_write(twi, MAX17055_HibCfg, 0x0);
 	max17055_write(twi, MAX17055_Command, 0x0);
 
-	design_cap = MAX17055_CAP * 2;
+	design_cap = battery_cap * 2;
 	max17055_write(twi, MAX17055_DesignCap, design_cap);
 	max17055_write(twi, MAX17055_dQAcc, design_cap / 32);
 	max17055_write(twi, MAX17055_IChgTerm, MAX17055_ICHGTERM / 156.25 * 1000);
@@ -123,6 +125,11 @@ uint16_t max17055_batt_mv(const nrf_drv_twi_t *twi)
 	return max17055_read(twi, MAX17055_VCell) * 1.25 / 16;
 }
 
+uint16_t max17055_ocv_mv(const nrf_drv_twi_t *twi)
+{
+	return max17055_read(twi, MAX17055_VFOCV) * 1.25 / 16;
+}
+
 int32_t max17055_batt_i(const nrf_drv_twi_t *twi)
 {
 	return (int16_t)max17055_read(twi, MAX17055_AvgCurrent) * 156.25;
@@ -131,6 +138,16 @@ int32_t max17055_batt_i(const nrf_drv_twi_t *twi)
 uint8_t max17055_temp(const nrf_drv_twi_t *twi)
 {
 	return ((uint16_t)max17055_read(twi, MAX17055_Temp)) >> 8;
+}
+
+uint16_t max17055_cap(const nrf_drv_twi_t *twi)
+{
+	return max17055_read(twi, MAX17055_RepCap) / 2;
+}
+
+uint16_t max17055_fullcap(const nrf_drv_twi_t *twi)
+{
+	return max17055_read(twi, MAX17055_FullCapRep) / 2;
 }
 
 uint16_t max17055_tte_mins(const nrf_drv_twi_t *twi)

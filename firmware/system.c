@@ -252,7 +252,7 @@ static void fuel_gauge_update(void)
 
 static void fuel_gauge_init(void)
 {
-	max17055_init(&twi);
+	max17055_init(&twi, MAX17055_CAP);
 }
 #else
 static void fuel_gauge_update(void) {}
