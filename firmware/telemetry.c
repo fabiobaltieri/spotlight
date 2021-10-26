@@ -49,7 +49,7 @@ void telemetry_update(void)
 	payload[2] = state.soc; // State of charge
 	payload[3] = state.temp; // Temperature (C)
 	payload[4] = state.tte; // Time to empty
-	payload[5] = 0xff;
+	payload[5] = state.dc; // Duty Cycle Target
 	payload[6] = state.batt_mv & 0xff; // Battery voltage (mV)
 	payload[7] = state.batt_mv >> 8;
 

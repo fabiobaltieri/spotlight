@@ -104,6 +104,11 @@ void levels_apply_state(uint8_t *manual)
 	NRF_LOG_INFO("state mode: %d level: %d", state.mode, state.level);
 	if (manual) {
 		memcpy(tgt_levels, manual, sizeof(tgt_levels));
+	} else if (state.level == LEVEL_MEDIUM && state.level == LEVEL_HIGH) {
+		tgt_levels[0] = state.dc;
+		tgt_levels[1] = state.dc;
+		tgt_levels[2] = 0;
+		tgt_levels[3] = 0;
 	} else {
 		memcpy(tgt_levels, &levels[state.level], sizeof(tgt_levels));
 	}

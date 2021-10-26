@@ -23,6 +23,7 @@ struct state {
 	uint8_t soc;
 	int8_t temp;
 	uint8_t tte;
+	uint8_t dc;
 };
 
 extern struct state state;

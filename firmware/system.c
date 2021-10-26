@@ -259,6 +259,36 @@ static void fuel_gauge_update(void) {}
 static void fuel_gauge_init(void) {}
 #endif
 
+#define R_BATT 0.36f
+#define V_LED_EQ 2.70f
+#define R_LED_EQ 0.50
+#define R_SHUNT 0.7f
+#define P_TARGET_HIGH 1.5f
+#define P_TARGET_LOW 0.75f
+static void dc_update(void)
+{
+	float vbatt;
+	float i;
+	float pled100;
+	float dc;
+	float p_target;
+
+	if (state.level == LEVEL_HIGH)
+		p_target = P_TARGET_HIGH;
+	else
+		p_target = P_TARGET_LOW;
+
+	vbatt = state.batt_mv;
+	i = (vbatt / 1000.0 - V_LED_EQ) / (R_BATT + R_LED_EQ + R_SHUNT);
+	pled100 = (V_LED_EQ + R_LED_EQ * i) * i;
+	dc = p_target / pled100 * 100;
+
+	if (dc > 100)
+		dc = 100;
+
+	state.dc = dc;
+}
+
 static void timer_handler(void *context)
 {
 
@@ -267,6 +297,9 @@ static void timer_handler(void *context)
 	temp_update();
 	saadc_convert();
 	fuel_gauge_update();
+	dc_update();
+
+	levels_apply_state(NULL);
 
 	telemetry_update();
 
