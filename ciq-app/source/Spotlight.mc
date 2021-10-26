@@ -13,6 +13,7 @@ class Spotlight extends AntDevice {
 	var battery;
 	var temp;
 	var tte;
+	var dc;
 
 	function initialize() {
 		AntDevice.initialize();
@@ -41,6 +42,7 @@ class Spotlight extends AntDevice {
 		battery = data[2];
 		temp = s8(data[3]);
 		tte = data[4];
+		dc = data[5];
 
 		data_valid = true;
 
@@ -49,7 +51,8 @@ class Spotlight extends AntDevice {
 				" tte=" + tte +
 				" soc=" + battery +
 				" vbatt=" + (data[6] + (data[7] << 8)) +
-				" temp=" + temp);
+				" temp=" + temp +
+				" dc=" + dc);
 		*/
 	}
 }
