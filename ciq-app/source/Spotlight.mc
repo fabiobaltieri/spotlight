@@ -5,7 +5,7 @@ class Spotlight extends AntDevice {
 	const PERIOD = 16384;
 	const DEV_NUMBER = 0; /* 0 for search */
 	const CHANNEL = 48;
-	const REOPEN_DELAY = 20;
+	const REOPEN_DELAY = 60;
 
 	var data_valid = false;
 	var mode;
