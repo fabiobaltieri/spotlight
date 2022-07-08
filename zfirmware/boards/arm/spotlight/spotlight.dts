@@ -1,0 +1,75 @@
+/dts-v1/;
+#include <nordic/nrf52832_qfaa.dtsi>
+
+/ {
+	model = "Spotlight";
+	compatible = "balto,spotlight";
+
+	chosen {
+		zephyr,sram = &sram0;
+		zephyr,flash = &flash0;
+	};
+
+	leds: leds {
+		compatible = "gpio-leds";
+		led_green {
+			gpios = <&gpio0 17 GPIO_ACTIVE_LOW>;
+			label = "Green LED";
+		};
+	};
+
+	pwmleds: pwmleds {
+		compatible = "pwm-leds";
+		led_pwm_0 {
+			pwms = <&pwm0 0 PWM_HZ(250) PWM_POLARITY_INVERTED>;
+		};
+		led_pwm_1 {
+			pwms = <&pwm0 1 PWM_HZ(250) PWM_POLARITY_INVERTED>;
+		};
+		led_pwm_2 {
+			pwms = <&pwm0 2 PWM_HZ(250) PWM_POLARITY_INVERTED>;
+		};
+	};
+
+	buttons {
+		compatible = "gpio-keys";
+		sw0: sw_0 {
+			gpios = <&gpio0 13 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+			label = "Push button switch";
+		};
+	};
+};
+
+&pinctrl {
+	pwm0_default: pwm0_default {
+		group1 {
+			psels = <NRF_PSEL(PWM_OUT0, 0, 18)>,
+				<NRF_PSEL(PWM_OUT1, 0, 19)>,
+				<NRF_PSEL(PWM_OUT2, 0, 20)>;
+		};
+	};
+
+	pwm0_sleep: pwm0_sleep {
+		group1 {
+			psels = <NRF_PSEL(PWM_OUT0, 0, 18)>,
+				<NRF_PSEL(PWM_OUT1, 0, 19)>,
+				<NRF_PSEL(PWM_OUT2, 0, 20)>;
+			low-power-enable;
+		};
+	};
+};
+
+&gpiote {
+	status = "okay";
+};
+
+&gpio0 {
+	status = "okay";
+};
+
+&pwm0 {
+	status = "okay";
+	pinctrl-0 = <&pwm0_default>;
+	pinctrl-1 = <&pwm0_sleep>;
+	pinctrl-names = "default", "sleep";
+};
