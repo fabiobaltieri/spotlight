@@ -5,6 +5,7 @@
 
 *.swp
 */_build
+*/build
 ota-key.pem
 
 *.[bs]#?
