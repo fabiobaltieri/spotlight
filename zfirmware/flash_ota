@@ -1,0 +1,12 @@
+#!/bin/sh
+
+MCUMGR="sudo $HOME/go/bin/mcumgr -c spotlight"
+
+$MCUMGR image upload -e build/zephyr/zephyr.signed.bin
+$MCUMGR image list
+
+echo $MCUMGR image test HHH
+echo $MCUMGR reset
+echo $MCUMGR confirm HHH
+echo $MCUMGR erase
+echo $MCUMGR list
