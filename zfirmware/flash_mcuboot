@@ -1,0 +1,17 @@
+#!/bin/sh
+
+BUILDDIR=build-mcuboot
+
+west build -p -d $BUILDDIR \
+	-b spotlight \
+	$HOME/zephyrproject/bootloader/mcuboot/boot/zephyr \
+	-- \
+	-DCONFIG_SERIAL=n \
+	-DCONFIG_GPIO=n \
+	-DCONFIG_USE_SEGGER_RTT=y \
+	-DCONFIG_RTT_CONSOLE=y \
+	-DCONFIG_BOOT_SIGNATURE_KEY_FILE=\"$PWD/spotlight-key.pem\" \
+	-DBOARD_ROOT="$PWD"
+
+#west build -d $BUILDDIR -t menuconfig
+west flash -d $BUILDDIR
