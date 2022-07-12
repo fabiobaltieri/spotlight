@@ -47,6 +47,7 @@
 			psels = <NRF_PSEL(PWM_OUT0, 0, 18)>,
 				<NRF_PSEL(PWM_OUT1, 0, 19)>,
 				<NRF_PSEL(PWM_OUT2, 0, 20)>;
+			nordic,invert;
 		};
 	};
 
