@@ -7,6 +7,6 @@ $MCUMGR image list
 
 echo $MCUMGR image test HHH
 echo $MCUMGR reset
-echo $MCUMGR confirm HHH
-echo $MCUMGR erase
-echo $MCUMGR list
+echo $MCUMGR image confirm HHH
+echo $MCUMGR image erase
+echo $MCUMGR image list
