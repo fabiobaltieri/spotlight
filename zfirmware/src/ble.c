@@ -6,8 +6,8 @@
 #include <zephyr/bluetooth/services/hrs.h>
 #include <zephyr/bluetooth/uuid.h>
 #include <zephyr/device.h>
+#include <zephyr/kernel.h>
 #include <zephyr/mgmt/mcumgr/smp_bt.h>
-#include <zephyr/zephyr.h>
 
 #include "img_mgmt/img_mgmt.h"
 #include "os_mgmt/os_mgmt.h"
