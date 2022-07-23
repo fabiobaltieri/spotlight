@@ -49,7 +49,6 @@ static void button_loop(void)
 
 static void button_thread(void)
 {
-
 	k_sem_init(&sem, 0, 1);
 
 	gpio_pin_configure_dt(&sw0, GPIO_INPUT);
