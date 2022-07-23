@@ -26,7 +26,7 @@ void main(void)
 {
 	leds = DEVICE_DT_GET(DT_NODELABEL(leds));
 
-	k_timer_start(&blink_sync, K_NO_WAIT, K_SECONDS(3));
+	k_timer_start(&blink_sync, K_SECONDS(3), K_SECONDS(3));
 
 	for (;;) {
 		battery_blink();
