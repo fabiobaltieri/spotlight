@@ -3,6 +3,7 @@
 #include <zephyr/drivers/led.h>
 #include <zephyr/kernel.h>
 
+#include "levels.h"
 #include "state.h"
 
 struct state state;
@@ -32,6 +33,8 @@ void main(void)
 		printk("LED device is not ready\n");
 		return;
 	}
+
+	levels_hello();
 
 	k_timer_start(&blink_sync, K_SECONDS(3), K_SECONDS(3));
 
