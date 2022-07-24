@@ -49,10 +49,26 @@ static void button_loop(void)
 
 static void button_thread(void)
 {
+	int ret;
+
+	if (!device_is_ready(sw0.port)) {
+		printk("SW0 device is not ready\n");
+		return;
+	}
+
 	k_sem_init(&sem, 0, 1);
 
-	gpio_pin_configure_dt(&sw0, GPIO_INPUT);
-	gpio_pin_interrupt_configure_dt(&sw0, GPIO_INT_EDGE_TO_ACTIVE);
+	ret = gpio_pin_configure_dt(&sw0, GPIO_INPUT);
+	if (ret) {
+		printk("failed to configure sw0 gpio: %d\n", ret);
+		return;
+	}
+	/* should really be GPIO_INT_EDGE_TO_ACTIVE */
+	ret = gpio_pin_interrupt_configure_dt(&sw0, GPIO_INT_LOW_0);
+	if (ret) {
+		printk("failed to configure sw0 interrupt: %d\n", ret);
+		return;
+	}
 
 	gpio_init_callback(&sw0_cb_data, button_pressed, BIT(sw0.pin));
 	gpio_add_callback(sw0.port, &sw0_cb_data);

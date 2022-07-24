@@ -11,31 +11,31 @@
 		zephyr,code-partition = &slot0_partition;
 	};
 
-	leds: leds {
+	leds {
 		compatible = "gpio-leds";
 		led_green {
-			gpios = <&gpio0 17 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio0 27 GPIO_ACTIVE_LOW>;
 			label = "Green LED";
 		};
 	};
 
-	pwmleds: pwmleds {
+	pwmleds {
 		compatible = "pwm-leds";
 		led_pwm_0 {
-			pwms = <&pwm0 0 PWM_HZ(250) PWM_POLARITY_INVERTED>;
+			pwms = <&pwm0 0 PWM_HZ(250) PWM_POLARITY_NORMAL>;
 		};
 		led_pwm_1 {
-			pwms = <&pwm0 1 PWM_HZ(250) PWM_POLARITY_INVERTED>;
+			pwms = <&pwm0 1 PWM_HZ(250) PWM_POLARITY_NORMAL>;
 		};
 		led_pwm_2 {
-			pwms = <&pwm0 2 PWM_HZ(250) PWM_POLARITY_INVERTED>;
+			pwms = <&pwm0 2 PWM_HZ(250) PWM_POLARITY_NORMAL>;
 		};
 	};
 
 	buttons {
 		compatible = "gpio-keys";
 		sw0: sw_0 {
-			gpios = <&gpio0 13 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+			gpios = <&gpio0 14 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 			label = "Push button switch";
 		};
 	};
@@ -44,18 +44,17 @@
 &pinctrl {
 	pwm0_default: pwm0_default {
 		group1 {
-			psels = <NRF_PSEL(PWM_OUT0, 0, 18)>,
+			psels = <NRF_PSEL(PWM_OUT0, 0, 12)>,
 				<NRF_PSEL(PWM_OUT1, 0, 19)>,
-				<NRF_PSEL(PWM_OUT2, 0, 20)>;
-			nordic,invert;
+				<NRF_PSEL(PWM_OUT2, 0, 22)>;
 		};
 	};
 
 	pwm0_sleep: pwm0_sleep {
 		group1 {
-			psels = <NRF_PSEL(PWM_OUT0, 0, 18)>,
+			psels = <NRF_PSEL(PWM_OUT0, 0, 12)>,
 				<NRF_PSEL(PWM_OUT1, 0, 19)>,
-				<NRF_PSEL(PWM_OUT2, 0, 20)>;
+				<NRF_PSEL(PWM_OUT2, 0, 22)>;
 			low-power-enable;
 		};
 	};

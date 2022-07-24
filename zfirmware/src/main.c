@@ -3,7 +3,7 @@
 #include <zephyr/drivers/led.h>
 #include <zephyr/kernel.h>
 
-static const struct device *leds;
+static const struct device *leds = DEVICE_DT_GET_ONE(gpio_leds);
 
 K_TIMER_DEFINE(blink_sync, NULL, NULL);
 
@@ -24,7 +24,10 @@ void battery_blink(void)
 
 void main(void)
 {
-	leds = DEVICE_DT_GET(DT_NODELABEL(leds));
+	if (!device_is_ready(leds)) {
+		printk("LED device is not ready\n");
+		return;
+	}
 
 	k_timer_start(&blink_sync, K_SECONDS(3), K_SECONDS(3));
 
