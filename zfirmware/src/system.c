@@ -8,12 +8,12 @@
 LOG_MODULE_REGISTER(system);
 
 #include "ble.h"
+#include "levels.h"
 #include "state.h"
 
 static K_TIMER_DEFINE(system_sync, NULL, NULL);
 
-//#define SHUTDOWN_DELAY (60 * 15) // TODO: go back to this
-#define SHUTDOWN_DELAY (60 * 1)
+#define SHUTDOWN_DELAY (60 * 15)
 
 static const struct device *fuel_gauge = DEVICE_DT_GET_ONE(maxim_max17055);
 static const struct device *temp = DEVICE_DT_GET_ANY(nordic_nrf_temp);
@@ -110,6 +110,9 @@ static void system_loop(void)
 	temp_update();
 	dc_update();
 	ble_update();
+
+	levels_apply_state();
+
 }
 
 static void system_thread(void)

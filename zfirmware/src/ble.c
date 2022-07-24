@@ -12,6 +12,7 @@
 #include "img_mgmt/img_mgmt.h"
 #include "os_mgmt/os_mgmt.h"
 
+#include "ble.h"
 #include "state.h"
 
 static const struct bt_data ad[] = {

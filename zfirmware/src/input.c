@@ -4,6 +4,8 @@
 
 LOG_MODULE_REGISTER(input);
 
+#include "input.h"
+#include "levels.h"
 #include "state.h"
 
 static K_TIMER_DEFINE(delay, NULL, NULL);
@@ -33,7 +35,7 @@ void switch_short(void)
 		LOG_ERR("I should not be here");
 	}
 
-	// TODO: levels_apply_state(NULL);
+	levels_apply_state();
 
 	k_timer_start(&delay, K_SECONDS(2), K_NO_WAIT);
 }
@@ -48,7 +50,7 @@ void switch_long(void)
 		state.level = LEVEL_OFF;
 	}
 
-	// TODO: levels_apply_state(NULL);
+	levels_apply_state();
 }
 
 // TODO: switch_auto
