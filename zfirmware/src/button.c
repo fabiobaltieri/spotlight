@@ -70,8 +70,7 @@ static void button_thread(void)
 		printk("failed to configure sw0 gpio: %d\n", ret);
 		return;
 	}
-	/* should really be GPIO_INT_EDGE_TO_ACTIVE */
-	ret = gpio_pin_interrupt_configure_dt(&sw0, GPIO_INT_LOW_0);
+	ret = gpio_pin_interrupt_configure_dt(&sw0, GPIO_INT_EDGE_TO_ACTIVE);
 	if (ret) {
 		printk("failed to configure sw0 interrupt: %d\n", ret);
 		return;
