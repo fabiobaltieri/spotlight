@@ -39,7 +39,7 @@ void main(void)
 	k_timer_start(&blink_sync, K_SECONDS(3), K_SECONDS(3));
 
 	for (;;) {
-		if (state.mode == MODE_STANDBY) {
+		if (state.mode != MODE_SHUTDOWN) {
 			battery_blink();
 		}
 		k_timer_status_sync(&blink_sync);
