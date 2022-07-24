@@ -3,6 +3,11 @@
 #include <zephyr/devicetree.h>
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/kernel.h>
+#include <zephyr/logging/log.h>
+
+LOG_MODULE_REGISTER(button);
+
+#include "input.h"
 
 #define SW_DEBOUNCE_MS 100
 #define SW_LONG_PRESS_MS 1000
@@ -36,12 +41,14 @@ static void button_loop(void)
 		if (!long_fired &&
 		    (k_uptime_get_32() - ts) >= SW_LONG_PRESS_MS) {
 			long_fired = true;
-			printk("long\n"); /* TODO: long handler */
+			LOG_INF("long press");
+			switch_long();
 		}
 	}
 
 	if (!long_fired) {
-		printk("short\n"); /* TODO: short handler */
+		LOG_INF("short press");
+		switch_short();
 	}
 
 	k_sem_reset(&sem);
