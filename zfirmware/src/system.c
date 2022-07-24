@@ -52,7 +52,7 @@ static void fuel_gauge_update(void)
 	state.soc = val.val1;
 
 	sensor_channel_get(fuel_gauge, SENSOR_CHAN_GAUGE_VOLTAGE, &val);
-	state.batt_mv = val.val1 / 1000;
+	state.batt_mv = val.val1 * 1000 + val.val2 / 1000;
 
 	sensor_channel_get(fuel_gauge, SENSOR_CHAN_GAUGE_TIME_TO_EMPTY, &val);
 	tte = val.val1 / 1000 / 60;
@@ -73,11 +73,42 @@ static void temp_update(void)
 	state.temp = val.val1;
 }
 
+#define R_BATT 0.36f
+#define V_LED_EQ 2.70f
+#define R_LED_EQ 0.50
+#define R_SHUNT 0.7f
+#define P_TARGET_HIGH 1.5f
+#define P_TARGET_LOW 0.75f
+static void dc_update(void)
+{
+	float vbatt;
+	float i;
+	float pled100;
+	float dc;
+	float p_target;
+
+	if (state.level == LEVEL_HIGH)
+		p_target = P_TARGET_HIGH;
+	else
+		p_target = P_TARGET_LOW;
+
+	vbatt = state.batt_mv;
+	i = (vbatt / 1000.0 - V_LED_EQ) / (R_BATT + R_LED_EQ + R_SHUNT);
+	pled100 = (V_LED_EQ + R_LED_EQ * i) * i;
+	dc = p_target / pled100 * 100;
+
+	if (dc > 100)
+		dc = 100;
+
+	state.dc = dc;
+}
+
 static void system_loop(void)
 {
 	maybe_shutdown();
 	fuel_gauge_update();
 	temp_update();
+	dc_update();
 	ble_update();
 }
 
