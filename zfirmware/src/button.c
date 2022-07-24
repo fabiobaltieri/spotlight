@@ -80,4 +80,4 @@ static void button_thread(void)
 	}
 }
 
-K_THREAD_DEFINE(button, 512, button_thread, NULL, NULL, NULL, 7, 0, 0);
+K_THREAD_DEFINE(button, 1024, button_thread, NULL, NULL, NULL, 7, 0, 0);
