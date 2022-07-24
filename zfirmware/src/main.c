@@ -15,10 +15,9 @@ static K_TIMER_DEFINE(blink_sync, NULL, NULL);
 static void battery_blink(void)
 {
 	int i;
-	int soc = 100; /* TODO: read actual SoC */
 	int blinks;
 
-	blinks = CLAMP((soc / 25) + 1, 1, 4);
+	blinks = CLAMP((state.soc / 25) + 1, 1, 4);
 	for (i = 0; i < blinks; i++) {
 		led_on(leds, 0);
 		k_sleep(K_MSEC(10));
