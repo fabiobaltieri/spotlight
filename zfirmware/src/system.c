@@ -9,9 +9,9 @@ LOG_MODULE_REGISTER(system);
 
 #include "state.h"
 
-K_TIMER_DEFINE(system_sync, NULL, NULL);
+static K_TIMER_DEFINE(system_sync, NULL, NULL);
 
-//#define SHUTDOWN_DELAY (60 * 15)
+//#define SHUTDOWN_DELAY (60 * 15) // TODO: go back to this
 #define SHUTDOWN_DELAY (60 * 1)
 
 static const struct device *fuel_gauge = DEVICE_DT_GET_ONE(maxim_max17055);

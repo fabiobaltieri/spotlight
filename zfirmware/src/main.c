@@ -9,9 +9,9 @@ struct state state;
 
 static const struct device *leds = DEVICE_DT_GET_ONE(gpio_leds);
 
-K_TIMER_DEFINE(blink_sync, NULL, NULL);
+static K_TIMER_DEFINE(blink_sync, NULL, NULL);
 
-void battery_blink(void)
+static void battery_blink(void)
 {
 	int i;
 	int soc = 100; /* TODO: read actual SoC */
