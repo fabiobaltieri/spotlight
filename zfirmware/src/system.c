@@ -15,6 +15,7 @@ K_TIMER_DEFINE(system_sync, NULL, NULL);
 #define SHUTDOWN_DELAY (60 * 1)
 
 static const struct device *fuel_gauge = DEVICE_DT_GET_ONE(maxim_max17055);
+static const struct device *temp = DEVICE_DT_GET_ANY(nordic_nrf_temp);
 
 static void maybe_shutdown(void)
 {
@@ -60,16 +61,33 @@ static void fuel_gauge_update(void)
 		state.tte = tte;
 }
 
+static void temp_update(void)
+{
+	struct sensor_value val;
+
+	sensor_sample_fetch(temp);
+
+	sensor_channel_get(temp, SENSOR_CHAN_DIE_TEMP, &val);
+
+	state.temp = val.val1;
+}
+
 static void system_loop(void)
 {
 	maybe_shutdown();
 	fuel_gauge_update();
+	temp_update();
 }
 
 static void system_thread(void)
 {
 	if (!device_is_ready(fuel_gauge)) {
 		printk("fuel gauge device is not ready\n");
+		return;
+	}
+
+	if (!device_is_ready(temp)) {
+		printk("temp device is not ready\n");
 		return;
 	}
 
