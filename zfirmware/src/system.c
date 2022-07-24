@@ -7,6 +7,7 @@
 
 LOG_MODULE_REGISTER(system);
 
+#include "ble.h"
 #include "state.h"
 
 static K_TIMER_DEFINE(system_sync, NULL, NULL);
@@ -77,6 +78,7 @@ static void system_loop(void)
 	maybe_shutdown();
 	fuel_gauge_update();
 	temp_update();
+	ble_update();
 }
 
 static void system_thread(void)
