@@ -58,6 +58,21 @@
 			low-power-enable;
 		};
 	};
+
+	i2c0_default: i2c0_default {
+		group1 {
+			psels = <NRF_PSEL(TWIM_SDA, 0, 7)>,
+				<NRF_PSEL(TWIM_SCL, 0, 8)>;
+		};
+	};
+
+	i2c0_sleep: i2c0_sleep {
+		group1 {
+			psels = <NRF_PSEL(TWIM_SDA, 0, 7)>,
+				<NRF_PSEL(TWIM_SCL, 0, 8)>;
+			low-power-enable;
+		};
+	};
 };
 
 &gpiote {
@@ -73,6 +88,26 @@
 	pinctrl-0 = <&pwm0_default>;
 	pinctrl-1 = <&pwm0_sleep>;
 	pinctrl-names = "default", "sleep";
+};
+
+&i2c0 {
+	compatible = "nordic,nrf-twi";
+	status = "okay";
+	pinctrl-0 = <&i2c0_default>;
+	pinctrl-1 = <&i2c0_sleep>;
+	pinctrl-names = "default", "sleep";
+
+	test_i2c_max17055: max17055@36 {
+		compatible = "maxim,max17055";
+		reg = <0x36>;
+		design-capacity = <1250>;
+		design-voltage = <4200>;
+		desired-voltage = <4200>;
+		desired-charging-current = <500>;
+		i-chg-term = <250>;
+		rsense-mohms = <10>;
+		v-empty = <2800>;
+	};
 };
 
 &flash0 {

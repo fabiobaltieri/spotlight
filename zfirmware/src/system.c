@@ -14,6 +14,8 @@ K_TIMER_DEFINE(system_sync, NULL, NULL);
 //#define SHUTDOWN_DELAY (60 * 15)
 #define SHUTDOWN_DELAY (60 * 1)
 
+static const struct device *fuel_gauge = DEVICE_DT_GET_ONE(maxim_max17055);
+
 static void maybe_shutdown(void)
 {
 	static uint16_t shutdown_counter = SHUTDOWN_DELAY;
@@ -37,9 +39,31 @@ static void maybe_shutdown(void)
 	pm_state_force(0, &pm_off);
 }
 
+static void fuel_gauge_update(void)
+{
+	struct sensor_value val;
+	uint16_t tte;
+
+	sensor_sample_fetch(fuel_gauge);
+
+	sensor_channel_get(fuel_gauge, SENSOR_CHAN_GAUGE_STATE_OF_CHARGE, &val);
+	state.soc = val.val1;
+
+	sensor_channel_get(fuel_gauge, SENSOR_CHAN_GAUGE_VOLTAGE, &val);
+	state.batt_mv = val.val1 / 1000;
+
+	sensor_channel_get(fuel_gauge, SENSOR_CHAN_GAUGE_TIME_TO_EMPTY, &val);
+	tte = val.val1 / 1000 / 60;
+	if (tte > 0xfe)
+		state.tte = 0xfe;
+	else
+		state.tte = tte;
+}
+
 static void system_loop(void)
 {
 	maybe_shutdown();
+	fuel_gauge_update();
 }
 
 static void system_thread(void)
