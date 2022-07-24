@@ -3,6 +3,10 @@
 #include <zephyr/drivers/led.h>
 #include <zephyr/kernel.h>
 
+#include "state.h"
+
+struct state state;
+
 static const struct device *leds = DEVICE_DT_GET_ONE(gpio_leds);
 
 K_TIMER_DEFINE(blink_sync, NULL, NULL);
@@ -32,7 +36,9 @@ void main(void)
 	k_timer_start(&blink_sync, K_SECONDS(3), K_SECONDS(3));
 
 	for (;;) {
-		battery_blink();
+		if (state.mode == MODE_STANDBY) {
+			battery_blink();
+		}
 		k_timer_status_sync(&blink_sync);
 	}
 }
