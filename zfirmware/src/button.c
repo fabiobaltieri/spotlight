@@ -26,12 +26,12 @@ static void button_pressed(const struct device *dev,
 
 static void button_loop(void)
 {
-	int ts;
+	int64_t ts;
 	bool long_fired = false;
 
 	k_sem_take(&sem, K_FOREVER);
 
-	ts = k_uptime_get_32();
+	ts = k_uptime_get();
 
 	k_sleep(K_MSEC(SW_DEBOUNCE_MS));
 
@@ -39,7 +39,7 @@ static void button_loop(void)
 		k_sleep(K_MSEC(SW_DEBOUNCE_MS));
 
 		if (!long_fired &&
-		    (k_uptime_get_32() - ts) >= SW_LONG_PRESS_MS) {
+		    (k_uptime_get() - ts) >= SW_LONG_PRESS_MS) {
 			long_fired = true;
 			LOG_INF("long press");
 			switch_long();
