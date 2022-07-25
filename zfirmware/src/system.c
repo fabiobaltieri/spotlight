@@ -41,6 +41,19 @@ static void maybe_shutdown(void)
 	pm_state_force(0, &pm_off);
 }
 
+#define RESERVE_MV 2800
+static void maybe_reserve(void)
+{
+	if (state.level != LEVEL_HIGH)
+		return;
+
+	if (state.batt_mv > RESERVE_MV)
+		return;
+
+	state.level = LEVEL_MEDIUM;
+	levels_apply_state();
+}
+
 static void fuel_gauge_update(void)
 {
 	struct sensor_value val;
@@ -106,6 +119,7 @@ static void dc_update(void)
 static void system_loop(void)
 {
 	maybe_shutdown();
+	maybe_reserve();
 	fuel_gauge_update();
 	temp_update();
 	dc_update();
