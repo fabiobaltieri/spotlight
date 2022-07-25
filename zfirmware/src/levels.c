@@ -11,18 +11,18 @@ LOG_MODULE_REGISTER(levels);
 
 static const struct device *pwm_leds = DEVICE_DT_GET_ONE(pwm_leds);
 
-static uint8_t tgt_levels[] = {0, 0, 0, 0};
-static uint8_t cur_levels[] = {0, 0, 0, 0};
+static uint8_t tgt_levels[] = {0, 0, 0};
+static uint8_t cur_levels[] = {0, 0, 0};
 
 static struct level {
-	uint8_t a, b, c, d;
+	uint8_t a, b, c;
 } levels[] = {
-	/* S    O  Red   nc */
-	{  0,   0,   0,   0}, // 0 - Off
-	{  1,   0,   0,   0}, // 1 - Low
-	{ 25,  25,   0,   0}, // 2 - Medium
-	{100, 100,   0,   0}, // 3 - High
-	{  0,   0, 100,   0}, // 4 - Red
+	/* S    O  Red */
+	{  0,   0,   0}, // 0 - Off
+	{  1,   0,   0}, // 1 - Low
+	{ 25,  25,   0}, // 2 - Medium
+	{100, 100,   0}, // 3 - High
+	{  0,   0, 100}, // 4 - Red
 };
 
 static void pwm_adjust_step(uint8_t *from, uint8_t to)
@@ -73,9 +73,8 @@ static void pwm_timer_handler(struct k_work *work)
 	led_set_brightness(pwm_leds, 1, cur_levels[1]);
 	led_set_brightness(pwm_leds, 2, cur_levels[2]);
 
-	LOG_INF("levels: %3d %3d %3d %3d",
-		cur_levels[0], cur_levels[1],
-		cur_levels[2], cur_levels[3]);
+	LOG_INF("levels: %3d %3d %3d",
+		cur_levels[0], cur_levels[1], cur_levels[2]);
 
 	pwm_update();
 }
@@ -88,7 +87,6 @@ void levels_apply_state(void)
 		tgt_levels[0] = state.dc;
 		tgt_levels[1] = state.dc;
 		tgt_levels[2] = 0;
-		tgt_levels[3] = 0;
 	} else {
 		memcpy(tgt_levels, &levels[state.level], sizeof(tgt_levels));
 	}
