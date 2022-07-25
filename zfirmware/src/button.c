@@ -59,7 +59,7 @@ static void button_thread(void)
 	int ret;
 
 	if (!device_is_ready(sw0.port)) {
-		printk("SW0 device is not ready\n");
+		LOG_ERR("SW0 device is not ready");
 		return;
 	}
 
@@ -67,12 +67,12 @@ static void button_thread(void)
 
 	ret = gpio_pin_configure_dt(&sw0, GPIO_INPUT);
 	if (ret) {
-		printk("failed to configure sw0 gpio: %d\n", ret);
+		LOG_ERR("failed to configure sw0 gpio: %d", ret);
 		return;
 	}
 	ret = gpio_pin_interrupt_configure_dt(&sw0, GPIO_INT_EDGE_TO_ACTIVE);
 	if (ret) {
-		printk("failed to configure sw0 interrupt: %d\n", ret);
+		LOG_ERR("failed to configure sw0 interrupt: %d", ret);
 		return;
 	}
 

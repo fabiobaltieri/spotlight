@@ -2,6 +2,9 @@
 #include <zephyr/devicetree.h>
 #include <zephyr/drivers/led.h>
 #include <zephyr/kernel.h>
+#include <zephyr/logging/log.h>
+
+LOG_MODULE_REGISTER(main);
 
 #include "levels.h"
 #include "state.h"
@@ -29,7 +32,7 @@ static void battery_blink(void)
 void main(void)
 {
 	if (!device_is_ready(leds)) {
-		printk("LED device is not ready\n");
+		LOG_ERR("LED device is not ready");
 		return;
 	}
 

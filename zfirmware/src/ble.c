@@ -7,10 +7,13 @@
 #include <zephyr/bluetooth/uuid.h>
 #include <zephyr/device.h>
 #include <zephyr/kernel.h>
+#include <zephyr/logging/log.h>
 #include <zephyr/mgmt/mcumgr/smp_bt.h>
 
 #include "img_mgmt/img_mgmt.h"
 #include "os_mgmt/os_mgmt.h"
+
+LOG_MODULE_REGISTER(ble);
 
 #include "ble.h"
 #include "state.h"
@@ -32,7 +35,7 @@ static int ble_setup(const struct device *arg)
 
 	err = bt_enable(NULL);
 	if (err) {
-		printk("Bluetooth init failed (err %d)\n", err);
+		LOG_ERR("Bluetooth init failed (err %d)", err);
 		return 0;
 	}
 
@@ -42,7 +45,7 @@ static int ble_setup(const struct device *arg)
 
 	err = bt_le_adv_start(BT_LE_ADV_CONN_NAME, ad, ARRAY_SIZE(ad), NULL, 0);
 	if (err) {
-		printk("Advertising failed to start (err %d)\n", err);
+		LOG_ERR("Advertising failed to start (err %d)", err);
 		return 0;
 	}
 

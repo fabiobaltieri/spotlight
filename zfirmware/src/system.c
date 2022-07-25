@@ -132,12 +132,12 @@ static void system_loop(void)
 static void system_thread(void)
 {
 	if (!device_is_ready(fuel_gauge)) {
-		printk("fuel gauge device is not ready\n");
+		LOG_ERR("fuel gauge device is not ready");
 		return;
 	}
 
 	if (!device_is_ready(temp)) {
-		printk("temp device is not ready\n");
+		LOG_ERR("temp device is not ready");
 		return;
 	}
 
