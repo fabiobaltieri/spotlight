@@ -24,8 +24,56 @@ static const struct bt_data ad[] = {
 		      BT_UUID_16_ENCODE(BT_UUID_BAS_VAL))
 };
 
+static uint8_t sl_status[8];
+
+static void sl_ccc_cfg_changed(const struct bt_gatt_attr *attr,
+				 uint16_t value)
+{
+	ARG_UNUSED(attr);
+
+	bool notif_enabled = (value == BT_GATT_CCC_NOTIFY);
+
+	LOG_INF("sl Notifications %s", notif_enabled ? "enabled" : "disabled");
+}
+
+static ssize_t read_sl_status(struct bt_conn *conn,
+			      const struct bt_gatt_attr *attr, void *buf,
+			      uint16_t len, uint16_t offset)
+{
+	return bt_gatt_attr_read(conn, attr, buf, len, offset, &sl_status,
+				 sizeof(sl_status));
+}
+
+#define BT_UUID_SL \
+	BT_UUID_DECLARE_128(BT_UUID_128_ENCODE( \
+		0x0000fab0, 0x9736, 0x46e5, 0x872a, 0x8a46449faa91))
+
+#define BT_UUID_SL_STATE \
+	BT_UUID_DECLARE_128(BT_UUID_128_ENCODE( \
+		0x0000fab1, 0x9736, 0x46e5, 0x872a, 0x8a46449faa91))
+
+BT_GATT_SERVICE_DEFINE(sl,
+	BT_GATT_PRIMARY_SERVICE(BT_UUID_SL),
+	BT_GATT_CHARACTERISTIC(BT_UUID_SL_STATE,
+			       BT_GATT_CHRC_READ | BT_GATT_CHRC_NOTIFY,
+			       BT_GATT_PERM_READ, read_sl_status, NULL,
+			       sl_status),
+	BT_GATT_CCC(sl_ccc_cfg_changed, BT_GATT_PERM_READ | BT_GATT_PERM_WRITE),
+);
+
 void ble_update(void)
 {
+	sl_status[0] = state.mode | (state.level << 4); // Mode + Level
+	sl_status[1] = state.soc; // State of charge
+	sl_status[2] = state.temp; // Temperature (C)
+	sl_status[3] = state.tte; // Time to empty
+	sl_status[4] = state.dc; // Duty Cycle Target
+	sl_status[5] = state.batt_mv & 0xff; // Battery voltage (mV)
+	sl_status[6] = state.batt_mv >> 8;
+	sl_status[7] = 0;
+
+	bt_gatt_notify(NULL, &sl.attrs[1], sl_status, sizeof(sl_status));
+
 	bt_bas_set_battery_level(state.soc);
 }
 
