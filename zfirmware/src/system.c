@@ -1,6 +1,7 @@
 #include <zephyr/device.h>
 #include <zephyr/devicetree.h>
 #include <zephyr/drivers/sensor.h>
+#include <zephyr/drivers/sensor/max17055.h>
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 #include <zephyr/pm/pm.h>
@@ -64,7 +65,7 @@ static void fuel_gauge_update(void)
 	sensor_channel_get(fuel_gauge, SENSOR_CHAN_GAUGE_STATE_OF_CHARGE, &val);
 	state.soc = val.val1;
 
-	sensor_channel_get(fuel_gauge, SENSOR_CHAN_GAUGE_VOLTAGE, &val);
+	sensor_channel_get(fuel_gauge, SENSOR_CHAN_MAX17055_VFOCV, &val);
 	state.batt_mv = val.val1 * 1000 + val.val2 / 1000;
 
 	sensor_channel_get(fuel_gauge, SENSOR_CHAN_GAUGE_TIME_TO_EMPTY, &val);
