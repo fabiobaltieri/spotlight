@@ -1,3 +1,5 @@
+/* west build -- -DDTC_OVERLAY_FILE=nrf52dk.overlay */
+
 / {
 	compatible = "nordic,nrf52-dk-nrf52832";
 
