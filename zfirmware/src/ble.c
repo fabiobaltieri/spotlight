@@ -100,7 +100,7 @@ BT_GATT_SERVICE_DEFINE(sl,
 
 void ble_update(void)
 {
-	sl_status[0] = state.mode | (state.level << 4); // Mode + Level
+	sl_status[0] = (state.mode << 4) | state.level; // Mode + Level
 	sl_status[1] = state.soc; // State of charge
 	sl_status[2] = state.temp; // Temperature (C)
 	sl_status[3] = state.tte; // Time to empty
