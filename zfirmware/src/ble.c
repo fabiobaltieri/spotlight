@@ -28,7 +28,7 @@ static uint8_t sl_status[8];
 static bool notify_enabled;
 
 static void sl_ccc_cfg_changed(const struct bt_gatt_attr *attr,
-				 uint16_t value)
+			       uint16_t value)
 {
 	ARG_UNUSED(attr);
 
@@ -57,7 +57,8 @@ BT_GATT_SERVICE_DEFINE(sl,
 	BT_GATT_PRIMARY_SERVICE(BT_UUID_SL),
 	BT_GATT_CHARACTERISTIC(BT_UUID_SL_STATUS,
 			       BT_GATT_CHRC_READ | BT_GATT_CHRC_NOTIFY,
-			       BT_GATT_PERM_READ, read_sl_status, NULL,
+			       BT_GATT_PERM_READ,
+			       read_sl_status, NULL,
 			       sl_status),
 	BT_GATT_CCC(sl_ccc_cfg_changed, BT_GATT_PERM_READ | BT_GATT_PERM_WRITE),
 );
