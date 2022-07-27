@@ -9,6 +9,10 @@ LOG_MODULE_REGISTER(main);
 #include "levels.h"
 #include "state.h"
 
+#if DT_HAS_COMPAT_STATUS_OKAY(nordic_nrf52_dk_nrf52832)
+#warning "building for nRF52DK"
+#endif
+
 struct state state;
 
 static const struct device *leds = DEVICE_DT_GET_ONE(gpio_leds);

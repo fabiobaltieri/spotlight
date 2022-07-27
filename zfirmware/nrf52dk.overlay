@@ -1,4 +1,6 @@
 / {
+	compatible = "nordic,nrf52-dk-nrf52832";
+
 	leds {
 		led_green {
 			gpios = <&gpio0 17 GPIO_ACTIVE_LOW>;
