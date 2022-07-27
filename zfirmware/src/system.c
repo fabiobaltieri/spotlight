@@ -58,7 +58,7 @@ static void maybe_reserve(void)
 static void fuel_gauge_update(void)
 {
 	struct sensor_value val;
-	uint16_t tte;
+	int32_t tte;
 
 	sensor_sample_fetch(fuel_gauge);
 
@@ -69,7 +69,7 @@ static void fuel_gauge_update(void)
 	state.batt_mv = val.val1 * 1000 + val.val2 / 1000;
 
 	sensor_channel_get(fuel_gauge, SENSOR_CHAN_GAUGE_TIME_TO_EMPTY, &val);
-	tte = val.val1 / 1000 / 60;
+	tte = val.val1;
 	if (tte > 0xfe)
 		state.tte = 0xfe;
 	else
