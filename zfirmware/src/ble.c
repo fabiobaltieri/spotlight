@@ -109,7 +109,7 @@ void ble_update(void)
 	sl_status[6] = state.batt_mv >> 8;
 	sl_status[7] = 0;
 
-        if (notify_enabled) {
+	if (notify_enabled) {
 		bt_gatt_notify(NULL, &sl.attrs[1], sl_status, sizeof(sl_status));
 	}
 
