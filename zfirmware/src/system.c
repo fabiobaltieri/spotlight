@@ -70,8 +70,8 @@ static void fuel_gauge_update(void)
 
 	sensor_channel_get(fuel_gauge, SENSOR_CHAN_GAUGE_TIME_TO_EMPTY, &val);
 	tte = val.val1;
-	if (tte > 0xfe)
-		state.tte = 0xfe;
+	if (tte > UINT8_MAX)
+		state.tte = UINT8_MAX;
 	else
 		state.tte = tte;
 }
