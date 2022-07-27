@@ -4,7 +4,7 @@ enum {
 	MODE_STANDBY = 0,
 	MODE_MANUAL = 1,
 	MODE_AUTO = 2,
-	MODE_SHUTDOWN = 0xff,
+	MODE_SHUTDOWN = 0xf,
 };
 
 enum {
