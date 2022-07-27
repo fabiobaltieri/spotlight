@@ -53,21 +53,20 @@ void switch_long(void)
 	levels_apply_state();
 }
 
-void switch_auto(uint8_t active, uint8_t speed, uint8_t cadence)
+void switch_auto(uint8_t active)
 {
 	uint8_t new_level;
 
 	if (state.mode != MODE_AUTO) {
-		LOG_WRN("RX discard, not in auto");
+		LOG_INF("RX discard, not in auto");
 		return;
 	}
-	LOG_INF("active: %d speed: %d cadence: %d",
-		active, speed, cadence);
+	LOG_INF("active: %d ", active);
 
-	if (!active) {
-		new_level = LEVEL_OFF;
-	} else {
+	if (active) {
 		new_level = LEVEL_HIGH;
+	} else {
+		new_level = LEVEL_OFF;
 	}
 
 	if (new_level == state.level) {

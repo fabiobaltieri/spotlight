@@ -16,6 +16,7 @@
 LOG_MODULE_REGISTER(ble);
 
 #include "ble.h"
+#include "input.h"
 #include "state.h"
 
 static const struct bt_data ad[] = {
@@ -45,6 +46,32 @@ static ssize_t read_sl_status(struct bt_conn *conn,
 				 sizeof(sl_status));
 }
 
+static ssize_t write_sl_active(struct bt_conn *conn,
+			       const struct bt_gatt_attr *attr,
+			       const void *buf,
+			       uint16_t len, uint16_t offset, uint8_t flags)
+{
+	const uint8_t *val;
+
+	if (len != 1) {
+		LOG_WRN("write: invalid data len: %d", len);
+		return BT_GATT_ERR(BT_ATT_ERR_INVALID_ATTRIBUTE_LEN);
+	}
+
+	if (offset != 0) {
+		LOG_DBG("Write: invalid offset: %d", offset);
+		return BT_GATT_ERR(BT_ATT_ERR_INVALID_OFFSET);
+	}
+
+	val = buf;
+
+	LOG_INF("write: %x", *val);
+	switch_auto(*val);
+
+	return len;
+}
+
+
 #define BT_UUID_SL \
 	BT_UUID_DECLARE_128(BT_UUID_128_ENCODE( \
 		0x0000fab0, 0x9736, 0x46e5, 0x872a, 0x8a46449faa91))
@@ -52,6 +79,10 @@ static ssize_t read_sl_status(struct bt_conn *conn,
 #define BT_UUID_SL_STATUS \
 	BT_UUID_DECLARE_128(BT_UUID_128_ENCODE( \
 		0x0000fab1, 0x9736, 0x46e5, 0x872a, 0x8a46449faa91))
+
+#define BT_UUID_SL_ACTIVE \
+	BT_UUID_DECLARE_128(BT_UUID_128_ENCODE( \
+		0x0000fab2, 0x9736, 0x46e5, 0x872a, 0x8a46449faa91))
 
 BT_GATT_SERVICE_DEFINE(sl,
 	BT_GATT_PRIMARY_SERVICE(BT_UUID_SL),
@@ -61,6 +92,10 @@ BT_GATT_SERVICE_DEFINE(sl,
 			       read_sl_status, NULL,
 			       sl_status),
 	BT_GATT_CCC(sl_ccc_cfg_changed, BT_GATT_PERM_READ | BT_GATT_PERM_WRITE),
+	BT_GATT_CHARACTERISTIC(BT_UUID_SL_ACTIVE,
+			       BT_GATT_CHRC_WRITE,
+			       BT_GATT_PERM_WRITE,
+			       NULL, write_sl_active, NULL),
 );
 
 void ble_update(void)
