@@ -25,15 +25,16 @@ static const struct bt_data ad[] = {
 };
 
 static uint8_t sl_status[8];
+static bool notify_enabled;
 
 static void sl_ccc_cfg_changed(const struct bt_gatt_attr *attr,
 				 uint16_t value)
 {
 	ARG_UNUSED(attr);
 
-	bool notif_enabled = (value == BT_GATT_CCC_NOTIFY);
+	notify_enabled = (value == BT_GATT_CCC_NOTIFY);
 
-	LOG_INF("sl Notifications %s", notif_enabled ? "enabled" : "disabled");
+	LOG_INF("notify_enabled:  %d", notify_enabled);
 }
 
 static ssize_t read_sl_status(struct bt_conn *conn,
@@ -72,7 +73,9 @@ void ble_update(void)
 	sl_status[6] = state.batt_mv >> 8;
 	sl_status[7] = 0;
 
-	bt_gatt_notify(NULL, &sl.attrs[1], sl_status, sizeof(sl_status));
+        if (notify_enabled) {
+		bt_gatt_notify(NULL, &sl.attrs[1], sl_status, sizeof(sl_status));
+	}
 
 	bt_bas_set_battery_level(state.soc);
 }
