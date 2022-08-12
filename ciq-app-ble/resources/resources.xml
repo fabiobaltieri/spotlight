@@ -1,0 +1,34 @@
+<resources>
+	<fitContributions>
+		<fitField
+			id="0"
+			displayInChart="true"
+			sortOrder="0"
+			precision="0"
+			chartTitle="@Strings.level_title"
+			dataLabel="@Strings.level_label"
+			unitLabel="@Strings.level_unit"
+			fillColor="#dd00ff"
+			/>
+		<fitField
+			id="1"
+			displayInChart="true"
+			sortOrder="1"
+			precision="0"
+			chartTitle="@Strings.batt_title"
+			dataLabel="@Strings.batt_label"
+			unitLabel="@Strings.batt_unit"
+			fillColor="#fff000"
+			/>
+		<fitField
+			id="2"
+			displayInChart="true"
+			sortOrder="2"
+			precision="0"
+			chartTitle="@Strings.temp_title"
+			dataLabel="@Strings.temp_label"
+			unitLabel="@Strings.temp_unit"
+			fillColor="#ff9900"
+			/>
+	</fitContributions>
+</resources>

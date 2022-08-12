@@ -1,0 +1,15 @@
+<resources>
+    <string id="AppName">ZSpotlight</string>
+
+    <string id="level_title">Spotlight Power Level</string>
+    <string id="level_label">Level</string>
+    <string id="level_unit"></string>
+
+    <string id="batt_title">Spotlight Battery</string>
+    <string id="batt_label">Battery</string>
+    <string id="batt_unit">%</string>
+
+    <string id="temp_title">Spotlight Temperature</string>
+    <string id="temp_label">Temperature</string>
+    <string id="temp_unit">C</string>
+</resources>
