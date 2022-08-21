@@ -17,7 +17,7 @@ static K_TIMER_DEFINE(system_sync, NULL, NULL);
 #define SHUTDOWN_DELAY (60 * 15)
 
 static const struct device *fuel_gauge = DEVICE_DT_GET_ONE(maxim_max17055);
-static const struct device *temp = DEVICE_DT_GET_ANY(nordic_nrf_temp);
+static const struct device *temp = DEVICE_DT_GET_ONE(nordic_nrf_temp);
 
 static void maybe_shutdown(void)
 {
