@@ -95,8 +95,8 @@ class DataField extends WatchUi.SimpleDataField {
 		soc = status[1];
 		temp = s8(status[2]);
 		tte = status[3];
-		vbatt = status[6] + (status[7] << 8);
 		dc = status[4];
+		vbatt = status[5] + (status[6] << 8);
 
 		/*
 		System.println(level + " " + mode +
