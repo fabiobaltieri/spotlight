@@ -12,10 +12,55 @@ class DataField extends WatchUi.SimpleDataField {
 	private const levels = ["-", "L", "M", "H", "!"];
 	private const MODE_AUTO = 2;
 
+	private const LEVEL_FIELD_ID = 0;
+	private const BATT_FIELD_ID = 1;
+	private const TEMP_FIELD_ID = 2;
+	private var level_field = null;
+	private var batt_field = null;
+	private var temp_field = null;
+
 	function initialize(device) {
 		SimpleDataField.initialize();
 		label = "ZSpotlight";
 		dev = device;
+	}
+
+	private function initialize_fields() {
+		level_field = createField(
+				"level",
+				LEVEL_FIELD_ID,
+				FitContributor.DATA_TYPE_SINT8,
+				{:mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>""});
+		batt_field = createField(
+				"battery",
+				BATT_FIELD_ID,
+				FitContributor.DATA_TYPE_UINT8,
+				{:mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"%"});
+		temp_field = createField(
+				"temperature",
+				TEMP_FIELD_ID,
+				FitContributor.DATA_TYPE_SINT8,
+				{:mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"C"});
+	}
+
+	private function log(valid, level, soc, temp) {
+		if (level_field == null) {
+			if (!valid) {
+				return;
+			}
+			initialize_fields();
+		}
+
+		if (!valid) {
+			level_field.setData(-1);
+			batt_field.setData(0);
+			temp_field.setData(0);
+			return;
+		}
+
+		level_field.setData(level);
+		batt_field.setData(soc);
+		temp_field.setData(temp);
 	}
 
 	private function sendBack() {
@@ -68,6 +113,8 @@ class DataField extends WatchUi.SimpleDataField {
 
 	function compute(info) {
 		dev.scan();
+
+		log(dev.mode != null, dev.level, dev.soc, dev.temp);
 
 		if (dev.scanning) {
 			return "Searching...";
