@@ -4,7 +4,7 @@ using Toybox.WatchUi;
 using Toybox.System;
 
 class DataField extends WatchUi.SimpleDataField {
-	var bleDevice;
+	private var bleDevice;
 
 	var mode;
 	var level;
@@ -25,7 +25,7 @@ class DataField extends WatchUi.SimpleDataField {
 		bleDevice = device;
 	}
 
-	hidden function s8(val) {
+	private function s8(val) {
 		return (val << 24) >> 24;
 	}
 
@@ -54,7 +54,7 @@ class DataField extends WatchUi.SimpleDataField {
 		sendBack();
 	}
 
-	hidden function mode_string() {
+	private function mode_string() {
 		var s_mode = modes[mode];
 		var s_level = levels[level];
 		var s_battery = soc;
@@ -105,7 +105,7 @@ class DataField extends WatchUi.SimpleDataField {
 			       " vbatt=" + vbatt +
 			       " temp=" + temp +
 			       " dc=" + dc);
-		 */
+		*/
 
 		sendBack();
 
