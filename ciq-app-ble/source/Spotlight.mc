@@ -9,6 +9,9 @@ class Spotlight extends BleDevice {
 	protected const READ_DESC = Ble.cccdUuid();
 	protected const WRITE_CHAR = Ble.stringToUuid("0000fab2-9736-46e5-872a-8a46449faa91");
 
+	protected const SCAN_TIMEOUT = 3;
+	protected const RESCAN_DELAY = 60;
+
 	var mode = null;
 	var level = null;
 	var soc = null;

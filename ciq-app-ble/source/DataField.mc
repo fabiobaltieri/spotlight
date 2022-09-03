@@ -71,6 +71,8 @@ class DataField extends WatchUi.SimpleDataField {
 
 		if (dev.scanning) {
 			return "Searching...";
+		} else if (!dev.paired) {
+			return "Idle";
 		} else if (dev.device == null) {
 			return "Disconnected";
 		} else if (dev.mode == null) {
