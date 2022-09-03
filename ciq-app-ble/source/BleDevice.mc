@@ -94,6 +94,7 @@ class BleDevice extends Ble.BleDelegate {
 			setReadNotifications(1);
 		} else {
 			self.device = null;
+			reset();
 		}
 	}
 

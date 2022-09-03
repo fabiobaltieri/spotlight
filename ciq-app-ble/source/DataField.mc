@@ -4,37 +4,26 @@ using Toybox.WatchUi;
 using Toybox.System;
 
 class DataField extends WatchUi.SimpleDataField {
-	private var bleDevice;
+	private var dev;
 
-	var mode;
-	var level;
-	var soc;
-	var temp;
-	var tte;
-	var vbatt;
-	var dc;
-	var active = false;
+	private var active = false;
 
-	const modes = ["S", "M", "A", "R"];
-	const levels = ["-", "L", "M", "H", "!"];
-	const MODE_AUTO = 2;
+	private const modes = ["S", "M", "A", "R"];
+	private const levels = ["-", "L", "M", "H", "!"];
+	private const MODE_AUTO = 2;
 
 	function initialize(device) {
 		SimpleDataField.initialize();
 		label = "ZSpotlight";
-		bleDevice = device;
+		dev = device;
 	}
 
-	private function s8(val) {
-		return (val << 24) >> 24;
-	}
-
-	function sendBack() {
-		if (mode == MODE_AUTO) {
+	private function sendBack() {
+		if (dev.mode == MODE_AUTO) {
 			if (active) {
-				bleDevice.setActive(1);
+				dev.setActive(1);
 			} else {
-				bleDevice.setActive(0);
+				dev.setActive(0);
 			}
 		}
 	}
@@ -55,10 +44,10 @@ class DataField extends WatchUi.SimpleDataField {
 	}
 
 	private function mode_string() {
-		var s_mode = modes[mode];
-		var s_level = levels[level];
-		var s_battery = soc;
-		var s_tte = tte;
+		var s_mode = modes[dev.mode];
+		var s_level = levels[dev.level];
+		var s_battery = dev.soc;
+		var s_tte = dev.tte;
 
 		if (s_tte == 0xff || s_tte == 0) {
 			s_tte = "--";
@@ -78,34 +67,15 @@ class DataField extends WatchUi.SimpleDataField {
 	}
 
 	function compute(info) {
-		var status = bleDevice.status;
+		dev.scan();
 
-		bleDevice.scan();
-
-		if (bleDevice.scanning) {
+		if (dev.scanning) {
 			return "Searching...";
-		} else if (bleDevice.device == null) {
+		} else if (dev.device == null) {
 			return "Disconnected";
-		} else if (status == null) {
+		} else if (dev.mode == null) {
 			return "No data";
 		}
-
-		mode = (status[0] >> 4) & 0x0f;
-		level = status[0] & 0x0f;
-		soc = status[1];
-		temp = s8(status[2]);
-		tte = status[3];
-		dc = status[4];
-		vbatt = status[5] + (status[6] << 8);
-
-		/*
-		System.println(level + " " + mode +
-			       " tte=" + tte +
-			       " soc=" + soc +
-			       " vbatt=" + vbatt +
-			       " temp=" + temp +
-			       " dc=" + dc);
-		*/
 
 		sendBack();
 
