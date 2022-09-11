@@ -15,7 +15,6 @@
 		compatible = "gpio-leds";
 		led_green {
 			gpios = <&gpio0 27 GPIO_ACTIVE_LOW>;
-			label = "Green LED";
 		};
 	};
 
@@ -36,7 +35,6 @@
 		compatible = "gpio-keys";
 		sw0: sw_0 {
 			gpios = <&gpio0 14 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-			label = "Push button switch";
 		};
 	};
 };
