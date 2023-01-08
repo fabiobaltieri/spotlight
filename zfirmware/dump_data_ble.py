@@ -34,7 +34,7 @@ async def main():
     async with BleakClient(dev.address) as client:
         #battery_level = await client.read_gatt_char(uuid_battery_level_characteristic)
         #print(int.from_bytes(battery_level, byteorder='big'))
-        while True:
-            await client.start_notify(spotlight_status_characteristic, callback)
+        await client.start_notify(spotlight_status_characteristic, callback)
+        await asyncio.sleep(9999)
 
 asyncio.run(main())
