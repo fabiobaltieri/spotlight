@@ -1,6 +1,5 @@
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
-#include <zephyr/bluetooth/services/bas.h>
 
 LOG_MODULE_REGISTER(input);
 
