@@ -125,8 +125,6 @@ static int ble_setup(const struct device *arg)
 		return 0;
 	}
 
-	smp_bt_start();
-
 	err = bt_le_adv_start(BT_LE_ADV_CONN, ad, ARRAY_SIZE(ad), NULL, 0);
 	if (err) {
 		LOG_ERR("Advertising failed to start (err %d)", err);
