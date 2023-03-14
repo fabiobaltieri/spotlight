@@ -1,3 +1,4 @@
+#include <hal/nrf_gpio.h>
 #include <zephyr/device.h>
 #include <zephyr/devicetree.h>
 #include <zephyr/drivers/sensor.h>
@@ -19,6 +20,8 @@ static K_TIMER_DEFINE(system_sync, NULL, NULL);
 static const struct device *fuel_gauge = DEVICE_DT_GET_ONE(maxim_max17055);
 static const struct device *temp = DEVICE_DT_GET_ONE(nordic_nrf_temp);
 
+#define WKUP_PIN DT_GPIO_PIN(DT_NODELABEL(wkup), gpios)
+
 static void maybe_shutdown(void)
 {
 	static uint16_t shutdown_counter = SHUTDOWN_DELAY;
@@ -34,6 +37,8 @@ static void maybe_shutdown(void)
 		return;
 
 	LOG_INF("initiate shutdown");
+
+	nrf_gpio_cfg_sense_set(WKUP_PIN, NRF_GPIO_PIN_SENSE_LOW);
 
 	state.mode = MODE_SHUTDOWN;
 

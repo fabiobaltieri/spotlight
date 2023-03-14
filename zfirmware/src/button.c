@@ -1,89 +1,32 @@
-#include <hal/nrf_gpio.h>
 #include <zephyr/device.h>
-#include <zephyr/devicetree.h>
-#include <zephyr/drivers/gpio.h>
-#include <zephyr/kernel.h>
+#include <zephyr/input/input.h>
 #include <zephyr/logging/log.h>
 
 LOG_MODULE_REGISTER(button);
 
 #include "input.h"
 
-#define SW_DEBOUNCE_MS 100
-#define SW_LONG_PRESS_MS 1000
+static const struct device *const input_dev = DEVICE_DT_GET(DT_NODELABEL(longpress));
 
-#define SW0_NODE DT_NODELABEL(sw0)
-
-static struct gpio_dt_spec sw0 = GPIO_DT_SPEC_GET(SW0_NODE, gpios);
-static struct gpio_callback sw0_cb_data;
-static struct k_sem sem;
-
-static void button_pressed(const struct device *dev,
-			   struct gpio_callback *cb, uint32_t pins)
+static void input_cb(struct input_event *evt)
 {
-	k_sem_give(&sem);
-}
-
-static void button_loop(void)
-{
-	int64_t ts;
-	bool long_fired = false;
-
-	k_sem_take(&sem, K_FOREVER);
-
-	ts = k_uptime_get();
-
-	k_sleep(K_MSEC(SW_DEBOUNCE_MS));
-
-	while (gpio_pin_get_dt(&sw0)) {
-		k_sleep(K_MSEC(SW_DEBOUNCE_MS));
-
-		if (!long_fired &&
-		    (k_uptime_get() - ts) >= SW_LONG_PRESS_MS) {
-			long_fired = true;
-			LOG_INF("long press");
-			switch_long();
-		}
+	if (evt->type != INPUT_EV_KEY) {
+		return;
 	}
 
-	if (!long_fired) {
-		LOG_INF("short press");
+	if (!evt->value) {
+		return;
+	}
+
+	switch (evt->code) {
+	case INPUT_KEY_A:
 		switch_short();
-	}
-
-	k_sem_reset(&sem);
-}
-
-static void button_thread(void)
-{
-	int ret;
-
-	if (!device_is_ready(sw0.port)) {
-		LOG_ERR("SW0 device is not ready");
-		return;
-	}
-
-	k_sem_init(&sem, 0, 1);
-
-	ret = gpio_pin_configure_dt(&sw0, GPIO_INPUT);
-	if (ret) {
-		LOG_ERR("failed to configure sw0 gpio: %d", ret);
-		return;
-	}
-	ret = gpio_pin_interrupt_configure_dt(&sw0, GPIO_INT_EDGE_TO_ACTIVE);
-	if (ret) {
-		LOG_ERR("failed to configure sw0 interrupt: %d", ret);
-		return;
-	}
-
-	gpio_init_callback(&sw0_cb_data, button_pressed, BIT(sw0.pin));
-	gpio_add_callback(sw0.port, &sw0_cb_data);
-
-	nrf_gpio_cfg_sense_set(sw0.pin, NRF_GPIO_PIN_SENSE_LOW);
-
-	for (;;) {
-		button_loop();
+		break;
+	case INPUT_KEY_B:
+		switch_long();
+		break;
+	default:
+		LOG_INF("unknown code: %d", evt->code);
 	}
 }
-
-K_THREAD_DEFINE(button, 1024, button_thread, NULL, NULL, NULL, 7, 0, 0);
+INPUT_LISTENER_CB_DEFINE(input_dev, input_cb);

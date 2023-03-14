@@ -1,5 +1,6 @@
 /dts-v1/;
 #include <nordic/nrf52832_qfaa.dtsi>
+#include <dt-bindings/input/input-event-codes.h>
 
 / {
 	model = "Spotlight";
@@ -31,12 +32,23 @@
 		};
 	};
 
-	buttons {
-		compatible = "gpio-keys";
-		sw0: sw_0 {
+	buttons: buttons {
+		compatible = "zephyr,gpio-keys";
+		wkup: sw_0 {
 			gpios = <&gpio0 14 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+			zephyr,code = <INPUT_KEY_0>;
 		};
 	};
+
+	longpress: longpress {
+		input = <&buttons>;
+		compatible = "zephyr,input-longpress";
+		input-codes = <INPUT_KEY_0>;
+		short-codes = <INPUT_KEY_A>;
+		long-codes = <INPUT_KEY_B>;
+		long-delay-ms = <1000>;
+	};
+
 };
 
 &pinctrl {

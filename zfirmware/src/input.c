@@ -1,7 +1,7 @@
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 
-LOG_MODULE_REGISTER(input);
+LOG_MODULE_REGISTER(app_input);
 
 #include "input.h"
 #include "levels.h"
