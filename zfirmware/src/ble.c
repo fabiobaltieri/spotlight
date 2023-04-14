@@ -115,7 +115,7 @@ void ble_update(void)
 	bt_bas_set_battery_level(state.soc);
 }
 
-static int ble_setup(const struct device *arg)
+static int ble_setup(void)
 {
 	int err;
 
