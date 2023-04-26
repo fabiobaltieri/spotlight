@@ -21,6 +21,7 @@ clean:
 	rm -f $(NAME).iq
 	rm -f $(NAME).prg
 	rm -f $(NAME).prg.debug.xml
+	rm -rf mir internal-mir gen
 
 $(NAME).prg: manifest.xml resources/*.xml source/*.mc
 	$(MONKEYC) -d $(DEVICE) -f $(JUNGLE) -o $(NAME).prg -y $(KEY)
