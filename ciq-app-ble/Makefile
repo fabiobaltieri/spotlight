@@ -2,7 +2,7 @@ SDK_PATH = $(HOME)/ciq
 KEY = developer_key.der
 
 NAME = zspotlight
-APP_ID = xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+APP_ID = 9ed3d39b-8b52-4f41-94e5-8b1428449871
 
 JUNGLE = monkey.jungle
 ifeq ($(DEVICE),)
