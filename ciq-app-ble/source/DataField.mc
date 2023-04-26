@@ -21,7 +21,7 @@ class DataField extends WatchUi.SimpleDataField {
 
 	function initialize(device) {
 		SimpleDataField.initialize();
-		label = "ZSpotlight";
+		label = "ZSPOTLIGHT";
 		dev = device;
 	}
 
