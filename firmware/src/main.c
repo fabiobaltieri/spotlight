@@ -33,11 +33,11 @@ static void battery_blink(void)
 	}
 }
 
-void main(void)
+int main(void)
 {
 	if (!device_is_ready(leds)) {
 		LOG_ERR("LED device is not ready");
-		return;
+		return 0;
 	}
 
 	levels_hello();
@@ -50,4 +50,6 @@ void main(void)
 		}
 		k_timer_status_sync(&blink_sync);
 	}
+
+	return 0;
 }
