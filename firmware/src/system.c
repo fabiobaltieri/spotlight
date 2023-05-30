@@ -155,4 +155,4 @@ static void system_thread(void)
 	}
 }
 
-K_THREAD_DEFINE(system, 1024, system_thread, NULL, NULL, NULL, 7, 0, 0);
+K_THREAD_DEFINE(sys, 1024, system_thread, NULL, NULL, NULL, 7, 0, 0);
