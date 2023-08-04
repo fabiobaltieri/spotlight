@@ -5,7 +5,7 @@
 #include <zephyr/drivers/sensor/max17055.h>
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
-#include <zephyr/pm/pm.h>
+#include <zephyr/sys/poweroff.h>
 
 LOG_MODULE_REGISTER(system);
 
@@ -25,7 +25,6 @@ static const struct device *temp = DEVICE_DT_GET_ONE(nordic_nrf_temp);
 static void maybe_shutdown(void)
 {
 	static uint16_t shutdown_counter = SHUTDOWN_DELAY;
-	struct pm_state_info pm_off = {PM_STATE_SOFT_OFF, 0, 0};
 
 	if (state.mode != MODE_STANDBY) {
 		shutdown_counter = SHUTDOWN_DELAY;
@@ -44,7 +43,7 @@ static void maybe_shutdown(void)
 
 	k_sleep(K_SECONDS(3));
 
-	pm_state_force(0, &pm_off);
+	sys_poweroff();
 }
 
 #define RESERVE_MV 2800
