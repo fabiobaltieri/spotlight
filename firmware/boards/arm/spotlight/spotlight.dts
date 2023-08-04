@@ -1,6 +1,6 @@
 /dts-v1/;
 #include <nordic/nrf52832_qfaa.dtsi>
-#include <dt-bindings/input/input-event-codes.h>
+#include <zephyr/dt-bindings/input/input-event-codes.h>
 
 / {
 	model = "Spotlight";
