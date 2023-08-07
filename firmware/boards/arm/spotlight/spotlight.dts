@@ -33,7 +33,7 @@
 	};
 
 	buttons: buttons {
-		compatible = "zephyr,gpio-keys";
+		compatible = "gpio-keys";
 		wkup: sw_0 {
 			gpios = <&gpio0 14 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 			zephyr,code = <INPUT_KEY_0>;
