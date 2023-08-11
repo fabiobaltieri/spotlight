@@ -20,7 +20,7 @@ static K_TIMER_DEFINE(system_sync, NULL, NULL);
 static const struct device *fuel_gauge = DEVICE_DT_GET_ONE(maxim_max17055);
 static const struct device *temp = DEVICE_DT_GET_ONE(nordic_nrf_temp);
 
-#define WKUP_PIN DT_GPIO_PIN(DT_NODELABEL(wkup), gpios)
+#define WKUP_PIN NRF_DT_GPIOS_TO_PSEL(DT_NODELABEL(wkup), gpios)
 
 static void maybe_shutdown(void)
 {
