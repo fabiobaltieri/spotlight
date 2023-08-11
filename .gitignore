@@ -6,7 +6,12 @@
 *.swp
 */_build
 */build
-ota-key.pem
+
+.west
+bootloader
+build
+modules
+zephyr
 
 *.[bs]#?
 *.dri
