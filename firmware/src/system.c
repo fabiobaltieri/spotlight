@@ -64,7 +64,9 @@ static void fuel_gauge_update(void)
 	struct sensor_value val;
 	int32_t tte;
 
-	sensor_sample_fetch(fuel_gauge);
+	sensor_sample_fetch_chan(fuel_gauge, SENSOR_CHAN_GAUGE_STATE_OF_CHARGE);
+	sensor_sample_fetch_chan(fuel_gauge, SENSOR_CHAN_MAX17055_VFOCV);
+	sensor_sample_fetch_chan(fuel_gauge, SENSOR_CHAN_GAUGE_TIME_TO_EMPTY);
 
 	sensor_channel_get(fuel_gauge, SENSOR_CHAN_GAUGE_STATE_OF_CHARGE, &val);
 	state.soc = val.val1;
