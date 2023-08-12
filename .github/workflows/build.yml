@@ -37,8 +37,8 @@ jobs:
           tar xvf zephyr-sdk-${ZEPHYR_SDK_VERSION}_linux-x86_64_minimal.tar.xz -C zephyr-sdk --strip-components=1
 
       - name: Setup Zephyr SDK
+        working-directory: zephyr-sdk
         run: |
-          cd zephyr-sdk
           ./setup.sh -t arm-zephyr-eabi -c
 
       - name: Install dependencies
