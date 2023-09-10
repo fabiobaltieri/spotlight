@@ -3,6 +3,7 @@
 import asyncio
 import time
 from bleak import BleakScanner, BleakClient
+import sys
 
 uuid_battery_level_characteristic = '00002a19-0000-1000-8000-00805f9b34fb'
 spotlight_status_characteristic = '0000fab1-9736-46e5-872a-8a46449faa91'
@@ -17,6 +18,7 @@ def callback(sender, data):
     level = state & 0x0f;
     mode = state >> 4;
     print(f"level:{level} mmode:{mode} soc:{soc} temp:{temp} tte:{tte} dc:{dc} batt_mv:{batt_mv}")
+    sys.stdout.flush()
 
 async def main():
     dev = None
