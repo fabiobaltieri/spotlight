@@ -22,6 +22,7 @@ jobs:
         uses: fabiobaltieri/zephyr-setup@main
         with:
           app-path: firmware
+          toolchains: arm-zephyr-eabi
 
       - name: Build
         run: |
