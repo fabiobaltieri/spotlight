@@ -5,7 +5,7 @@
 #include <zephyr/bluetooth/services/bas.h>
 #include <zephyr/bluetooth/services/hrs.h>
 #include <zephyr/bluetooth/uuid.h>
-#include <zephyr/device.h>
+#include <zephyr/init.h>
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 #include <zephyr/mgmt/mcumgr/transport/smp_bt.h>
