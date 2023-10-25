@@ -24,6 +24,12 @@ jobs:
           app-path: firmware
           toolchains: arm-zephyr-eabi
 
+      - name: Save the MCUboot key
+        env:
+          MCUBOOT_SIGNATURE_KEY: ${{ secrets.MCUBOOT_SIGNATURE_KEY }}
+        run: |
+          cat > spotlight-key.pem <<< $MCUBOOT_SIGNATURE_KEY
+
       - name: Build
         run: |
-          west build firmware -DCONFIG_MCUBOOT_SIGNATURE_KEY_FILE="\"bootloader/mcuboot/root-rsa-2048.pem\""
+          west build firmware -DCONFIG_MCUBOOT_SIGNATURE_KEY_FILE="\"spotlight-key.pem\""
