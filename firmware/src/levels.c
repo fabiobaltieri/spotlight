@@ -4,7 +4,7 @@
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 
-LOG_MODULE_REGISTER(levels);
+LOG_MODULE_REGISTER(levels, LOG_LEVEL_INF);
 
 #include "levels.h"
 #include "state.h"

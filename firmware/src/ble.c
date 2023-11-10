@@ -10,7 +10,7 @@
 #include <zephyr/logging/log.h>
 #include <zephyr/mgmt/mcumgr/transport/smp_bt.h>
 
-LOG_MODULE_REGISTER(ble);
+LOG_MODULE_REGISTER(ble, LOG_LEVEL_INF);
 
 #include "ble.h"
 #include "input.h"

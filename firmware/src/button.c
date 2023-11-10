@@ -2,7 +2,7 @@
 #include <zephyr/input/input.h>
 #include <zephyr/logging/log.h>
 
-LOG_MODULE_REGISTER(button);
+LOG_MODULE_REGISTER(button, LOG_LEVEL_INF);
 
 #include "input.h"
 
