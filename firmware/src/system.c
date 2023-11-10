@@ -7,11 +7,11 @@
 #include <zephyr/logging/log.h>
 #include <zephyr/sys/poweroff.h>
 
-LOG_MODULE_REGISTER(system, LOG_LEVEL_INF);
-
 #include "ble.h"
 #include "levels.h"
 #include "state.h"
+
+LOG_MODULE_REGISTER(system, LOG_LEVEL_INF);
 
 static K_TIMER_DEFINE(system_sync, NULL, NULL);
 

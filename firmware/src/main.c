@@ -4,10 +4,10 @@
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 
-LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
-
 #include "levels.h"
 #include "state.h"
+
+LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
 
 #if DT_HAS_COMPAT_STATUS_OKAY(nordic_nrf52_dk_nrf52832)
 #warning "building for nRF52DK"

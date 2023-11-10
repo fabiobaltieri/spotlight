@@ -2,9 +2,9 @@
 #include <zephyr/input/input.h>
 #include <zephyr/logging/log.h>
 
-LOG_MODULE_REGISTER(button, LOG_LEVEL_INF);
-
 #include "input.h"
+
+LOG_MODULE_REGISTER(button, LOG_LEVEL_INF);
 
 static const struct device *const input_dev = DEVICE_DT_GET(DT_NODELABEL(longpress));
 

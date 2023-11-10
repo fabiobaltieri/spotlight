@@ -1,11 +1,11 @@
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 
-LOG_MODULE_REGISTER(app_input, LOG_LEVEL_INF);
-
 #include "input.h"
 #include "levels.h"
 #include "state.h"
+
+LOG_MODULE_REGISTER(app_input, LOG_LEVEL_INF);
 
 static K_TIMER_DEFINE(delay, NULL, NULL);
 

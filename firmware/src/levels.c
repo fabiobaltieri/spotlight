@@ -4,10 +4,10 @@
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 
-LOG_MODULE_REGISTER(levels, LOG_LEVEL_INF);
-
 #include "levels.h"
 #include "state.h"
+
+LOG_MODULE_REGISTER(levels, LOG_LEVEL_INF);
 
 static const struct device *pwm_leds = DEVICE_DT_GET_ONE(pwm_leds);
 
