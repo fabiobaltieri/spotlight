@@ -134,4 +134,4 @@ static int ble_setup(void)
 	return 0;
 }
 
-SYS_INIT(ble_setup, APPLICATION, CONFIG_APPLICATION_INIT_PRIORITY);
+SYS_INIT(ble_setup, APPLICATION, 91);
