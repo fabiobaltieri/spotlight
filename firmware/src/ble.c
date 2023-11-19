@@ -34,7 +34,7 @@ static void sl_ccc_cfg_changed(const struct bt_gatt_attr *attr,
 
 	notify_enabled = (value == BT_GATT_CCC_NOTIFY);
 
-	LOG_INF("notify_enabled:  %d", notify_enabled);
+	LOG_INF("notify_enabled: %d", notify_enabled);
 }
 
 static ssize_t read_sl_status(struct bt_conn *conn,
@@ -58,7 +58,7 @@ static ssize_t write_sl_active(struct bt_conn *conn,
 	}
 
 	if (offset != 0) {
-		LOG_DBG("Write: invalid offset: %d", offset);
+		LOG_DBG("write: invalid offset: %d", offset);
 		return BT_GATT_ERR(BT_ATT_ERR_INVALID_OFFSET);
 	}
 
