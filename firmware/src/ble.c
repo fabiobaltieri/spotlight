@@ -10,11 +10,11 @@
 #include <zephyr/logging/log.h>
 #include <zephyr/mgmt/mcumgr/transport/smp_bt.h>
 
-LOG_MODULE_REGISTER(ble, LOG_LEVEL_INF);
-
 #include "ble.h"
 #include "input.h"
 #include "state.h"
+
+LOG_MODULE_REGISTER(ble, LOG_LEVEL_INF);
 
 #define DEVICE_NAME     CONFIG_BT_DEVICE_NAME
 #define DEVICE_NAME_LEN (sizeof(DEVICE_NAME) - 1)
