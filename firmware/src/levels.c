@@ -53,14 +53,14 @@ static void pwm_adjust_step(uint8_t *from, uint8_t to)
 
 static void pwm_timer_handler(struct k_work *work);
 
-static K_WORK_DELAYABLE_DEFINE(pwm_work, pwm_timer_handler);
+static K_WORK_DELAYABLE_DEFINE(pwm_dwork, pwm_timer_handler);
 
 static void pwm_update(void)
 {
 	if (memcmp(tgt_levels, cur_levels, sizeof(tgt_levels)) == 0)
 		return;
 
-	k_work_reschedule(&pwm_work, K_MSEC(20));
+	k_work_reschedule(&pwm_dwork, K_MSEC(20));
 }
 
 static void pwm_timer_handler(struct k_work *work)
