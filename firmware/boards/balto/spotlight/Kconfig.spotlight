@@ -1,0 +1,2 @@
+config BOARD_SPOTLIGHT
+	select SOC_NRF52832_QFAA

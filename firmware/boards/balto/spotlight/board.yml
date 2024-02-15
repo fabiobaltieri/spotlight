@@ -1,0 +1,5 @@
+board:
+  name: spotlight
+  vendor: balto
+  socs:
+    - name: nrf52832

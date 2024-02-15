@@ -1,8 +1,5 @@
 if BOARD_SPOTLIGHT
 
-config BOARD
-	default "spotlight"
-
 config BT_CTLR
 	default BT
 

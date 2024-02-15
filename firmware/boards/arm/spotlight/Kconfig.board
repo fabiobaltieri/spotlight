@@ -1,3 +1,0 @@
-config BOARD_SPOTLIGHT
-	bool "Spotlight"
-	depends on SOC_NRF52832_QFAA
