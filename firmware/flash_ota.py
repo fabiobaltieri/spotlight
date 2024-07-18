@@ -4,7 +4,7 @@ import os
 import time
 
 HOME = os.environ["HOME"]
-MCUMGR = f"sudo {HOME}/go/bin/mcumgr -c spotlight"
+MCUMGR = f"sudo {HOME}/go/bin/mcumgr --conntype ble --connstring peer_name='ZSpotlight'"
 IMAGE_PATH = "build/zephyr/zephyr.signed.bin"
 OFFSET = -328
 
