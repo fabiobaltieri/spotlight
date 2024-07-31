@@ -8,7 +8,7 @@ LOG_MODULE_REGISTER(button, LOG_LEVEL_INF);
 
 static const struct device *const input_dev = DEVICE_DT_GET(DT_NODELABEL(longpress));
 
-static void input_cb(struct input_event *evt)
+static void input_cb(struct input_event *evt, void *user_data)
 {
 	if (evt->type != INPUT_EV_KEY) {
 		return;
@@ -29,4 +29,4 @@ static void input_cb(struct input_event *evt)
 		LOG_INF("unknown code: %d", evt->code);
 	}
 }
-INPUT_CALLBACK_DEFINE(input_dev, input_cb);
+INPUT_CALLBACK_DEFINE(input_dev, input_cb, NULL);
