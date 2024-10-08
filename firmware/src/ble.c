@@ -25,7 +25,7 @@ static const struct bt_data ad[] = {
 };
 
 static struct bt_le_adv_param ad_param = BT_LE_ADV_PARAM_INIT(
-		BT_LE_ADV_OPT_CONNECTABLE,
+		BT_LE_ADV_OPT_CONN,
 		BT_GAP_ADV_SLOW_INT_MIN, BT_GAP_ADV_SLOW_INT_MAX, NULL);
 
 static uint8_t sl_status[8];
