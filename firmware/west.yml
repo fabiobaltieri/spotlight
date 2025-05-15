@@ -9,7 +9,7 @@ manifest:
       revision: main
       import:
         name-allowlist:
-          - cmsis
+          - cmsis_6
           - hal_nordic
           - mcuboot
           - segger
